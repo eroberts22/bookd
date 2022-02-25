@@ -1,0 +1,19 @@
+Firebase vs SQLite
+
+Firebase Firestore:
+- Cloud service hosted by Google- server entirely separated from us
+- Only free for a certain size: 
+- Tons of services/ APIs/SDKs 
+- Non-portable: Anything done in firebase will not translate elsewhere
+- Easy to setup
+- Lots of development resources
+- Real Time Database has limited query filtering functinality
+- 1GiB total stored data
+- NoSQL database
+
+SQLite:
+- Self contained, serverless, no configuration, transactinoal SQL database engine
+- Embedded SQL engine (hosted on own computer)
+- Classic SQL functionality
+- Lightweight
+- Lots of development resources
