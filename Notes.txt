@@ -1,0 +1,7 @@
+Booking can go both ways:
+- Venues can book artists
+- Artists can request to perform at a Venues
+
+Calendar (Availability):
+- Days free
+- Option to request from Artist/venue
