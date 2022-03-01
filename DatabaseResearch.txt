@@ -9,7 +9,8 @@ Firebase Firestore:
 - Lots of development resources
 - Real Time Database has limited query filtering functinality
 - 1GiB total stored data
-- NoSQL database
+- NoSQL database, using collections
+
 
 SQLite:
 - Self contained, serverless, no configuration, transactinoal SQL database engine
@@ -17,3 +18,7 @@ SQLite:
 - Classic SQL functionality
 - Lightweight
 - Lots of development resources
+
+
+Decision: Firebase Realtime Database
+Reason: Offers the standard database schemas while also offering the functionality and SDKs of firebase.
