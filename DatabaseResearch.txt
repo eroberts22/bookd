@@ -20,5 +20,5 @@ SQLite:
 - Lots of development resources
 
 
-Decision: Firebase Realtime Database
-Reason: Offers the standard database schemas while also offering the functionality and SDKs of firebase.
+Decision: SQLite
+Reason: Offers standard SQL structure and functionality. Don't need anything crazy for this project
