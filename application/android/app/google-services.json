@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "729684081664",
+    "project_id": "bookd-4bdd3",
+    "storage_bucket": "bookd-4bdd3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729684081664:android:7eb9389b170a2287296ce5",
+        "android_client_info": {
+          "package_name": "app.softwareengineering2022.bookd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "729684081664-bbmg74glneujhbsa4qd236rju04sr7b7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnaT50x49QGysrQ32UfRfkPa_LzWpqgrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "729684081664-bbmg74glneujhbsa4qd236rju04sr7b7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
