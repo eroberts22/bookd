@@ -45,7 +45,8 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "app.softwareengineering2022.bookd"
-        minSdkVersion flutter.minSdkVersion
+        // Use the firebase min version (19), instead of the flutter min SDK version (16)
+        minSdkVersion 19
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

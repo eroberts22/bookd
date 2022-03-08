@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.application">
+    package="app.softwareengineering2022.bookd">
    <application
         android:label="application"
         android:name="${applicationName}"
