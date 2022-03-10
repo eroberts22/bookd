@@ -1,0 +1,8 @@
+{
+  // All authenticated users can read and write
+  // Will need to be fixed later for security
+  "rules": {
+    ".read": "auth.uid != null",
+    ".write": "auth.uid != null"
+  }
+}
