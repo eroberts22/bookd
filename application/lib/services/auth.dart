@@ -6,10 +6,29 @@ class AuthService {
 
   // Create user object from firebase user id
   // Nullable function
-  BookdUser? _userFromFirebaseUser(User user) {
-    if (user != null) {
-      return BookdUser(user.uid, "email", "name");
-    } else {
+  BookdUser? _userFromFirebaseUser(User? user) {
+    return user != null ? BookdUser(user.uid, "email", "name") : null;
+  }
+
+  // Authentication change in user stream
+  Stream<BookdUser?> get user {
+    // Map the stream of FirebaseUsers -> BookdUser calling the conversion function for each item
+    return _auth.authStateChanges().map(_userFromFirebaseUser);
+  }
+
+  // Sign in anonymous
+  Future signInAnon() async {
+    try {
+      UserCredential result = await _auth.signInAnonymously();
+      User user = result.user;
+      // Catch a null return value
+      if (user == null) {
+        print("Unable to login!");
+        return null;
+      }
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
       return null;
     }
   }
@@ -19,5 +38,12 @@ class AuthService {
   // Register with email and password
 
   // Sign out
-
+  Future signOut() async {
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 }

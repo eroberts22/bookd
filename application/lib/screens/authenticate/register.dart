@@ -1,14 +1,14 @@
-import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:application/services/auth.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+class Register extends StatefulWidget {
+  const Register({Key? key}) : super(key: key);
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   // Our custom authentication class to store auth data
   final AuthService _authService = AuthService();
 
@@ -23,7 +23,7 @@ class _SignInState extends State<SignIn> {
         appBar: AppBar(
             backgroundColor: Colors.red[400],
             elevation: 0.0,
-            title: Text('Sign In to Bookd')),
+            title: Text('Sign up for Bookd')),
         body: Container(
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
             child: Form(
@@ -47,7 +47,7 @@ class _SignInState extends State<SignIn> {
                   foregroundColor:
                       MaterialStateProperty.all<Color>(Colors.blue),
                 ),
-                child: Text('Sign In', style: TextStyle(color: Colors.white)),
+                child: Text('Register', style: TextStyle(color: Colors.white)),
                 onPressed: () async {
                   // Go log this person into firebase
                   print(email);
