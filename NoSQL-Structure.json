@@ -1,45 +1,43 @@
-User:
-{	
-	"_id": ObjectID,
-	"username": String,
-	"password": String
-}
-
-
-Profile:
+User
 {
-	"_id": ObjectID,
-	"user_id": ObjectID,
-	"kind": int,
-	"config": json for artist or venue,
-	"name:": String,
-	"description": String,
-	"website_link": String,
-	"average_rating": int (out of 10?),
-	"central location": latitude & longitude coordinates,
-	"travel_range": miles,
-	"calendar": idk yet (maybe calendar_id),
-	"photos": file_contents [],
-	"reviews": [
-		{
-			"review_id": ObjectID,
-			"reviewee_id": ObjectID,
-			"reviewer_id": ObjectID,
-			"rating": int (out of 10),
-			"description": String
-			
-			(This is the way that an example showed me, but this appears to unnecessarily store data twice, maybe we would just want a list of review_ids)
-		}
-	],
+    "User": {
+        "_id": ObjectID,
+        "username": String,
+        "name:": String,
+    }
+
+
+    "Profile": {
+        "_id": ObjectID,
+        "user_id": ObjectID,
+        "kind": int,
+        "config": json for artist or venue,
+        "description": String,
+        "website_link": String,
+        "average_rating": int (out of 10?),
+        "central location": latitude & longitude coordinates,
+        "travel_range": miles,
+        "calendar": idk yet (maybe calendar_id),
+        "photos": file_contents [],
+        "reviews": [
+            {
+                "review_id": ObjectID,
+                "reviewee_id": ObjectID,
+                "reviewer_id": ObjectID,
+                "rating": int (out of 10),
+                "description": String
+                
+                (This is the way that an example showed me, but this appears to unnecessarily store data twice, maybe we would just want a list of review_ids)
+            }
+        ],
+    }
+
+    Review: {
+        "_id": ObjectID,
+        "reviewee_id": ObjectID,
+        "reviewer_id": ObjectID,
+        "rating": int (out of 10),
+        "description": String
+    }
 }
 
-Review:
-{
-	"_id": ObjectID,
-	"reviewee_id": ObjectID,
-	"reviewer_id": ObjectID,
-	"rating": int (out of 10),
-	"description": String
-}
-	
-		

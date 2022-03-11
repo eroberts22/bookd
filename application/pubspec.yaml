@@ -29,6 +29,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Add the dependency for the Firebase Core Flutter SDK
+  firebase_core: ^0.7.0
+  # Add the dependencies for the Firebase products you want to use in your app
+  # For example, to use Firebase Authentication and Cloud Firestore
+  firebase_auth: ^0.20.1
+  firebase_database: ^6.0.0
+  provider: ^4.3.3
 
 
   # The following adds the Cupertino Icons font to your application.
