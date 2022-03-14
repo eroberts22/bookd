@@ -15,8 +15,8 @@ class _AuthenticateState extends State<Authenticate> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //child: Home(), // testing home page
-      child: Register(),
+      // child: Home(),
+      child: SignIn(),        
     );
   }
 }

@@ -11,9 +11,9 @@ class AuthService {
   }
 
   // Authentication change in user stream
-  Stream<BookdUser?> get user {
+  Stream<BookdUser?> get user { // user is the current user of the app
     // Map the stream of FirebaseUsers -> BookdUser calling the conversion function for each item
-    return _auth.authStateChanges().map(_userFromFirebaseUser);
+    return _auth.authStateChanges().map(_userFromFirebaseUser); //listens for if a user is signed in or not
   }
 
   // Sign in anonymous
@@ -34,9 +34,27 @@ class AuthService {
   }
 
   // Sign in with email and password
-
+  Future signInWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password); // same as register but gets existing firebase user
+      User user = result.user; //turn firebase user into bookd user
+      return _userFromFirebaseUser(user);      
+    } catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
   // Register with email and password
-
+  Future registerWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      User user = result.user; //turn firebase user into bookd user
+      return _userFromFirebaseUser(user);      
+    } catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
   // Sign out
   Future signOut() async {
     try {

@@ -9,12 +9,13 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  // Our custom authentication class to store auth data
-  final AuthService _authService = AuthService();
+  final AuthService _authService = AuthService();   // Our custom authentication class to store auth data. instance created from auth.dart class
+  final _formKey = GlobalKey<FormState>(); //key to track state of form to validate
 
   //Store email and password local state
   String email = '';
   String password = '';
+  String error = ''; // error is caught and printed to box
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +28,22 @@ class _RegisterState extends State<Register> {
         body: Container(
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
             child: Form(
-                child: Column(children: <Widget>[
+              key: _formKey, //key to track state of form to validate
+                child: Column(
+                  children: <Widget>[
               SizedBox(height: 20.0),
               TextFormField(
+                validator: (val) => val!.isEmpty ? 'Enter an email' : null, //indicates if form is valid or not. Using !. so assuming value won't be null
                 // val represents whatever was inserted
-                onChanged: (val) {
+                onChanged: (val) { // on user typing update email value
                   setState(() => email = val);
                 },
               ),
               SizedBox(height: 20.0),
               TextFormField(
                   obscureText: true,
-                  onChanged: (val) {
+                  validator: (val) => val!.length < 6 ? 'Enter a password 6 characters or longer' : null, //indicates if form is valid or not. Using !. so assuming value won't be null
+                  onChanged: (val) { // on user typing update password value
                     setState(() => password = val);
                   }),
               SizedBox(height: 20.0),
@@ -49,10 +54,19 @@ class _RegisterState extends State<Register> {
                 ),
                 child: Text('Register', style: TextStyle(color: Colors.white)),
                 onPressed: () async {
-                  // Go log this person into firebase
-                  print(email);
-                  print(password);
+                  if (_formKey.currentState!.validate()){ // true if form is valid, false if otherwise. !NOTE!!!! Using a !. null safety operator, telling it this state can never be null. Might need to fix this to avoid bugs?
+                    dynamic result =  await _authService.registerWithEmailAndPassword(email, password); //get "dynamic"(result can change its type) result 
+                    if (result == null){
+                      setState(() => error = 'please supply a valid email');
+                    }
+                    // If result is not null, the listener stream<bookduser> in auth.dart will know a user has signed in and will update authentication state
+                  }
                 },
+              ),
+              SizedBox(height: 12.0), //text box for error
+              Text(
+                error,
+                style: TextStyle(color: Colors.red, fontSize: 14.0),
               )
             ]))));
   }
