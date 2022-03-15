@@ -8,9 +8,8 @@ User
 
 
     "Profile": {
-        "_id": ObjectID,
-        "user_id": ObjectID,
-        "kind": int,
+        "user_id (primary key)": ObjectID,
+        "kind (0 for artist, 1 for venue)": int,
         "config": json for artist or venue,
         "description": String,
         "website_link": String,
