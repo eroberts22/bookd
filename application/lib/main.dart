@@ -1,5 +1,7 @@
 import 'package:application/models/users.dart';
+import 'package:application/screens/authenticate/authenticate.dart';
 import 'package:application/screens/wrapper.dart';
+import 'package:application/screens/homepage/home.dart';
 import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,7 +25,15 @@ class MyApp extends StatelessWidget {
       initialData: null, // when dependencies were updated for no-null-safety, it wanted me to include initialData parameter, but I dodn't know what to put so I just did null
       value: AuthService().user,
       child: MaterialApp(
-        home: Wrapper(),
+        // home: Wrapper(),
+        // using routing fixes logout button
+        initialRoute: '/',
+        routes: {
+          '/': (context) => Wrapper(),
+          Home.route :(context) => Home(),
+          ProfilePage.route:(context) => ProfilePage(),
+          AccountPage.route:(context) => AccountPage(),
+        },
       ),
     );
   }
