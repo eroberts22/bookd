@@ -16,7 +16,7 @@ class _AuthenticateState extends State<Authenticate> {
   Widget build(BuildContext context) {
     return Container(
       // child: Home(),
-      child: SignIn(),        
+      child: Register(),        
     );
   }
 }

@@ -20,12 +20,10 @@ class AuthService {
   Future signInAnon() async {
     try {
       UserCredential result = await _auth.signInAnonymously();
-      User user = result.user;
-      // Catch a null return value
-      if (user == null) {
-        print("Unable to login!");
-        return null;
+      if(result.user == null){ // catch null firebase user before assigning it to an app user
+        return null; //an error will be outputed from signin page
       }
+      User user = result.user!; //use result.user! here since we know result.user isn't null
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -37,7 +35,10 @@ class AuthService {
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password); // same as register but gets existing firebase user
-      User user = result.user; //turn firebase user into bookd user
+      if(result.user == null){ // catch null firebase user before assigning it to an app user
+        return null;
+      }
+      User user = result.user!; //turn firebase user into bookd user
       return _userFromFirebaseUser(user);      
     } catch(e){
       print(e.toString());
@@ -48,7 +49,10 @@ class AuthService {
   Future registerWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      User user = result.user; //turn firebase user into bookd user
+      if(result.user == null){ // catch null firebase user before assigning it to an app user
+        return null;
+      }
+      User user = result.user!; //turn firebase user into bookd user
       return _userFromFirebaseUser(user);      
     } catch(e){
       print(e.toString());
@@ -56,7 +60,7 @@ class AuthService {
     }
   }
   // Sign out
-  Future signOut() async {
+  Future signOut() async { //TODO: error box pop-up in main app if signout fails
     try {
       return await _auth.signOut();
     } catch (e) {

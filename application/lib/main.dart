@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamProvider<BookdUser?>.value(
       // Uses the stream of BookdUser? objects from auth.dart
+      initialData: null, // when dependencies were updated for no-null-safety, it wanted me to include initialData parameter, but I dodn't know what to put so I just did null
       value: AuthService().user,
       child: MaterialApp(
         home: Wrapper(),

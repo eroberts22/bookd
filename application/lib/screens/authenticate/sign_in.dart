@@ -65,7 +65,7 @@ class _SignInState extends State<SignIn> {
               ),
               SizedBox(height: 12.0), //text box for error
               Text(
-                error,
+                error, // output the error from signin
                 style: TextStyle(color: Colors.red, fontSize: 14.0),
               )
             ]))));
