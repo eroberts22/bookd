@@ -174,7 +174,7 @@ class AppDrawer extends StatelessWidget {
             TextButton.icon(
               icon: Icon(Icons.person),
               onPressed: () async {
-                await _auth.signOut();
+                await _auth.signOut(); // need error box for error from this function
               },
               label: Text('logout'),
               style: TextButton.styleFrom(
