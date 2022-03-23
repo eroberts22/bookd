@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Home Page ///////////////////////////////////////////////////////////
 class Home extends StatelessWidget {
+  static const String route = '/home';
   Home({Key? key}) : super(key: key);
 
   // Our class to handle authentication
@@ -26,6 +27,7 @@ class Home extends StatelessWidget {
 
 // Profile Page ////////////////////////////////////////////////////////
 class ProfilePage extends StatelessWidget {
+  static const String route = '/profile';
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
@@ -46,6 +48,7 @@ class ProfilePage extends StatelessWidget {
 
 // Account Page ////////////////////////////////////////////////////////
 class AccountPage extends StatelessWidget {
+  static const String route = '/account';
   const AccountPage({ Key? key }) : super(key: key);
 
   @override
@@ -102,8 +105,9 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Drawer(
+    //return Container(
+      //child: Drawer(
+        return Drawer(
         backgroundColor: Colors.brown[50], // nav background
         child: ListView(
           children: [
@@ -128,12 +132,8 @@ class AppDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => Home()
-                    )
-                );
+                Navigator.pushReplacementNamed(context,'/home');
+                
               },
             ),
             // Profile
@@ -146,10 +146,7 @@ class AppDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfilePage()));
+                Navigator.pushReplacementNamed(context,'/profile');
               },
             ),
             // Account
@@ -162,19 +159,17 @@ class AppDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => AccountPage()
-                    )
-                );
+               Navigator.pushReplacementNamed(context,'/account');
               },
             ),
             // logout icon
             TextButton.icon(
               icon: Icon(Icons.person),
               onPressed: () async {
-                await _auth.signOut(); // need error box for error from this function
+               Navigator.pop(context);
+               // Navigator.pushReplacementNamed(context, '/');
+                await _auth.signOut();
+                Navigator.pushReplacementNamed(context, '/'); // need error box for error from this function
               },
               label: Text('logout'),
               style: TextButton.styleFrom(
@@ -183,7 +178,7 @@ class AppDrawer extends StatelessWidget {
             )
           ],
         ),
-      ),
+    //  ),
     );
   }
 }
