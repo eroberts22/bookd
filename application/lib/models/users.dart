@@ -1,13 +1,11 @@
 class BookdUser {
   final String uid;
-  final String email;
-  final String name;
+  final String? email;
 
-  BookdUser(this.uid, this.email, this.name);
+  BookdUser(this.uid, this.email);
 
   Map toJson() => {
         "id": uid,
-        "email": email,
-        "name": name,
+        "email": email
       };
 }
