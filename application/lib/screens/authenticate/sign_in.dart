@@ -25,16 +25,8 @@ class _SignInState extends State<SignIn> {
         appBar: AppBar(
           backgroundColor: Colors.blue,
           elevation: 0.0,
-          title: Text('BOOKD'),
-          actions: <Widget>[
-            TextButton(
-                onPressed: () {
-                  widget.toggleView();
-                },
-                child: const Text('Register'),
-                style: TextButton.styleFrom(primary: Colors.white,),
-                )
-          ],
+          centerTitle: true,
+          title: const Text ('BOOKD'),
         ),
         body: Container(
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -69,7 +61,7 @@ class _SignInState extends State<SignIn> {
                   SizedBox(height: 20.0),
                   ElevatedButton(
                     style: ButtonStyle(
-                      foregroundColor:
+                      backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.blue),
                       fixedSize: MaterialStateProperty.all(const Size(300, 30)),
                     ),
@@ -93,12 +85,33 @@ class _SignInState extends State<SignIn> {
                     onPressed: () {
                       // Forgot password screen
                     },
-                    child: const Text('Forgot Password',),
+                    child: const Text(
+                      'Forgot Password',
+                    ),
                   ),
-                  SizedBox(height: 12.0), //text box for error
+                  Row(
+                    children: const <Widget>[
+                      Expanded(child: Divider(color: Colors.grey)),
+                      Text("OR"),
+                      Expanded(child: Divider(color: Colors.grey)),
+                    ],
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green),
+                      fixedSize: MaterialStateProperty.all(const Size(300, 30)),
+                    ),
+                    child: const Text('Create new Bookd account',
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: () {
+                      widget.toggleView();
+                    },
+                  ),
+                  const SizedBox(height: 12.0), //text box for error
                   Text(
                     error, // output the error from signin
-                    style: TextStyle(color: Colors.red, fontSize: 14.0),
+                    style: const TextStyle(color: Colors.red, fontSize: 14.0),
                   )
                 ]))));
   }

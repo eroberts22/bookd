@@ -25,19 +25,16 @@ class _RegisterState extends State<Register> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.blue,
-          elevation: 0.0,
-          title: Text('BOOKD'),
-          actions: <Widget>[
-            TextButton(
-                onPressed: () {
-                  widget.toggleView();
-                },
-                child: const Text('Sign In'),
-                style: TextButton.styleFrom(primary: Colors.white,),
-                )
-          ],
-        ),
+            backgroundColor: Colors.blue,
+            elevation: 0.0,
+            centerTitle: true,
+            title: const Text('BOOKD'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                widget.toggleView();
+              },
+            )),
         body: Container(
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
             child: Form(
@@ -75,7 +72,7 @@ class _RegisterState extends State<Register> {
                     style: ButtonStyle(
                       foregroundColor:
                           MaterialStateProperty.all<Color>(Colors.blue),
-                      fixedSize: MaterialStateProperty.all(const Size(300,30)),
+                      fixedSize: MaterialStateProperty.all(const Size(300, 30)),
                     ),
                     child:
                         Text('Register', style: TextStyle(color: Colors.white)),
