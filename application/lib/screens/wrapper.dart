@@ -1,4 +1,5 @@
 import 'package:application/models/users.dart';
+import 'package:application/screens/artists/store_info.dart';
 import 'package:application/screens/authenticate/authenticate.dart';
 import 'package:application/screens/homepage/home.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class Wrapper extends StatelessWidget {
       return Authenticate();
     } else {
       // Otherwise, we want to give them the home screen
-      return Home();
+      return artistSettings();
     }
 
     
