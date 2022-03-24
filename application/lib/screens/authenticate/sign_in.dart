@@ -89,6 +89,12 @@ class _SignInState extends State<SignIn> {
                       }
                     },
                   ),
+                  TextButton(
+                    onPressed: () {
+                      // Forgot password screen
+                    },
+                    child: const Text('Forgot Password',),
+                  ),
                   SizedBox(height: 12.0), //text box for error
                   Text(
                     error, // output the error from signin
