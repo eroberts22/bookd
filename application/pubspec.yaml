@@ -35,6 +35,8 @@ dependencies:
   # For example, to use Firebase Authentication and Cloud Firestore
   firebase_auth: ^3.3.11
   firebase_database: ^9.0.8
+  # For storing images
+  firebase_storage: ^10.2.9
   provider: ^6.0.2
 
 
