@@ -23,7 +23,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.cyan,
           elevation: 0.0,
           centerTitle: true,
           title: const Text ('BOOKD'),
@@ -62,7 +62,7 @@ class _SignInState extends State<SignIn> {
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
+                          MaterialStateProperty.all<Color>(Colors.cyan),
                       fixedSize: MaterialStateProperty.all(const Size(300, 30)),
                     ),
                     child:
@@ -76,6 +76,10 @@ class _SignInState extends State<SignIn> {
                                 password); //get "dynamic"(result can change its type) result
                         if (result == null) {
                           setState(() => error = 'Invalid email or password');
+                        }
+
+                        if(result != null) { // if sign in is valid, show home screen
+                        Navigator.of(context).pushReplacementNamed('/home');
                         }
                         // If result is not null, the listener stream<bookduser> in auth.dart will know a user has signed in and will update authentication state
                       }
@@ -99,7 +103,7 @@ class _SignInState extends State<SignIn> {
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
+                          MaterialStateProperty.all<Color>(Colors.blueGrey),
                       fixedSize: MaterialStateProperty.all(const Size(300, 30)),
                     ),
                     child: const Text('Create new Bookd account',

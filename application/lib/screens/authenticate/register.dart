@@ -25,7 +25,7 @@ class _RegisterState extends State<Register> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.cyan,
             elevation: 0.0,
             centerTitle: true,
             title: const Text('BOOKD'),
@@ -71,7 +71,7 @@ class _RegisterState extends State<Register> {
                   ElevatedButton(
                     style: ButtonStyle(
                       foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
+                          MaterialStateProperty.all<Color>(Colors.cyan),
                       fixedSize: MaterialStateProperty.all(const Size(300, 30)),
                     ),
                     child:
@@ -86,6 +86,9 @@ class _RegisterState extends State<Register> {
                         if (result == null) {
                           setState(() => error = 'please supply a valid email');
                         }
+                        // if register is valid, show home page
+                        Navigator.of(context).pushReplacementNamed('/home');
+
                         // If result is not null, the listener stream<bookduser> in auth.dart will know a user has signed in and will update authentication state
                       }
                     },

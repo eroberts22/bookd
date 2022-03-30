@@ -1,7 +1,11 @@
 import 'package:application/models/users.dart';
 import 'package:application/screens/authenticate/authenticate.dart';
-import 'package:application/screens/wrapper.dart';
+import 'package:application/screens/homepage/calendar.dart';
 import 'package:application/screens/homepage/home.dart';
+import 'package:application/screens/homepage/explore.dart';
+import 'package:application/screens/homepage/account.dart';
+import 'package:application/screens/artists/store_info.dart';
+import 'package:application/screens/homepage/profile.dart';
 import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,15 +29,25 @@ class MyApp extends StatelessWidget {
       initialData: null, // when dependencies were updated for no-null-safety, it wanted me to include initialData parameter, but I dodn't know what to put so I just did null
       value: AuthService().user,
       child: MaterialApp(
-        // home: Wrapper(),
-        // using routing fixes logout button
-        initialRoute: '/',
+        initialRoute: Provider.of<BookdUser?>(context) == null ? '/authenticate' : '/home',
         routes: {
-          '/': (context) => Wrapper(),
-          Home.route :(context) => Home(),
-          ProfilePage.route:(context) => ProfilePage(),
-          AccountPage.route:(context) => AccountPage(),
-        },
+          '/authenticate': ((context) => Authenticate()),
+          '/home':(context) => Explore(),
+          '/profile':(context) => Profile(),
+          '/account':(context) => Account(),
+          '/artist-settings':(context) => artistSettings(),
+          '/calendar':((context) => BookdCalendar()
+          )
+        }
+        //home: Wrapper(),
+        // using routing fixes logout button
+        //initialRoute: '/',
+        //routes: {
+        //  '/': (context) => Wrapper(),
+        //  Home.route :(context) => Home(),
+        //  ProfilePage.route:(context) => ProfilePage(),
+      //   AccountPage.route:(context) => AccountPage(),
+        //},
       ),
     );
   }
