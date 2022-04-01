@@ -22,6 +22,7 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.blue,
           elevation: 0.0,
@@ -96,6 +97,7 @@ class _SignInState extends State<SignIn> {
                       Expanded(child: Divider(color: Colors.grey)),
                     ],
                   ),
+                  SizedBox(height: 20.0),
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
