@@ -18,6 +18,9 @@ class _RegisterState extends State<Register> {
   //Store email and password local state
   String email = '';
   String password = '';
+  String firstName = '';
+  String lastName = '';
+  String phoneNumber = '';
   String error = ''; // error is caught and printed to box
 
   @override
@@ -40,6 +43,33 @@ class _RegisterState extends State<Register> {
             child: Form(
                 key: _formKey, //key to track state of form to validate
                 child: Column(children: <Widget>[
+                  Row(children: [
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'First Name',
+                        ),
+                        validator: (val) =>
+                          val!.isEmpty ? 'Enter First Name' : null,
+                        onChanged: (val) {
+                          setState(() => firstName = val);
+                        }
+                      ),
+                    ),
+                    SizedBox(width: 20,),
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Last Name',
+                        ),
+                        validator: (val) =>
+                          val!.isEmpty ? 'Enter Last Name' : null,
+                        onChanged: (val) {
+                          setState(() => lastName = val);
+                        }
+                      ),
+                    )
+                  ],),
                   SizedBox(height: 20.0),
                   TextFormField(
                     decoration: const InputDecoration(
