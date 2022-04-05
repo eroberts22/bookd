@@ -1,0 +1,6 @@
+Querying the firebase database guide:
+https://petercoding.com/firebase/2020/02/16/using-firebase-queries-in-flutter/#executing-different-firebase-queries
+updating/deleting/adding data to firebase:
+https://firebase.flutter.dev/docs/database/read-and-write
+Calendar documentation:
+https://pub.dev/documentation/table_calendar/latest/

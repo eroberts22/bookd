@@ -4,7 +4,8 @@ import 'package:application/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+  final Function toggleView;
+  const Register({Key? key, required this.toggleView}) : super(key: key);
 
   @override
   State<Register> createState() => _RegisterState();
@@ -23,21 +24,36 @@ class _RegisterState extends State<Register> {
   String password = '';
   String error = ''; // error is caught and printed to box
 
+  String profileType = '0';
+
+  List<bool> _selections = List.generate(3, (_) => false);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.brown[50],
+        backgroundColor: Colors.white,
         appBar: AppBar(
             backgroundColor: Colors.cyan,
             elevation: 0.0,
-            title: Text('Sign up for Bookd')),
+            centerTitle: true,
+            title: const Text('BOOKD'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                widget.toggleView();
+              },
+            )),
         body: Container(
+          child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
             child: Form(
                 key: _formKey, //key to track state of form to validate
                 child: Column(children: <Widget>[
                   SizedBox(height: 20.0),
                   TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                    ),
                     validator: (val) => val!.isEmpty
                         ? 'Enter an email'
                         : null, //indicates if form is valid or not. Using !. so assuming value won't be null
@@ -49,6 +65,9 @@ class _RegisterState extends State<Register> {
                   ),
                   SizedBox(height: 20.0),
                   TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Password',
+                      ),
                       obscureText: true,
                       validator: (val) => val!.length < 6
                           ? 'Enter a password 6 characters or longer'
@@ -58,44 +77,78 @@ class _RegisterState extends State<Register> {
                         setState(() => password = val);
                       }),
                   SizedBox(height: 20.0),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
-                    ),
-                    child:
-                        Text('Register', style: TextStyle(color: Colors.white)),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        // true if form is valid, false if otherwise. !NOTE!!!! Using a !. null safety operator, telling it this state can never be null. Might need to fix this to avoid bugs?
-                        dynamic result =
-                            await _authService.registerWithEmailAndPassword(
-                                email,
-                                password); //get "dynamic"(result can change its type) result
-                        if (result == null) {
-                          setState(() => error = 'please supply a valid email');
+                  TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: '0 For Artist, 1 For Venue',
+                      ),
+                      validator: (val) {
+                        if (val == "0" || val == "1") {
+                          return null;
                         } else {
-                          String? uid = result.uid;
-                          // A new user has just been created!
-                          DatabaseReference artistRef =
-                              database.ref("Users/$uid");
-
-                          // Store the new user in the database!
-                          String u_email = result.email;
-                          await artistRef.set(u_email);
-                          print(
-                            "Created user $uid in database with email $u_email"
-                            );
+                          return "Invalid Entry. Enter 0 for Artist, 1 for Venue";
                         }
+                      }, //indicates if form is valid or not. Using !. so assuming value won't be null
+                      onChanged: (val) {
+                        // on user typing update password value
+                        setState(() => profileType = val);
+                      }),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue),
+                        fixedSize:
+                            MaterialStateProperty.all(const Size(300, 30)),
+                      ),
+                      child: Text('Register',
+                          style: TextStyle(color: Colors.white)),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          // true if form is valid, false if otherwise. !NOTE!!!! Using a !. null safety operator, telling it this state can never be null. Might need to fix this to avoid bugs?
+                          dynamic result =
+                              await _authService.registerWithEmailAndPassword(
+                                  email,
+                                  password); //get "dynamic"(result can change its type) result
+                          if (result == null) {
+                            setState(
+                                () => error = 'please supply a valid email');
+                          } else {
+                            if (profileType == "0" || profileType == "1") {
+                              String profile = "";
+                              if (profileType == "0") {
+                                profile = "artist";
+                              } else {
+                                profile = "venue";
+                              }
+                              String? uid = result.uid;
+                              // Store the new user in the database!
+                              String u_email = result.email;
+                              Map<String, String?> user_map = {
+                                "email": u_email,
+                                "profileType": profile
+                              };
+                              
+                              // A new user has just been created!
+                              DatabaseReference artistRef =
+                                  database.ref("Users/$uid");
+
+                              
+                              await artistRef.set(user_map);
+                              print(
+                                  "Created user $uid in database with email $u_email and profile $profile");
+                            }
+                          }
+                        }
+                        // if register is valid, show home page
+                        Navigator.of(context).pushReplacementNamed('/home');
+
                         // If result is not null, the listener stream<bookduser> in auth.dart will know a user has signed in and will update authentication state
-                      }
-                    },
-                  ),
+                      }),
                   SizedBox(height: 12.0), //text box for error
                   Text(
                     error,
                     style: TextStyle(color: Colors.red, fontSize: 14.0),
                   )
-                ]))));
+                ])))));
   }
 }

@@ -35,7 +35,13 @@ class _artistSettingsState extends State<artistSettings> {
         appBar: AppBar(
             backgroundColor: Colors.cyan,
             elevation: 0.0,
-            title: Text('Store Artist Info')),
+            title: Text('Store Artist Info'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/account');
+              },
+            )),
         body: Container(
             child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),

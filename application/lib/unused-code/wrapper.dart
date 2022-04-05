@@ -19,7 +19,7 @@ class Wrapper extends StatelessWidget {
       return Authenticate();
     } else {
       // Otherwise, we want to give them the home screen
-      return artistSettings();
+      return Home();
     }
 
     
