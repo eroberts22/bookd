@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           '/profile':(context) => Profile(),
           '/account':(context) => Account(),
           '/artist-settings':(context) => artistSettings(),
-          '/venue-settings':(context) => VenueSettings(),
+          '/venue-settings':(context) => venueSettings(),
           '/calendar':(context) => BookdCalendar()
         }
         //home: Wrapper(),

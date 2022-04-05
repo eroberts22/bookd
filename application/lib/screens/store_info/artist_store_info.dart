@@ -109,6 +109,9 @@ class _artistSettingsState extends State<artistSettings> {
                           print("Button Pressed, send info to database");
                           String? uid = _authService.userID;
 
+                          //Reset error to be empty
+                          error = "";
+
                           // Check if the current user already has an artist profile
 
                           DatabaseReference artistRef =
@@ -177,7 +180,9 @@ class _artistSettingsState extends State<artistSettings> {
                             }
                             print(artistRef);
                             print(updateMap);
-                            if (updateMap.isNotEmpty) {
+                            print(error);
+                            // Don't want to write if there is an error
+                            if (updateMap.isNotEmpty && error == "") {
                               print("Writing map to database");
                               await artistRef.update(updateMap);
                             }
