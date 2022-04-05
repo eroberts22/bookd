@@ -136,13 +136,17 @@ class _RegisterState extends State<Register> {
                               await artistRef.set(user_map);
                               print(
                                   "Created user $uid in database with email $u_email and profile $profile");
+
+                              // if register is valid, show home page
+                              if(result != null) { // if sign in is valid, show home screen
+                                Navigator.of(context).pushReplacementNamed('/home');
+                              }
                             }
                           }
                         }
-                        // if register is valid, show home page
-                        Navigator.of(context).pushReplacementNamed('/home');
 
                         // If result is not null, the listener stream<bookduser> in auth.dart will know a user has signed in and will update authentication state
+                        
                       }),
                   SizedBox(height: 12.0), //text box for error
                   Text(
