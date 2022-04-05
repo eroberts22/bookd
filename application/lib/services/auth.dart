@@ -1,5 +1,6 @@
 import 'package:application/models/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -7,7 +8,19 @@ class AuthService {
   // Create user object from firebase user id
   // Nullable function
   BookdUser? _userFromFirebaseUser(User? user) {
-    return user != null ? BookdUser(user.uid, userEmail) : null;
+    String? pType = "";
+    profileType.then((String? profType)
+    {
+      pType = profType;
+    });
+    return user != null ? BookdUser(user.uid, userEmail, pType) : null;
+  }
+
+  Future<String?> get profileType async {
+    DatabaseEvent profileTypeEvent =
+        await FirebaseDatabase.instance.ref("Users/$userID/profileType").once();
+    String? profileType = (profileTypeEvent.snapshot.value as String);
+    return profileType;
   }
 
   // Authentication change in user stream
