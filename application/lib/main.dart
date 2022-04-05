@@ -4,7 +4,8 @@ import 'package:application/screens/homepage/calendar.dart';
 import 'package:application/screens/homepage/home.dart';
 import 'package:application/screens/homepage/explore.dart';
 import 'package:application/screens/homepage/account.dart';
-import 'package:application/screens/artists/store_info.dart';
+import 'package:application/screens/store_info/artist_store_info.dart';
+import 'package:application/screens/store_info/venue_store_info.dart';
 import 'package:application/screens/homepage/profile.dart';
 import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +37,8 @@ class MyApp extends StatelessWidget {
           '/profile':(context) => Profile(),
           '/account':(context) => Account(),
           '/artist-settings':(context) => artistSettings(),
-          '/calendar':((context) => BookdCalendar()
-          )
+          '/venue-settings':(context) => VenueSettings(),
+          '/calendar':(context) => BookdCalendar()
         }
         //home: Wrapper(),
         // using routing fixes logout button
