@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:application/screens/authenticate/register.dart';
 // added for testing home page
 import 'package:application/screens/homepage/home.dart';
-import 'package:application/screens/artists/store_info.dart';
 
 class Authenticate extends StatefulWidget {
   const Authenticate({Key? key}) : super(key: key);
