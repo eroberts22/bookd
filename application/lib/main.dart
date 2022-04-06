@@ -32,12 +32,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         initialRoute: Provider.of<BookdUser?>(context) == null ? '/authenticate' : '/home',
         routes: {
-          '/authenticate': ((context) => Authenticate()),
-          '/home':(context) => Explore(),
-          '/profile':(context) => Profile(),
-          '/account':(context) => Account(),
-          '/artist-settings':(context) => artistSettings(),
-          '/venue-settings':(context) => venueSettings(),
+          '/authenticate': ((context) => const Authenticate()),
+          '/home':(context) => const Explore(),
+          '/profile':(context) => const Profile(),
+          '/account':(context) => const Account(),
+          '/artist-settings':(context) => const artistSettings(),
+          '/venue-settings':(context) => const venueSettings(),
           '/calendar':(context) => BookdCalendar()
         }
         //home: Wrapper(),

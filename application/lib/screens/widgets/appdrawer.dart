@@ -10,12 +10,12 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
         return Drawer(
-        backgroundColor: Colors.brown[50], // nav background
+        backgroundColor: Colors.white, // nav background
         child: ListView(
           children: [
             // close menu icon
             ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.close,
                 color: Colors.cyan,
                 size: 50.0,
@@ -63,6 +63,7 @@ class AppDrawer extends StatelessWidget {
               },
             ),
             // logout icon
+            /*
             TextButton.icon(
               icon: Icon(Icons.person),
               onPressed: () async {
@@ -73,7 +74,7 @@ class AppDrawer extends StatelessWidget {
               style: TextButton.styleFrom(
                 primary: Colors.cyan,
               ),
-            )
+            )*/
           ],
         ),
     );

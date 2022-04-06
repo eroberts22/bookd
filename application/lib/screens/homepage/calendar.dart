@@ -45,11 +45,11 @@ class BookdCalendarState extends State<BookdCalendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown[50],
+      backgroundColor: Colors.white,
       appBar: AppBar(
             backgroundColor: Colors.cyan,
             elevation: 0.0,
-            title: Text('Calendar'),
+            title: const Text('Calendar'),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
@@ -61,7 +61,7 @@ class BookdCalendarState extends State<BookdCalendar> {
             calendarBuilders: CalendarBuilders(
               singleMarkerBuilder: (context, day, events) { //changes the look of the event markers. Needs to be made to look good.
                 return Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.rectangle,
                     color: Colors.blue),
                   width: 10.0,

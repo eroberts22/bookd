@@ -31,11 +31,11 @@ class _artistSettingsState extends State<artistSettings> {
   Widget build(BuildContext context) {
     FirebaseDatabase database = FirebaseDatabase.instance;
     return Scaffold(
-        backgroundColor: Colors.brown[50],
+        backgroundColor: Colors.white,
         appBar: AppBar(
             backgroundColor: Colors.cyan,
             elevation: 0.0,
-            title: Text('Store Artist Info'),
+            title: const Text('Profile Settings'),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
@@ -44,12 +44,12 @@ class _artistSettingsState extends State<artistSettings> {
             )),
         body: Container(
             child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
                 child: Form(
                     key: _formKey, //key to track state of form to validate
                     child: Column(children: <Widget>[
-                      SizedBox(height: 20.0),
-                      Text("Enter a brief description of yourself"),
+                      const SizedBox(height: 20.0),
+                      const Text("Enter a brief description of yourself"),
                       TextFormField(
                         validator: (val) =>
                             val!.isEmpty ? 'Enter a description' : null,
@@ -61,8 +61,8 @@ class _artistSettingsState extends State<artistSettings> {
                           print(description);
                         },
                       ),
-                      SizedBox(height: 20.0),
-                      Text("Enter your desired stage name"),
+                      const SizedBox(height: 20.0),
+                      const Text("Enter your desired stage name"),
                       TextFormField(
                           validator: (val) => val!.isEmpty
                               ? 'Enter your stage name'
@@ -72,8 +72,8 @@ class _artistSettingsState extends State<artistSettings> {
                             setState(() => stageName = val);
                             print(stageName);
                           }),
-                      SizedBox(height: 20.0),
-                      Text(
+                      const SizedBox(height: 20.0),
+                      const Text(
                           "Enter as many personal urls as desired separated by commas"),
                       TextFormField(
                           validator: (val) => val!.isEmpty
@@ -84,8 +84,8 @@ class _artistSettingsState extends State<artistSettings> {
                             setState(() => websiteLinks = val);
                             print(websiteLinks);
                           }),
-                      SizedBox(height: 20.0),
-                      Text(
+                      const SizedBox(height: 20.0),
+                      const Text(
                           "Enter all cities you willing to play in separated by commas"),
                       TextFormField(
                           validator: (val) => val!.isEmpty
@@ -96,13 +96,13 @@ class _artistSettingsState extends State<artistSettings> {
                             setState(() => potentialCities = val);
                             print(potentialCities);
                           }),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       ElevatedButton(
                         style: ButtonStyle(
                           foregroundColor:
                               MaterialStateProperty.all<Color>(Colors.blue),
                         ),
-                        child: Text('Update Artist Info',
+                        child: const Text('Update Artist Info',
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {
                           // Connect to the database, and access the current user's uid to be used as primary key
@@ -191,10 +191,10 @@ class _artistSettingsState extends State<artistSettings> {
                           // Parse out info separated by commas in List fields
                         },
                       ),
-                      SizedBox(height: 12.0), //text box for error
+                      const SizedBox(height: 12.0), //text box for error
                       Text(
                         error, // output the error from signin
-                        style: TextStyle(color: Colors.red, fontSize: 14.0),
+                        style: const TextStyle(color: Colors.red, fontSize: 14.0),
                       )
                     ])))));
   }

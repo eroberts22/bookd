@@ -9,12 +9,12 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
       child: Row(children: [
         // Text field
         Flexible(
           child: TextFormField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               prefixIcon: Icon(Icons.search),
               hintText: 'Search for Venues',
             ),
