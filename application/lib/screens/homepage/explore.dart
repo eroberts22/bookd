@@ -18,12 +18,12 @@ class _ExploreState extends State<Explore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown[50],
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       drawer: AppDrawer(),
-      appBar: BookdAppBar(),
+      appBar: const BookdAppBar(),
       body: Center(child: 
-      Column(children: [
+      Column(children: const [
        // Text('Explore Venues', style: TextStyle(fontSize: 20),),
         SearchBar()
       ],

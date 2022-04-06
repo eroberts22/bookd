@@ -18,14 +18,15 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown[50],
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       drawer: AppDrawer(),
-      appBar: BookdAppBar(),
-      body: Center(child: 
-      Column(children: [
-        Text('Profile', style: TextStyle(fontSize: 20),),
+      appBar: const BookdAppBar(),
+      body: 
+      Column(
+        children: const [
+        Text('profile', style: TextStyle(fontSize: 30),),
       ],
-    )));
+    ));
   }
 }

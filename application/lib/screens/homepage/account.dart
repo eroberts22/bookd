@@ -17,7 +17,6 @@ class _AccountState extends State<Account> {
   var profileType;
 
   @override void initState() {
-    // TODO: implement initState
     super.initState();
     _getDatabaseProfileType();
   }
@@ -32,14 +31,16 @@ class _AccountState extends State<Account> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.brown[50],
+        backgroundColor: Colors.white,
         drawer: AppDrawer(),
-        appBar: BookdAppBar(),
-        body:  Center(child:
+        appBar: const BookdAppBar(),
+        body: 
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // profile settings
             TextButton.icon(
-              icon: Icon(Icons.settings),
+              icon: const Icon(Icons.settings),
               onPressed: () async {
                 // load page specific to account type: artist and venue
                 if (profileType == "artist") {
@@ -51,22 +52,54 @@ class _AccountState extends State<Account> {
                   //
                 }
               },
-              label: Text('Profile Settings'),
+              label: const Text(
+                'Profile Settings',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                ),
+              ),
               style: TextButton.styleFrom(
-                primary: Colors.cyan,
+                primary: Colors.black,
               ),
             ),
+            // calendar
             TextButton.icon(
-              icon: Icon(Icons.calendar_month),
+              icon: const Icon(Icons.calendar_month),
               onPressed: () async {
                 Navigator.of(context).pushReplacementNamed('/calendar');
               },
-              label: Text('Calendar'),
+              label: const Text(
+                'Calendar',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                ),
+              ),
               style: TextButton.styleFrom(
-                primary: Colors.cyan,
+                primary: Colors.black,
+              ),
+            ),
+            // logout
+            TextButton.icon(
+              icon: const Icon(Icons.person),
+              onPressed: () async {
+                await _auth.signOut();
+                Navigator.of(context).pushReplacementNamed('/authenticate');
+              },
+              label: const Text(
+                'Logout',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                ),
+                ),
+              style: TextButton.styleFrom(
+                primary: Colors.black,
               ),
             )
           ],
-        )));
+        ),
+        );
   }
 }

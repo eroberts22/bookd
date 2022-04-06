@@ -36,7 +36,9 @@ class _RegisterState extends State<Register> {
             backgroundColor: Colors.cyan,
             elevation: 0.0,
             centerTitle: true,
-            title: const Text('BOOKD'),
+            title: const Text(
+              'Bookd.',
+              style: TextStyle(fontSize: 30),),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
@@ -45,11 +47,11 @@ class _RegisterState extends State<Register> {
             )),
         body: Container(
             child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
                 child: Form(
                     key: _formKey, //key to track state of form to validate
                     child: Column(children: <Widget>[
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Email',
@@ -63,7 +65,7 @@ class _RegisterState extends State<Register> {
                           setState(() => email = val);
                         },
                       ),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       TextFormField(
                           decoration: const InputDecoration(
                             labelText: 'Password',
@@ -76,7 +78,7 @@ class _RegisterState extends State<Register> {
                             // on user typing update password value
                             setState(() => password = val);
                           }),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       TextFormField(
                           decoration: const InputDecoration(
                             labelText: '0 For Artist, 1 For Venue',
@@ -92,7 +94,7 @@ class _RegisterState extends State<Register> {
                             // on user typing update password value
                             setState(() => profileType = val);
                           }),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       ElevatedButton(
                           style: ButtonStyle(
                             foregroundColor:
@@ -100,7 +102,7 @@ class _RegisterState extends State<Register> {
                             fixedSize:
                                 MaterialStateProperty.all(const Size(300, 30)),
                           ),
-                          child: Text('Register',
+                          child: const Text('Register',
                               style: TextStyle(color: Colors.white)),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
@@ -149,10 +151,10 @@ class _RegisterState extends State<Register> {
                             }
                             
                           }),
-                      SizedBox(height: 12.0), //text box for error
+                      const SizedBox(height: 12.0), //text box for error
                       Text(
                         error,
-                        style: TextStyle(color: Colors.red, fontSize: 14.0),
+                        style: const TextStyle(color: Colors.red, fontSize: 14.0),
                       )
                     ])))));
   }

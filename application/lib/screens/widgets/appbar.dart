@@ -7,21 +7,22 @@ class BookdAppBar extends StatelessWidget implements PreferredSizeWidget{
   Widget build(BuildContext context) {
      return AppBar(
         centerTitle: true,
-        title: Text(
-          'Bookd',
-          style: TextStyle(fontSize: 40),
+        title: const Text(
+          'Bookd.',
+          style: TextStyle(fontSize: 30),
         ),
-        backgroundColor: Color.fromARGB(0, 0, 0, 0), // transparent background
-        foregroundColor: Colors.cyan,
+        backgroundColor: Colors.cyan, // transparent background
+        //foregroundColor: Colors.cyan,
         elevation: 0.0,
         leading: Builder(
           builder: (context) => IconButton(
               onPressed: () => Scaffold.of(context).openDrawer(),
-              icon: Icon(Icons.menu),
-              iconSize: 50.0,
-              padding: EdgeInsets.symmetric(horizontal: 10)),
+              icon: const Icon(Icons.menu),
+              iconSize: 40.0,
+              padding: const EdgeInsets.symmetric(horizontal: 10)),
         ),
     );
   }
-  Size get preferredSize => new Size.fromHeight(kToolbarHeight);
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
