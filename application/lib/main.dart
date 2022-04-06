@@ -8,6 +8,7 @@ import 'package:application/screens/store_info/artist_store_info.dart';
 import 'package:application/screens/store_info/venue_store_info.dart';
 import 'package:application/screens/homepage/profile.dart';
 import 'package:application/services/auth.dart';
+import 'package:application/screens/store_info/upload_pictures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
           '/account':(context) => const Account(),
           '/artist-settings':(context) => const artistSettings(),
           '/venue-settings':(context) => const venueSettings(),
-          '/calendar':(context) => BookdCalendar()
+          '/calendar':(context) => BookdCalendar(),
+          '/upload-image':(context) => UploadImage()
         }
         //home: Wrapper(),
         // using routing fixes logout button

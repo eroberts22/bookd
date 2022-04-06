@@ -36,7 +36,10 @@ dependencies:
   firebase_auth: ^3.3.11
   firebase_database: ^9.0.8
   # For storing images
-  firebase_storage: ^10.2.9
+  firebase_storage: ^10.2.10
+  path: ^1.8.0
+  image_picker: ^0.8.5
+
   provider: ^6.0.2
 
 

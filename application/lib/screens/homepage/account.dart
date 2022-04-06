@@ -63,6 +63,23 @@ class _AccountState extends State<Account> {
                 primary: Colors.black,
               ),
             ),
+            // Upload Images
+            TextButton.icon(
+              icon: const Icon(Icons.image),
+              onPressed: () async {
+                Navigator.of(context).pushReplacementNamed('/upload-image');
+              },
+              label: const Text(
+                'Upload Image',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                ),
+              ),
+              style: TextButton.styleFrom(
+                primary: Colors.black,
+              ),
+            ),
             // calendar
             TextButton.icon(
               icon: const Icon(Icons.calendar_month),
