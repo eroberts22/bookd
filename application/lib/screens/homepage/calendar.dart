@@ -20,18 +20,29 @@ class BookdCalendarState extends State<BookdCalendar> {
   void initState() {
     super.initState();
     _getDatabaseDates(); // on initial start, add dates to _availableDates list
+    _selectedDay = _focusedDay;
   }
 
   void _getDatabaseDates() async { //get all availableDates from database
 
     String? uid = _authService.userID;
-    DatabaseReference artistDatesRef = database.ref("Artists/$uid/availableDates"); //get the reference for current user
-    List<dynamic> allDates = []; //a list that will contain all the dates stored in the database for an artist (as strings)
-    DatabaseEvent artistDates = await artistDatesRef.orderByValue().once(); //get artistDates as a data snapshot
-    for (var date in artistDates.snapshot.children){ //add each date to list of dates
+    
+    DatabaseReference databaseRef = database.ref(); //get the reference
+    DatabaseEvent userType = await databaseRef.child("Users/$uid/profileType").once(); //event for getting the profile type for comparison
+    DatabaseEvent userDates;
+    if(userType.snapshot.value == "artist"){
+      userDates = await databaseRef.child("Artists/$uid/availableDates").orderByValue().once();
+    }
+    else{//(userType == "Venue"){
+      userDates = await databaseRef.child("Venues/$uid/availableDates").orderByValue().once();
+    }
+    List<dynamic> allDates = []; //a list that will contain all the dates stored in the database for an user (as strings)
+    for (var date in userDates.snapshot.children){ //add each date to list of dates
       allDates.add(date.value);
     }
-    _availableDates = allDates; //set global list of dates
+    setState(() { //set the state once data has arrived
+      _availableDates = allDates; //set global list of dates
+    });
   }
 
   List _getEventsForDay(DateTime day){ //return a list of "events" that exist on a day. In this case there can only be one event on any particular day, so return a single value array or empty array
@@ -59,28 +70,39 @@ class BookdCalendarState extends State<BookdCalendar> {
       body:Column(children: [
           TableCalendar(
             calendarBuilders: CalendarBuilders(
-              singleMarkerBuilder: (context, day, events) { //changes the look of the event markers. Needs to be made to look good.
+              singleMarkerBuilder: (context, day, events) { //changes the look of the event markers.
                 return Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    color: Colors.blue),
-                  width: 10.0,
-                  height: 10.0,
-              
-                  margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                    color: Colors.cyan),
+                  width: 60.0,
+                  height: 13.0,
                 );
               },
-              // selectedBuilder: (context, day, events) { //changes look of days that are selected
-              //   return Container(
-              //     decoration: BoxDecoration(
-              //       shape: BoxShape.rectangle,
-              //       color: Colors.blue),
-              //     width: 10.0,
-              //     height: 10.0,
-              
-              //     margin: const EdgeInsets.symmetric(horizontal: 1.5),
-              //   );
-              // }
+              selectedBuilder: (context, day, events) { //changes look of days that are selected
+                return Container(
+                  //duration: Duration(milliseconds: 300),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.orangeAccent),
+                  width: 45.0,
+                  height: 45.0,              
+                  child: Center(
+                    child: Text(day.day.toString(), style: const TextStyle(fontSize: 14, color: Colors.black)),)                  
+                );
+              },
+              todayBuilder: (context, day, events) {
+                return Container(
+                  //duration: Duration(milliseconds: 300),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color.fromARGB(100, 255, 171, 64)),
+                  width: 45.0,
+                  height: 45.0,              
+                  child: Center(
+                    child: Text(day.day.toString(), style: const TextStyle(fontSize: 14, color: Colors.black)),)                  
+                );
+              }
             ),
             firstDay: DateTime.utc(DateTime.now().year, DateTime.now().month, 1),
             lastDay: DateTime.utc(DateTime.now().year+5, DateTime.now().month, 1),
@@ -97,22 +119,30 @@ class BookdCalendarState extends State<BookdCalendar> {
             },
             onDayLongPressed: (selectedDay, focusedDay) async{ //on long press add date to availibility days
               String? uid = _authService.userID;
-              DatabaseReference artistDatesRef = database.ref("Artists/$uid/availableDates"); //get the reference for current user's availible Dates
-              DatabaseEvent artistDate = await artistDatesRef.orderByValue().equalTo(selectedDay.toString()).once(); //query for finding if the selected day exists in the database
-              if(!artistDate.snapshot.exists){ //if this day does not already exist in the database
-                DatabaseReference addedListItemRef = artistDatesRef.push(); //create new spot for selected day
+              DatabaseReference databaseRef = database.ref(); //get the reference for database
+              DatabaseEvent userType = await databaseRef.child("Users/$uid/profileType").once(); //get a data snapshot of the user type for comparison
+              String userTypePath;         
+              if(userType.snapshot.value == "artist"){
+                userTypePath = "Artists/$uid/availableDates";
+              }
+              else{//(userType == "Venue"){
+                userTypePath = "Venues/$uid/availableDates";
+              }
+              DatabaseEvent userDate = await databaseRef.child(userTypePath).orderByValue().equalTo(selectedDay.toString()).once(); //query for finding if the selected day exists in the database
+              if(!userDate.snapshot.exists){ //if this day does not already exist in the database
+                DatabaseReference addedListItemRef = databaseRef.child(userTypePath).push(); //create new spot for selected day
                 addedListItemRef.set(selectedDay.toString()); //set the current date to be in the spot just created
               }
               else{ //delete day from database
-                for(var child in artistDate.snapshot.children){ //delete each key of the children from the artistDate query (should be only one child)
-                  artistDatesRef.child(child.key!).remove();
+                for(var child in userDate.snapshot.children){ //delete each key of the children from the artistDate query (should be only one child)
+                  databaseRef.child(userTypePath + "/" + child.key!).remove();
                 }
               }
               setState(() { //update the longpressed day to be "selected"
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay; // update `_focusedDay` here as well
-                _getDatabaseDates(); //update _availableDates from new database values
               });
+              _getDatabaseDates(); //update _availableDates from new database values
             },
             onFormatChanged: (format) { //if format if calendar is changed, update it
               setState(() {
