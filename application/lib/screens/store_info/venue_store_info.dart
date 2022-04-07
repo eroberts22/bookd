@@ -40,7 +40,6 @@ class _venueSettingsState extends State<venueSettings> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseDatabase database = FirebaseDatabase.instance;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
