@@ -130,7 +130,17 @@ class _UploadImageState extends State<UploadImage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.cyan,
+            elevation: 0.0,
+            title: const Text('Upload Image'),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/account');
+              },
+            ),
+      ),
       body: Column(
         children: <Widget>[
           SizedBox(
