@@ -4,9 +4,11 @@ import 'package:application/screens/homepage/calendar.dart';
 import 'package:application/screens/homepage/home.dart';
 import 'package:application/screens/homepage/explore.dart';
 import 'package:application/screens/homepage/account.dart';
-import 'package:application/screens/artists/store_info.dart';
+import 'package:application/screens/store_info/artist_store_info.dart';
+import 'package:application/screens/store_info/venue_store_info.dart';
 import 'package:application/screens/homepage/profile.dart';
 import 'package:application/services/auth.dart';
+import 'package:application/screens/store_info/upload_pictures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -31,13 +33,14 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         initialRoute: Provider.of<BookdUser?>(context) == null ? '/authenticate' : '/home',
         routes: {
-          '/authenticate': ((context) => Authenticate()),
-          '/home':(context) => Explore(),
-          '/profile':(context) => Profile(),
-          '/account':(context) => Account(),
-          '/artist-settings':(context) => artistSettings(),
-          '/calendar':((context) => BookdCalendar()
-          )
+          '/authenticate': ((context) => const Authenticate()),
+          '/home':(context) => const Explore(),
+          '/profile':(context) => const Profile(),
+          '/account':(context) => const Account(),
+          '/artist-settings':(context) => const artistSettings(),
+          '/venue-settings':(context) => const venueSettings(),
+          '/calendar':(context) => BookdCalendar(),
+          '/upload-image':(context) => UploadImage()
         }
         //home: Wrapper(),
         // using routing fixes logout button

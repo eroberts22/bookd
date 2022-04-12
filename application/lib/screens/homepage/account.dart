@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/appdrawer.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -12,36 +13,110 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   final AuthService _auth = AuthService();
+  FirebaseDatabase database = FirebaseDatabase.instance;
+  var profileType;
+
+  @override void initState() {
+    super.initState();
+    _getDatabaseProfileType();
+  }
+
+  void _getDatabaseProfileType() async {
+    String? uid = _auth.userID;
+    DatabaseReference profileTypeRef = database.ref("Users/$uid/profileType");
+    DatabaseEvent profileTypeEv = await profileTypeRef.once();
+    profileType = profileTypeEv.snapshot.value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.brown[50],
+        backgroundColor: Colors.white,
         drawer: AppDrawer(),
-        appBar: BookdAppBar(),
-        body:  Center(child:
+        appBar: const BookdAppBar(),
+        body: 
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // profile settings
             TextButton.icon(
-              icon: Icon(Icons.settings),
+              icon: const Icon(Icons.settings),
               onPressed: () async {
-                Navigator.of(context).pushReplacementNamed('/artist-settings');
+                // load page specific to account type: artist and venue
+                if (profileType == "artist") {
+                  Navigator.of(context).pushReplacementNamed('/artist-settings');
+                }
+                else if (profileType == "venue") {
+                  Navigator.of(context).pushReplacementNamed('/venue-settings');
+                } else {
+                  //
+                }
               },
-              label: Text('Profile Settings'),
+              label: const Text(
+                'Profile Settings',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                ),
+              ),
               style: TextButton.styleFrom(
-                primary: Colors.cyan,
+                primary: Colors.black,
               ),
             ),
+            // Upload Images
             TextButton.icon(
-              icon: Icon(Icons.calendar_month),
+              icon: const Icon(Icons.image),
+              onPressed: () async {
+                Navigator.of(context).pushReplacementNamed('/upload-image');
+              },
+              label: const Text(
+                'Upload Image',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                ),
+              ),
+              style: TextButton.styleFrom(
+                primary: Colors.black,
+              ),
+            ),
+            // calendar
+            TextButton.icon(
+              icon: const Icon(Icons.calendar_month),
               onPressed: () async {
                 Navigator.of(context).pushReplacementNamed('/calendar');
               },
-              label: Text('Calendar'),
+              label: const Text(
+                'Calendar',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                ),
+              ),
               style: TextButton.styleFrom(
-                primary: Colors.cyan,
+                primary: Colors.black,
+              ),
+            ),
+            // logout
+            TextButton.icon(
+              icon: const Icon(Icons.person),
+              onPressed: () async {
+                await _auth.signOut();
+                Navigator.of(context).pushReplacementNamed('/authenticate');
+              },
+              label: const Text(
+                'Logout',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                ),
+                ),
+              style: TextButton.styleFrom(
+                primary: Colors.black,
               ),
             )
           ],
-        )));
+        ),
+        );
   }
 }

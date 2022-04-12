@@ -27,14 +27,16 @@ class _SignInState extends State<SignIn> {
           backgroundColor: Colors.cyan,
           elevation: 0.0,
           centerTitle: true,
-          title: const Text ('BOOKD'),
+          title: const Text (
+            'Bookd.',
+            style: TextStyle(fontSize: 30),),
         ),
         body: Container(
-            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
             child: Form(
                 key: _formKey, //key to track state of form to validate
                 child: Column(children: <Widget>[
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   TextFormField(
                     decoration: const InputDecoration(
                       labelText: 'Email',
@@ -47,7 +49,7 @@ class _SignInState extends State<SignIn> {
                       setState(() => email = val);
                     },
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   TextFormField(
                       decoration: const InputDecoration(
                         labelText: 'Password',
@@ -59,7 +61,7 @@ class _SignInState extends State<SignIn> {
                       onChanged: (val) {
                         setState(() => password = val);
                       }),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
@@ -67,7 +69,7 @@ class _SignInState extends State<SignIn> {
                       fixedSize: MaterialStateProperty.all(const Size(300, 30)),
                     ),
                     child:
-                        Text('Sign In', style: TextStyle(color: Colors.white)),
+                        const Text('Sign In', style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       // Go log this person into firebase
                       if (_formKey.currentState!.validate()) {
@@ -101,7 +103,7 @@ class _SignInState extends State<SignIn> {
                       Expanded(child: Divider(color: Colors.grey)),
                     ],
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
