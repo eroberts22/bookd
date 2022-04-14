@@ -38,7 +38,7 @@ class _artistSettingsState extends State<artistSettings> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/account');
+                Navigator.of(context).pushReplacementNamed('/account-artist');
               },
             )),
         body: Container(

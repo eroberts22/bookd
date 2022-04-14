@@ -25,6 +25,8 @@ class _UploadImageState extends State<UploadImage> {
   // To update user info
   FirebaseDatabase database = FirebaseDatabase.instance;
 
+  var type; // type of account, used for navigation
+
   File? _photo;
   final ImagePicker _picker = ImagePicker();
 
@@ -127,6 +129,20 @@ class _UploadImageState extends State<UploadImage> {
     }
   }
 
+  // functions to handle navigation based on profile type\
+  @override
+  void initState() {
+    super.initState();
+    _getDatabaseProfileType();
+  }
+
+  void _getDatabaseProfileType() async {
+    String? uid = _authService.userID;
+    DatabaseReference profileTypeRef = database.ref("Users/$uid/profileType");
+    DatabaseEvent profileTypeEv = await profileTypeRef.once();
+    type = profileTypeEv.snapshot.value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,8 +153,16 @@ class _UploadImageState extends State<UploadImage> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/account');
-              },
+               // _getDatabaseProfileType();
+                // load page specific to account type: artist and venue
+                if (type == "artist") {
+                  Navigator.of(context).pushReplacementNamed('/account-artist');
+                }
+                else if (type == "venue") {
+                  Navigator.of(context).pushReplacementNamed('/account-venue');
+                } else {
+                  //
+                }              },
             ),
       ),
       body: Column(

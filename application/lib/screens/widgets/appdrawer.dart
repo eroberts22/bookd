@@ -1,15 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-class AppDrawer extends StatelessWidget {
-  AppDrawer({Key? key}) : super(key: key);
 
-  // Our class to handle authentication
-  final AuthService _auth = AuthService();
+class BookdAppDrawer extends StatefulWidget {
+  const BookdAppDrawer({ Key? key }) : super(key: key);
+
+  @override
+  State<BookdAppDrawer> createState() => _BookdAppDrawerState();
+}
+
+class _BookdAppDrawerState extends State<BookdAppDrawer> {
+
+final AuthService _auth = AuthService();
+  FirebaseDatabase database = FirebaseDatabase.instance;
+  var profileType;
+
+  @override void initState() {
+    super.initState();
+    _getDatabaseProfileType();
+  }
+
+  void _getDatabaseProfileType() async {
+    String? uid = _auth.userID;
+    DatabaseReference profileTypeRef = database.ref("Users/$uid/profileType");
+    DatabaseEvent profileTypeEv = await profileTypeRef.once();
+    profileType = profileTypeEv.snapshot.value;
+  }
 
   @override
   Widget build(BuildContext context) {
-        return Drawer(
+   return Drawer(
         backgroundColor: Colors.white, // nav background
         child: ListView(
           children: [
@@ -58,8 +79,15 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacementNamed('/account');
-
+                // load page specific to account type: artist and venue
+                if (profileType == "artist") {
+                  Navigator.of(context).pushReplacementNamed('/account-artist');
+                }
+                else if (profileType == "venue") {
+                  Navigator.of(context).pushReplacementNamed('/account-venue');
+                } else {
+                  // error handle?
+                }
               },
             ),
             // logout icon

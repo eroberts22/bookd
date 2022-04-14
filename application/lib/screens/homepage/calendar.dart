@@ -16,11 +16,15 @@ class BookdCalendarState extends State<BookdCalendar> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   List _availableDates = [];
+
+  var profileType; // added so we can navigate to appropriate user account
   @override
   void initState() {
     super.initState();
     _getDatabaseDates(); // on initial start, add dates to _availableDates list
     _selectedDay = _focusedDay;
+
+    _getDatabaseProfileType(); // get profile type
   }
 
   void _getDatabaseDates() async { //get all availableDates from database
@@ -53,6 +57,13 @@ class BookdCalendarState extends State<BookdCalendar> {
     return available;
   }
 
+  void _getDatabaseProfileType() async {
+    String? uid = _authService.userID;
+    DatabaseReference profileTypeRef = database.ref("Users/$uid/profileType");
+    DatabaseEvent profileTypeEv = await profileTypeRef.once();
+    profileType = profileTypeEv.snapshot.value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,8 +75,15 @@ class BookdCalendarState extends State<BookdCalendar> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/account');
-              },
+                // load page specific to account type: artist and venue
+                if (profileType == "artist") {
+                  Navigator.of(context).pushReplacementNamed('/account-artist');
+                }
+                else if (profileType == "venue") {
+                  Navigator.of(context).pushReplacementNamed('/account-venue');
+                } else {
+                  // error handle?
+                }              },
             )),
       body:Column(children: [
           TableCalendar(

@@ -20,7 +20,7 @@ class _ExploreState extends State<Explore> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      drawer: AppDrawer(),
+      drawer: BookdAppDrawer(),
       appBar: const BookdAppBar(),
       body: Center(child: 
       Column(children: const [

@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      drawer: AppDrawer(),
+      drawer: BookdAppDrawer(),
       appBar: const BookdAppBar(),
       body: 
       Column(

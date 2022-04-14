@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:application/screens/homepage/explore.dart';
-import 'package:application/screens/homepage/account.dart';
+import 'package:application/screens/homepage/account_artist.dart';
 
 class Home extends StatefulWidget {
   const Home({ Key? key}) : super(key: key);

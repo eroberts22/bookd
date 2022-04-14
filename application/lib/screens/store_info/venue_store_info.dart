@@ -80,7 +80,7 @@ class _venueSettingsState extends State<venueSettings> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/account');
+                Navigator.of(context).pushReplacementNamed('/account-venue');
               },
             )),
         body: Container(

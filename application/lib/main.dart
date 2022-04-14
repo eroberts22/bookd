@@ -1,12 +1,15 @@
 import 'package:application/models/users.dart';
 import 'package:application/screens/authenticate/authenticate.dart';
+import 'package:application/screens/homepage/account_venue.dart';
 import 'package:application/screens/homepage/calendar.dart';
 import 'package:application/screens/homepage/home.dart';
 import 'package:application/screens/homepage/explore.dart';
-import 'package:application/screens/homepage/account.dart';
+import 'package:application/screens/homepage/account_artist.dart';
 import 'package:application/screens/store_info/artist_store_info.dart';
 import 'package:application/screens/store_info/venue_store_info.dart';
 import 'package:application/screens/homepage/profile.dart';
+import 'package:application/screens/homepage/bookings.dart';
+import 'package:application/screens/homepage/incoming_requests.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/screens/store_info/upload_pictures.dart';
 import 'package:flutter/material.dart';
@@ -36,11 +39,14 @@ class MyApp extends StatelessWidget {
           '/authenticate': ((context) => const Authenticate()),
           '/home':(context) => const Explore(),
           '/profile':(context) => const Profile(),
-          '/account':(context) => const Account(),
+          '/account-artist':(context) => const AccountArtist(),
+          '/account-venue':(context) => const AccountVenue(),
           '/artist-settings':(context) => const artistSettings(),
           '/venue-settings':(context) => const venueSettings(),
           '/calendar':(context) => BookdCalendar(),
-          '/upload-image':(context) => UploadImage()
+          '/upload-image':(context) => const UploadImage(),
+          '/booking':(context) => const BookingPage(),
+          '/incoming-requests':(context) => const IncomingRequestPage(),
         }
         //home: Wrapper(),
         // using routing fixes logout button
