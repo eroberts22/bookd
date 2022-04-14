@@ -1,9 +1,10 @@
 import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'register.dart';
 
 class SignIn extends StatefulWidget {
-  final Function toggleView;
-  const SignIn({Key? key, required this.toggleView}) : super(key: key);
+  static const routeName = '/sign_in';
+  const SignIn({Key? key}) : super(key: key);
 
   @override
   State<SignIn> createState() => _SignInState();
@@ -126,9 +127,7 @@ class _SignInState extends State<SignIn> {
                     ),
                     child: const Text('Create new Bookd account',
                         style: TextStyle(color: Colors.white)),
-                    onPressed: () {
-                      widget.toggleView();
-                    },
+                    onPressed: () => Navigator.of(context).pushNamed(Register.routeName),
                   ),
                   const SizedBox(height: 12.0), //text box for error
                   Text(

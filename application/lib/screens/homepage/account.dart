@@ -1,3 +1,4 @@
+import 'package:application/screens/authenticate/landingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/screens/widgets/appbar.dart';
@@ -102,7 +103,7 @@ class _AccountState extends State<Account> {
               icon: const Icon(Icons.person),
               onPressed: () async {
                 await _auth.signOut();
-                Navigator.of(context).pushReplacementNamed('/authenticate');
+                Navigator.of(context).pushReplacementNamed(LandingPage.routeName);
               },
               label: const Text(
                 'Logout',

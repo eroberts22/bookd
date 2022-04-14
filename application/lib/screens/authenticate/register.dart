@@ -2,10 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'sign_in.dart';
 
 class Register extends StatefulWidget {
-  final Function toggleView;
-  const Register({Key? key, required this.toggleView}) : super(key: key);
+  static const routeName = '/register';
+  const Register({Key? key}) : super(key: key);
 
   @override
   State<Register> createState() => _RegisterState();
@@ -41,16 +42,16 @@ class _RegisterState extends State<Register> {
             centerTitle: true,
             title: const Text(
               'Bookd.',
-              style: TextStyle(fontSize: 30),),
+              style: TextStyle(fontSize: 30),
+            ),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () {
-                widget.toggleView();
-              },
+              onPressed: () => Navigator.of(context).pushNamed(SignIn.routeName),
             )),
         body: Container(
             child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 50.0),
                 child: Form(
                     key: _formKey, //key to track state of form to validate
                     child: Column(children: <Widget>[
@@ -141,23 +142,24 @@ class _RegisterState extends State<Register> {
                                   print(
                                       "Created user $uid in database with email $u_email and profile $profile");
                                   // if register is valid, show home page
-                                  if(result != null) { // if sign in is valid, show home screen
-                                    Navigator.of(context).pushReplacementNamed('/home');
+                                  if (result != null) {
+                                    // if sign in is valid, show home screen
+                                    Navigator.of(context)
+                                        .pushReplacementNamed('/home');
                                   }
                                   // If result is not null, the listener stream<bookduser> in auth.dart will know a user has signed in and will update authentication state
                                 }
-                              }
-                              else{
-                                setState(() =>
-                                      error = 'please supply a valid profile type');
+                              } else {
+                                setState(() => error =
+                                    'please supply a valid profile type');
                               }
                             }
-                            
                           }),
                       const SizedBox(height: 12.0), //text box for error
                       Text(
                         error,
-                        style: const TextStyle(color: Colors.red, fontSize: 14.0),
+                        style:
+                            const TextStyle(color: Colors.red, fontSize: 14.0),
                       )
                     ])))));
   }

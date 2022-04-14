@@ -1,5 +1,5 @@
 import 'package:application/models/users.dart';
-import 'package:application/screens/authenticate/authenticate.dart';
+import 'package:application/screens/authenticate/sign_in.dart';
 import 'package:application/screens/homepage/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +15,7 @@ class Wrapper extends StatelessWidget {
 
     // If the user value is null, that means the user is not signed on
     if (input_user == null) {
-      return Authenticate();
+      return SignIn();
     } else {
       // Otherwise, we want to give them the home screen
       return Home();
