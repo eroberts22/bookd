@@ -18,8 +18,7 @@ class _LandingPageState extends State<LandingPage> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: NetworkImage(
-                      'https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHw%3D&w=1000&q=80'),
+                  image: AssetImage('assets/images/landingPage_background.jpg'),
                   fit: BoxFit.fill),
             ),
           ),
@@ -38,7 +37,7 @@ class _LandingPageState extends State<LandingPage> {
                             fontSize: 55,
                             fontWeight: FontWeight.bold,
                             color: Colors.white),
-                      ),             
+                      ),
                     ],
                   ),
                 ),
@@ -84,7 +83,7 @@ class _LandingPageState extends State<LandingPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           ),
-                        ),    
+                        ),
                         child: const Text(
                           'Sign Up',
                           style: TextStyle(
