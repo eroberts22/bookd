@@ -29,7 +29,7 @@ class _LandingPageState extends State<LandingPage> {
               Expanded(
                 flex: 6,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 60, left: 25),
+                  padding: const EdgeInsets.only(top: 80, left: 25),
                   child: Column(
                     children: const [
                       Text(
@@ -38,14 +38,7 @@ class _LandingPageState extends State<LandingPage> {
                             fontSize: 55,
                             fontWeight: FontWeight.bold,
                             color: Colors.white),
-                      ),
-                      Text(
-                        'Lorem ipsum dolor sit amet',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontStyle: FontStyle.italic,
-                            color: Colors.white),
-                      ),
+                      ),             
                     ],
                   ),
                 ),
@@ -62,10 +55,16 @@ class _LandingPageState extends State<LandingPage> {
                       child: ElevatedButton(
                         onPressed: () =>
                             Navigator.of(context).pushNamed(SignIn.routeName),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.grey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
                         child: const Text(
                           'Sign In',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
@@ -80,12 +79,18 @@ class _LandingPageState extends State<LandingPage> {
                       child: ElevatedButton(
                         onPressed: () =>
                             Navigator.of(context).pushNamed(Register.routeName),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),    
                         child: const Text(
                           'Sign Up',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.w700,
-                            color: Colors.lightBlue,
+                            color: Colors.grey,
                           ),
                         ),
                       ),
