@@ -21,7 +21,7 @@ class _ProfileVenueState extends State<ProfileVenue> {
       resizeToAvoidBottomInset: false,
       drawer: const VBookdAppDrawer(),
       appBar: const BookdAppBar(),
-      body: const VenueProfileWidget(),
+      body: VenueProfileWidget(),
     );
   }
 }
