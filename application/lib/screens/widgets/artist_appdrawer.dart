@@ -3,14 +3,14 @@ import 'package:application/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 
-class BookdAppDrawer extends StatefulWidget {
-  const BookdAppDrawer({ Key? key }) : super(key: key);
+class ABookdAppDrawer extends StatefulWidget {
+  const ABookdAppDrawer({ Key? key }) : super(key: key);
 
   @override
-  State<BookdAppDrawer> createState() => _BookdAppDrawerState();
+  State<ABookdAppDrawer> createState() => _ABookdAppDrawerState();
 }
 
-class _BookdAppDrawerState extends State<BookdAppDrawer> {
+class _ABookdAppDrawerState extends State<ABookdAppDrawer> {
 
 final AuthService _auth = AuthService();
   FirebaseDatabase database = FirebaseDatabase.instance;
@@ -54,7 +54,7 @@ final AuthService _auth = AuthService();
                 ),
               ),
               onTap: () {
-                Navigator.of(context).pushReplacementNamed('/home');
+                Navigator.of(context).pushReplacementNamed('/explore');
               },
             ),
             // Profile

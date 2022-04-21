@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/screens/widgets/appbar.dart';
-import 'package:application/screens/widgets/appdrawer.dart';
+import 'package:application/screens/widgets/venue_appdrawer.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class AccountVenue extends StatefulWidget {
@@ -32,7 +32,7 @@ class _AccountVenueState extends State<AccountVenue> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        drawer: const BookdAppDrawer(),
+        drawer: const VBookdAppDrawer(),
         appBar: const BookdAppBar(),
         body: 
         Column(

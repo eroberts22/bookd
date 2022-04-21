@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/screens/widgets/appbar.dart';
-import 'package:application/screens/widgets/appdrawer.dart';
+import 'package:application/screens/widgets/artist_appdrawer.dart';
 import 'package:application/screens/widgets/searchbar.dart';
 
 
@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      drawer: BookdAppDrawer(),
+      drawer: ABookdAppDrawer(),
       appBar: const BookdAppBar(),
       body: 
       Column(

@@ -2,7 +2,6 @@ import 'package:application/models/users.dart';
 import 'package:application/screens/authenticate/authenticate.dart';
 import 'package:application/screens/homepage/account_venue.dart';
 import 'package:application/screens/homepage/calendar.dart';
-import 'package:application/screens/homepage/home.dart';
 import 'package:application/screens/homepage/explore.dart';
 import 'package:application/screens/homepage/account_artist.dart';
 import 'package:application/screens/store_info/artist_store_info.dart';
@@ -10,6 +9,7 @@ import 'package:application/screens/store_info/venue_store_info.dart';
 import 'package:application/screens/homepage/profile.dart';
 import 'package:application/screens/homepage/bookings.dart';
 import 'package:application/screens/homepage/incoming_requests.dart';
+import 'package:application/screens/homepage/home.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/screens/store_info/upload_pictures.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +36,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         initialRoute: Provider.of<BookdUser?>(context) == null ? '/authenticate' : '/home',
         routes: {
-          '/authenticate': ((context) => const Authenticate()),
-          '/home':(context) => const Explore(),
+          '/authenticate': (context) => const Authenticate(),
+          '/home':(context) => const Home(),
+          '/explore':(context) => const Explore(),
           '/profile':(context) => const Profile(),
           '/account-artist':(context) => const AccountArtist(),
           '/account-venue':(context) => const AccountVenue(),
@@ -48,15 +49,6 @@ class MyApp extends StatelessWidget {
           '/booking':(context) => const BookingPage(),
           '/incoming-requests':(context) => const IncomingRequestPage(),
         }
-        //home: Wrapper(),
-        // using routing fixes logout button
-        //initialRoute: '/',
-        //routes: {
-        //  '/': (context) => Wrapper(),
-        //  Home.route :(context) => Home(),
-        //  ProfilePage.route:(context) => ProfilePage(),
-      //   AccountPage.route:(context) => AccountPage(),
-        //},
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/screens/widgets/appbar.dart';
-import 'package:application/screens/widgets/appdrawer.dart';
+import 'package:application/screens/widgets/artist_appdrawer.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class AccountArtist extends StatefulWidget {
@@ -19,7 +19,7 @@ class _AccountArtistState extends State<AccountArtist> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        drawer: const BookdAppDrawer(),
+        drawer: const ABookdAppDrawer(),
         appBar: const BookdAppBar(),
         body: 
         Column(
