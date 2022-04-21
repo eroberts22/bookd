@@ -67,24 +67,7 @@ class BookdCalendarState extends State<BookdCalendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-            backgroundColor: Colors.cyan,
-            elevation: 0.0,
-            title: const Text('Calendar'),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () {
-                // load page specific to account type: artist and venue
-                if (profileType == "artist") {
-                  Navigator.of(context).pushReplacementNamed('/account-artist');
-                }
-                else if (profileType == "venue") {
-                  Navigator.of(context).pushReplacementNamed('/account-venue');
-                } else {
-                  // error handle?
-                }              },
-            )),
+   
       body:Column(children: [
           TableCalendar(
             calendarBuilders: CalendarBuilders(

@@ -5,15 +5,15 @@ import 'package:application/screens/widgets/artist_appdrawer.dart';
 import 'package:application/screens/widgets/searchbar.dart';
 
 
-class Profile extends StatefulWidget {
+class ProfileArtist extends StatefulWidget {
 
-  const Profile({ Key? key }) : super(key: key);
+  const ProfileArtist({ Key? key }) : super(key: key);
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<ProfileArtist> createState() => _ProfileArtistState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileArtistState extends State<ProfileArtist> {
    final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class _ProfileState extends State<Profile> {
       body: 
       Column(
         children: const [
-        Text('profile', style: TextStyle(fontSize: 30),),
+        Text('artist profile', style: TextStyle(fontSize: 30),),
       ],
     ));
   }

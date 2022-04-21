@@ -66,7 +66,7 @@ final AuthService _auth = AuthService();
                 ),
               ),
               onTap: () {
-               Navigator.of(context).pushReplacementNamed('/profile');
+               Navigator.of(context).pushReplacementNamed('/profile-artist');
 
               },
             ),
@@ -79,30 +79,9 @@ final AuthService _auth = AuthService();
                 ),
               ),
               onTap: () {
-                // load page specific to account type: artist and venue
-                if (profileType == "artist") {
                   Navigator.of(context).pushReplacementNamed('/account-artist');
-                }
-                else if (profileType == "venue") {
-                  Navigator.of(context).pushReplacementNamed('/account-venue');
-                } else {
-                  // error handle?
-                }
               },
             ),
-            // logout icon
-            /*
-            TextButton.icon(
-              icon: Icon(Icons.person),
-              onPressed: () async {
-                await _auth.signOut();
-                Navigator.of(context).pushReplacementNamed('/authenticate');
-              },
-              label: Text('logout'),
-              style: TextButton.styleFrom(
-                primary: Colors.cyan,
-              ),
-            )*/
           ],
         ),
     );

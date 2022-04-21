@@ -45,18 +45,6 @@ final AuthService _auth = AuthService();
                 Navigator.pop(context);
               },
             ),
-            // Explore
-            /*ListTile(
-              title: const Text(
-                'Explore',
-                style: TextStyle(
-                  fontSize: 30.0,
-                ),
-              ),
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed('/explore');
-              },
-            ),*/
             // Profile
             ListTile(
               title: const Text(
@@ -66,7 +54,7 @@ final AuthService _auth = AuthService();
                 ),
               ),
               onTap: () {
-               Navigator.of(context).pushReplacementNamed('/profile');
+               Navigator.of(context).pushReplacementNamed('/profile-venue');
 
               },
             ),
@@ -79,30 +67,9 @@ final AuthService _auth = AuthService();
                 ),
               ),
               onTap: () {
-                // load page specific to account type: artist and venue
-                if (profileType == "artist") {
-                  Navigator.of(context).pushReplacementNamed('/account-artist');
-                }
-                else if (profileType == "venue") {
-                  Navigator.of(context).pushReplacementNamed('/account-venue');
-                } else {
-                  // error handle?
-                }
+                 Navigator.of(context).pushReplacementNamed('/account-venue');
               },
             ),
-            // logout icon
-            /*
-            TextButton.icon(
-              icon: Icon(Icons.person),
-              onPressed: () async {
-                await _auth.signOut();
-                Navigator.of(context).pushReplacementNamed('/authenticate');
-              },
-              label: Text('logout'),
-              style: TextButton.styleFrom(
-                primary: Colors.cyan,
-              ),
-            )*/
           ],
         ),
     );
