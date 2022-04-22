@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
@@ -27,8 +29,64 @@ class _artistSettingsState extends State<artistSettings> {
 
   String error = "";
 
+  var citiesController = TextEditingController();
+  var linksController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _setupLinksAndCities();
+  }
+
+  // Retrieve the existing values for links and cities, and store them as comma separated
+  void _setupLinksAndCities() async {
+    String? uid = _authService.userID;
+
+    DatabaseEvent profileEvent = await database.ref("Artists/$uid").once();
+
+    Map<String, dynamic>? profile =
+        jsonDecode(jsonEncode(profileEvent.snapshot.value));
+    if (profile != null) {
+      List cities = (profile["potentialCities"] as List);
+      String cities_csv = "";
+      if (cities.length > 0) {
+        // Convert the list of strings to a single string, with values separated by commas
+        cities_csv = cities[0].toString();
+        for (var i = 1; i < cities.length; i++) {
+          cities_csv = cities_csv + ", " + cities[i].toString();
+        }
+      }
+
+      List links = (profile["websiteLinks"] as List);
+      String links_csv = "";
+      if (links.length > 0) {
+        // Convert the list of strings to a single string, with values separated by commas
+        links_csv = links[0].toString();
+        for (var i = 1; i < links.length; i++) {
+          links_csv = links_csv + ", " + links[i].toString();
+        }
+      }
+      print("Initializing");
+      print(cities_csv);
+      print(links_csv);
+      // Set the states
+      setState(() => websiteLinks = links_csv);
+      setState(() => potentialCities = cities_csv);
+      print(websiteLinks);
+      print(potentialCities);
+
+      setState(() =>
+          citiesController = TextEditingController(text: potentialCities));
+      setState(
+          () => linksController = TextEditingController(text: websiteLinks));
+
+      // Only do all this stuff if the profile is not null
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("Building");
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -43,7 +101,8 @@ class _artistSettingsState extends State<artistSettings> {
             )),
         body: Container(
             child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 50.0),
                 child: Form(
                     key: _formKey, //key to track state of form to validate
                     child: Column(children: <Widget>[
@@ -75,6 +134,7 @@ class _artistSettingsState extends State<artistSettings> {
                       const Text(
                           "Enter as many personal urls as desired separated by commas"),
                       TextFormField(
+                          controller: linksController,
                           validator: (val) => val!.isEmpty
                               ? 'Enter personal urls'
                               : null, //indicates if form is valid or not. Using !. so assuming value won't be null
@@ -87,6 +147,7 @@ class _artistSettingsState extends State<artistSettings> {
                       const Text(
                           "Enter all cities you willing to play in separated by commas"),
                       TextFormField(
+                          controller: citiesController,
                           validator: (val) => val!.isEmpty
                               ? 'Enter potential cities'
                               : null, //indicates if form is valid or not. Using !. so assuming value won't be null
@@ -133,11 +194,16 @@ class _artistSettingsState extends State<artistSettings> {
                               // Separate links by comma
                               updateMap["websiteLinks"] =
                                   websiteLinks.split(',');
+                            } else {
+                              // websiteLinks is empty, which can potentially be a change
+                              updateMap["websiteLinks"] = [];
                             }
                             if (!potentialCities.isEmpty) {
                               // Separate cities by comma
                               updateMap["potentialCities"] =
                                   potentialCities.split(',');
+                            } else {
+                              updateMap["potentialCities"] = [];
                             }
                             print(artistRef);
                             print(updateMap);
@@ -193,7 +259,8 @@ class _artistSettingsState extends State<artistSettings> {
                       const SizedBox(height: 12.0), //text box for error
                       Text(
                         error, // output the error from signin
-                        style: const TextStyle(color: Colors.red, fontSize: 14.0),
+                        style:
+                            const TextStyle(color: Colors.red, fontSize: 14.0),
                       )
                     ])))));
   }
