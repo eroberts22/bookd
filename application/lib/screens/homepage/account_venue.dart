@@ -16,6 +16,8 @@ class _AccountVenueState extends State<AccountVenue> {
   FirebaseDatabase database = FirebaseDatabase.instance;
   var profileType;
 
+  String error_str = "";
+
   @override void initState() {
     super.initState();
     _getDatabaseProfileType();
@@ -30,6 +32,7 @@ class _AccountVenueState extends State<AccountVenue> {
 
   @override
   Widget build(BuildContext context) {
+    String? uid = _auth.userID;
     return Scaffold(
         backgroundColor: Colors.white,
         drawer: const VBookdAppDrawer(),
@@ -76,7 +79,18 @@ class _AccountVenueState extends State<AccountVenue> {
             TextButton.icon(
               icon: const Icon(Icons.image),
               onPressed: () async {
-                Navigator.of(context).pushReplacementNamed('/upload-image');
+                // Check to see if an artist account has been stored yet
+                // If not, then we update error string and do not switch to the upload image page
+                DatabaseEvent venueEvent =
+                    await database.ref("Venues/$uid").once();
+                if (venueEvent.snapshot.value != null) {
+                  // Settings exist, so we can upload images
+                  Navigator.of(context).pushReplacementNamed('/upload-image');
+                } else {
+                  // No settings exist!
+                  setState(() => error_str =
+                      "Error! Cannot upload images before storing profile settings");
+                }
               },
               label: const Text(
                 'Upload Image',
@@ -123,7 +137,11 @@ class _AccountVenueState extends State<AccountVenue> {
               style: TextButton.styleFrom(
                 primary: Colors.black,
               ),
-            )
+            ),
+            Text(
+            error_str,
+            style: const TextStyle(color: Colors.red, fontSize: 14.0),
+          )
           ],
         ),
         );
