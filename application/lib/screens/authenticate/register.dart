@@ -24,7 +24,8 @@ class _RegisterState extends State<Register> {
   String password = '';
   String error = ''; // error is caught and printed to box
   String profileType = '0';
-
+  bool isArtistSelected = false;
+  bool isVenueSelected = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,15 +47,20 @@ class _RegisterState extends State<Register> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Artist button definition
                       Material(
-                        color: Colors.grey,
+                        color: isArtistSelected ? Colors.cyan : Colors.grey,
                         elevation: 8,
                         borderRadius: BorderRadius.circular(28),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         child: InkWell(
                           splashColor: Colors.black26,
                           onTap: () {
-                            profileType == "0";
+                            setState(() {
+                              isArtistSelected = true;
+                              isVenueSelected = false;
+                              profileType == "0";
+                            });
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -77,15 +83,20 @@ class _RegisterState extends State<Register> {
                           ),
                         ),
                       ),
+                      // Venue button definition
                       Material(
-                        color: Colors.grey,
+                        color: isVenueSelected ? Colors.cyan : Colors.grey,
                         elevation: 8,
                         borderRadius: BorderRadius.circular(28),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         child: InkWell(
                           splashColor: Colors.black26,
                           onTap: () {
-                            profileType == "0";
+                            setState(() {
+                              isArtistSelected = false;
+                              isVenueSelected = true;
+                              profileType = "1";
+                            });
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
