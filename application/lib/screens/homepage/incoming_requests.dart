@@ -2,6 +2,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
+import 'package:application/screens/widgets/request_tile.dart';
 
 class IncomingRequestPage extends StatefulWidget {
   const IncomingRequestPage({ Key? key }) : super(key: key);
@@ -25,8 +26,7 @@ class _IncomingRequestPageState extends State<IncomingRequestPage> {
                 Navigator.of(context).pushReplacementNamed('/account-venue');
               },
             )),
-        body: Container(
-          ),
+        body: RequestTile(),
         );
   }
 }
