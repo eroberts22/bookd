@@ -1,7 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:application/services/auth.dart';
 
-class RequestTile extends StatelessWidget {
-  const RequestTile({Key? key}) : super(key: key);
+class RequestTile extends StatefulWidget {
+  final String uid;
+  RequestTile(this.uid);
+  @override
+  RequestTileState createState() => RequestTileState();
+}
+
+class RequestTileState extends State<RequestTile> {
+
+  final AuthService _authService = AuthService();
+  FirebaseDatabase database = FirebaseDatabase.instance;
+  String artistName = "";
+  @override
+  void initState() {
+    super.initState();
+    _getArtistEvent();
+  }
+
+  void _getArtistEvent() async{ //get database event for thisArtist so we can access its values
+    DatabaseReference artistRef = database.ref().child("Artists/${widget.uid}");
+    DatabaseEvent thisArtist = await artistRef.once();
+    setState(() {
+      artistName = thisArtist.snapshot.child("stageName").value.toString();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +46,7 @@ class RequestTile extends StatelessWidget {
               ),
               Container(
                 padding: EdgeInsets.fromLTRB(10.0, 6.0, 10.0, 0.0),
-                child: Text('Artist Name'),
+                child: Text(artistName),
               ),
               Container(
                   child: Row(

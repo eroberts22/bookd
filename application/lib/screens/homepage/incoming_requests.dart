@@ -12,6 +12,29 @@ class IncomingRequestPage extends StatefulWidget {
 }
 
 class _IncomingRequestPageState extends State<IncomingRequestPage> {
+
+  final AuthService _authService = AuthService();
+  FirebaseDatabase database = FirebaseDatabase.instance;
+  List<String> bookingReqIds = [];
+  @override
+  void initState() {
+    super.initState();
+    _getVenueEvent();
+  }
+
+  void _getVenueEvent() async{ //get database event for thisVenue so we can access its incoming requests
+    String uid = _authService.userID!; 
+    DatabaseReference venueRef = database.ref().child("Venues/$uid/bookingRequests");
+    DatabaseEvent thisVenue = await venueRef.once();
+    List<String> requests = [];
+    for(var child in thisVenue.snapshot.children){
+      requests.add(child.value.toString());
+    }
+    setState(() {
+      bookingReqIds = requests;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +49,12 @@ class _IncomingRequestPageState extends State<IncomingRequestPage> {
                 Navigator.of(context).pushReplacementNamed('/account-venue');
               },
             )),
-        body: RequestTile(),
+        body: ListView.builder(
+          itemCount: bookingReqIds.length,
+          itemBuilder: (BuildContext context, int index){
+            return RequestTile(bookingReqIds[index]);
+          },
+        ),
         );
   }
 }

@@ -24,7 +24,7 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   void _getDatabaseProfileType() async {
-    String? uid = _authService.userID;
+    String? uid = _authService.userID; //on this page uid will always be the current user's id
     DatabaseReference profileTypeRef = database.ref("Users/$uid/profileType");
     DatabaseEvent profileTypeEv = await profileTypeRef.once();
     profileType = profileTypeEv.snapshot.value;
@@ -51,7 +51,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   // error handle?
                 }              },
             )),
-            body: BookdCalendar(),
+            body: BookdCalendar(_authService.userID!),
     );
   }
 }

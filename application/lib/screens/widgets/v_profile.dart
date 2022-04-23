@@ -38,8 +38,10 @@ class VenueProfileWidget extends StatelessWidget {
 
 
 class VenueProfileWidget extends StatefulWidget {
+  // //make it so the uid is set by passing it into this widget. access uid by using "widget.uid"
+  // final String uid;
+  // const VenueProfileWidget(this.uid);
   const VenueProfileWidget({ Key? key }) : super(key: key);
-
   @override
   State<VenueProfileWidget> createState() => _VenueProfileWidgetState();
 }
@@ -66,7 +68,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
   }
 
   Future _getProfileInfo() async {
-    String? uid = _authService.userID;
+    String? uid = _authService.userID; //TODO: uid here should be passed in from explore page card (see contructor)
     final ref = FirebaseDatabase.instance.ref();
     event = await ref.child('Venues/$uid').once();
     
@@ -93,25 +95,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                     Text(event.snapshot.child("streetAddress").value.toString()),
                     Text(event.snapshot.child("city").value.toString()),
                     Text(event.snapshot.child("zipCode").value.toString()),
-                    SizedBox(width: 400,height: 350, child: BookdCalendar(),),
-                    TextButton(
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
-                        overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.hovered))
-                              return Colors.blue.withOpacity(0.04);
-                            if (states.contains(MaterialState.focused) ||
-                                states.contains(MaterialState.pressed))
-                              return Colors.orangeAccent.withOpacity(0.9);
-                            return null; // Defer to the widget's default.
-                          },
-                        ),
-                      ),
-                      onPressed: () { },
-                      child: const Text('Book a Day')
-                    ),
+                    SizedBox(width: 400,height: 400, child: BookdCalendar(_authService.userID!),),
                   ]);
                   } else {
                     return Center(child: CircularProgressIndicator(),)
