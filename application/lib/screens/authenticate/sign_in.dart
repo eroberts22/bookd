@@ -1,9 +1,10 @@
 import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'register.dart';
 
 class SignIn extends StatefulWidget {
-  final Function toggleView;
-  const SignIn({Key? key, required this.toggleView}) : super(key: key);
+  static const routeName = '/sign_in';
+  const SignIn({Key? key}) : super(key: key);
 
   @override
   State<SignIn> createState() => _SignInState();
@@ -25,42 +26,55 @@ class _SignInState extends State<SignIn> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.cyan,
-          elevation: 0.0,
-          centerTitle: true,
-          title: const Text (
-            'Bookd.',
-            style: TextStyle(fontSize: 30),),
         ),
-        body: Container(
-            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        body: SingleChildScrollView(
+            padding:
+                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
             child: Form(
                 key: _formKey, //key to track state of form to validate
                 child: Column(children: <Widget>[
-                  const SizedBox(height: 20.0),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                    ),
-                    validator: (val) => val!.isEmpty
-                        ? 'Enter an email'
-                        : null, //indicates if form is valid or not. Using !. so assuming value won't be null
-                    // val represents whatever was inserted
-                    onChanged: (val) {
-                      setState(() => email = val);
-                    },
-                  ),
-                  const SizedBox(height: 20.0),
-                  TextFormField(
+                  Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: Center(
+                          child: SizedBox(
+                              width: 250,
+                              height: 200,
+                              child: Image.asset(
+                                  'assets/images/bookd_logo.JPG')))),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
+                    child: TextFormField(
                       decoration: const InputDecoration(
-                        labelText: 'Password',
+                        border: OutlineInputBorder(),
+                        labelText: 'Email',
                       ),
-                      obscureText: true,
-                      validator: (val) => val!.length < 6
-                          ? 'Enter a password 6 characters or longer'
+                      validator: (val) => val!.isEmpty
+                          ? 'Enter an email'
                           : null, //indicates if form is valid or not. Using !. so assuming value won't be null
+                      // val represents whatever was inserted
                       onChanged: (val) {
-                        setState(() => password = val);
-                      }),
+                        setState(() => email = val);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
+                    child: TextFormField(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Password',
+                        ),
+                        obscureText: true,
+                        validator: (val) => val!.length < 6
+                            ? 'Enter a password 6 characters or longer'
+                            : null, //indicates if form is valid or not. Using !. so assuming value won't be null
+                        onChanged: (val) {
+                          setState(() => password = val);
+                        }),
+                  ),
+
                   const SizedBox(height: 20.0),
                   ElevatedButton(
                     style: ButtonStyle(
@@ -68,8 +82,8 @@ class _SignInState extends State<SignIn> {
                           MaterialStateProperty.all<Color>(Colors.cyan),
                       fixedSize: MaterialStateProperty.all(const Size(300, 30)),
                     ),
-                    child:
-                        const Text('Sign In', style: TextStyle(color: Colors.white)),
+                    child: const Text('Sign In',
+                        style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       // Go log this person into firebase
                       if (_formKey.currentState!.validate()) {
@@ -81,8 +95,9 @@ class _SignInState extends State<SignIn> {
                           setState(() => error = 'Invalid email or password');
                         }
 
-                        if(result != null) { // if sign in is valid, show home screen
-                        Navigator.of(context).pushReplacementNamed('/home');
+                        if (result != null) {
+                          // if sign in is valid, show home screen
+                          Navigator.of(context).pushReplacementNamed('/home');
                         }
                         // If result is not null, the listener stream<bookduser> in auth.dart will know a user has signed in and will update authentication state
                       }
@@ -112,9 +127,7 @@ class _SignInState extends State<SignIn> {
                     ),
                     child: const Text('Create new Bookd account',
                         style: TextStyle(color: Colors.white)),
-                    onPressed: () {
-                      widget.toggleView();
-                    },
+                    onPressed: () => Navigator.of(context).pushNamed(Register.routeName),
                   ),
                   const SizedBox(height: 12.0), //text box for error
                   Text(
