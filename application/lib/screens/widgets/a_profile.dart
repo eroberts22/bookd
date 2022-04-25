@@ -19,14 +19,6 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
   FirebaseDatabase database = FirebaseDatabase.instance;
   File? _photo;
 
-  String _name = "";
-  String _address = "";
-  String _city = "";
-  String _zipCode = "";
-  String _description = "";
-  List _tags = [];
-  String _tagsList = "";
-
   late DatabaseEvent event;
 
   @override
@@ -83,10 +75,23 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
                             ),
                           ),
                   ),
-                  Text("Stage Name: " +
-                      event.snapshot.child("stageName").value.toString()),
-                  Text("Description: " +
-                      event.snapshot.child("description").value.toString()),
+                  Padding(
+                  padding: const EdgeInsets.only(top:20, bottom: 10),
+                  child: event.snapshot.child("stageName").value != null ?
+                  Text(event.snapshot.child("stageName").value.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30),)
+                  :const Text("Please Enter All Profile\nInformation in Settings",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),),
+                ),
+                Padding(padding: const EdgeInsets.only(top: 10, left: 30, right: 30 ),
+                  child: event.snapshot.child("description").value != null ?
+                    Text(event.snapshot.child("description").value.toString())
+                    :Container(),
+                ),
                 ]),
               );
             } else {

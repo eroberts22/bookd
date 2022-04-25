@@ -3,8 +3,10 @@
 import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/calendar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:application/models/venue.dart';
 import 'package:path/path.dart';
@@ -24,6 +26,8 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
   final AuthService _authService = AuthService();
   FirebaseDatabase database = FirebaseDatabase.instance;
   File? _photo;
+  String? img;
+  String? venueType;
 
   late DatabaseEvent event;
 
@@ -44,12 +48,14 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
       print(c.key);
     }
 
-    List<String> imgList = [];
-    for (var item in jsonDecode(jsonEncode(event.snapshot.value))["images"]) {
-      imgList.add(item);
+    print(event.snapshot.child("tags").children);
+    for (var c in event.snapshot.child("tags").children) {
+      //print(c.value);
+      if (c.value.toString() == "true") {
+        print(c.key);
+        venueType = c.key;
+      }
     }
-    print(imgList);
-    
   }
 
   @override
@@ -63,7 +69,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return Center(
-                  child: Column(children: [
+                child: Column(children: [
                 CircleAvatar(
                   radius: 55,
                   backgroundColor: Colors.orangeAccent,
@@ -72,6 +78,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                           borderRadius: BorderRadius.circular(50),
                           child: Image.file(
                             _photo!,
+                            //"gs://bookd-4bdd3.appspot.com/Images/$img",
                             width: 100,
                             height: 100,
                             fit: BoxFit.fitHeight,
@@ -89,11 +96,57 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                           ),
                         ),
                 ),
-                Text(event.snapshot.child("name").value.toString()),
-                Text(event.snapshot.child("description").value.toString()),
-                Text(event.snapshot.child("streetAddress").value.toString()),
-                Text(event.snapshot.child("city").value.toString()),
-                Text(event.snapshot.child("zipCode").value.toString()),
+                Padding(
+                  padding: const EdgeInsets.only(top:20, bottom: 10),
+                  child: event.snapshot.child("name").value != null ?
+                  Text(event.snapshot.child("name").value.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30),)
+                  :const Text("Please Enter All Profile\nInformation in Settings",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(),
+                  child: venueType != null ?
+                    Text(venueType!,
+                    style: TextStyle(
+                      color: Colors.black.withOpacity(0.5) ),)
+                    : Text(""),
+                ),
+                Padding(padding: const EdgeInsets.only(top: 10, left: 30, right: 30 ),
+                  child: event.snapshot.child("description").value != null ?
+                    Text(event.snapshot.child("description").value.toString())
+                    :Container(),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: event.snapshot.child("streetAddress").value != null && event.snapshot.child("city").value != null && event.snapshot.child("zipCode").value != null ?
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 10),
+                    child: Text(
+                    event.snapshot.child("streetAddress").value.toString() 
+                    + " " + event.snapshot.child("city").value.toString() 
+                    + " " +event.snapshot.child("zipCode").value.toString(),
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Colors.black.withOpacity(0.5) ),),
+                  ):Container(),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: event.snapshot.child("phoneNumber").value != null ?
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
+                    child: Text(
+                    event.snapshot.child("phoneNumber").value.toString(),
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Colors.black.withOpacity(0.5) ),),
+                  ):Container(),
+                ),
                 SizedBox(
                   width: 400,
                   height: 400,
@@ -101,7 +154,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                 ),
               ]));
             } else {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
