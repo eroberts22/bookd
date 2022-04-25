@@ -3,6 +3,7 @@ import 'package:application/services/auth.dart';
 import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/artist_appdrawer.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:application/screens/authenticate/landingPage.dart';
 
 class AccountArtist extends StatefulWidget {
   const AccountArtist({Key? key}) : super(key: key);
@@ -111,7 +112,7 @@ class _AccountArtistState extends State<AccountArtist> {
             icon: const Icon(Icons.person),
             onPressed: () async {
               await _auth.signOut();
-              Navigator.of(context).pushReplacementNamed('/authenticate');
+              Navigator.of(context).pushReplacementNamed(LandingPage.routeName);
             },
             label: const Text(
               'Logout',
