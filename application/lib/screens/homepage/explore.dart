@@ -1,77 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/artist_appdrawer.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Explore extends StatefulWidget {
-  const Explore({Key? key}) : super(key: key);
-
+  const Explore({Key? key, this.title}) : super(key: key);
+  final String? title;
   @override
   State<Explore> createState() => _ExploreState();
 }
 
 class _ExploreState extends State<Explore> {
+  FirebaseDatabase database = FirebaseDatabase.instance;
+  List<dynamic> listIds = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getVenues();
+  }
+
+  void _getVenues() async {
+    DatabaseReference dbRef = database.ref();
+    DatabaseEvent thisVenue = await dbRef.child("Venues").orderByValue().once();
+    List<dynamic> venues = [];
+    for (var user in thisVenue.snapshot.children) {
+      venues.add(user.child("name").value.toString());
+    }
+    setState(() {
+      listIds = venues;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
-        drawer: ABookdAppDrawer(),
-        appBar: BookdAppBar(),
-        body: Container(
-          padding: EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: [
-                buildCard(),
-                buildCard(),
-              ],
-            ),
-          ),
-        ));
-  }
-
-  Card buildCard() {
-    var title = "Title of Venue Here";
-    var defaultCardImage =
-        const AssetImage('assets/images/venue_defaultImage.jpg');
-    var description = "The description goes here";
-    var ratings = "The ratings go here";
-
-    return Card(
-        elevation: 4.0,
-        child: Column(
-          children: [
-            ListTile(
-              title: Text(title),
-              subtitle: Text(ratings),
-              trailing: const Icon(Icons.favorite),
-            ),
-            SizedBox(
-              height: 200.0,
-              child: Ink.image(
-                image: defaultCardImage,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(16.0),
-              alignment: Alignment.centerLeft,
-              child: Text(ratings),
-            ),
-            ButtonBar(
-              children: [
-                TextButton(
-                  child: const Text('Contact Venue'),
-                  onPressed: () {},
+        drawer: const ABookdAppDrawer(),
+        appBar: const BookdAppBar(),
+        body: ListView.builder(
+          shrinkWrap: true,
+          itemCount: listIds.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              elevation: 4.0,
+              child: Column(children: [
+                ListTile(
+                  title: Text(listIds[index]),
+                  subtitle: const Text("Ratings"),
+                  trailing: const Icon(Icons.favorite),
                 ),
-                TextButton(
-                  child: const Text('Learn More'),
-                  onPressed: () {},
+                SizedBox(
+                  height: 200.0,
+                  child: Ink.image(
+                    image: const AssetImage(
+                        'assets/images/venue_test.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(16.0),
+                  alignment: Alignment.centerLeft,
+                  child: const Text("Other Information"),
+                ),
+                ButtonBar(
+                  children: [
+                    TextButton(
+                      child: const Text('Contact Venue'),
+                      onPressed: () {},
+                    ),
+                    TextButton(
+                      child: const Text('Learn More'),
+                      onPressed: () {},
+                    )
+                  ],
                 )
-              ],
-            )
-          ],
+              ]),
+            );
+          },
         ));
   }
 }

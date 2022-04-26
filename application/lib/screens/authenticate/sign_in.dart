@@ -28,6 +28,7 @@ class _SignInState extends State<SignIn> {
           backgroundColor: Colors.cyan,
         ),
         body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
             padding:
                 const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
             child: Form(
