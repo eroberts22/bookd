@@ -87,10 +87,22 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
                         fontWeight: FontWeight.bold,
                       ),),
                 ),
-                Padding(padding: const EdgeInsets.only(top: 10, left: 30, right: 30 ),
+                Padding(padding: const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 10),
                   child: event.snapshot.child("description").value != null ?
                     Text(event.snapshot.child("description").value.toString())
                     :Container(),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: event.snapshot.child("phoneNumber").value != null ?
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
+                    child: Text(
+                    event.snapshot.child("phoneNumber").value.toString(),
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Colors.black.withOpacity(0.5) ),),
+                  ):Container(),
                 ),
                 ]),
               );
