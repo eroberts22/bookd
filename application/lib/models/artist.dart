@@ -7,7 +7,7 @@ class Artist {
   String phoneNumber = "012-345-6789";
   List availableDates = [];
   // Photos are stored in cloud storage, and we store the url to the images here
-  List photos = ["url1", "url2"];
+  List photos = [];
   List reviews = [];
 
   Artist(

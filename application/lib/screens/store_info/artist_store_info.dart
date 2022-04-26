@@ -131,6 +131,17 @@ class _artistSettingsState extends State<artistSettings> {
                             print(stageName);
                           }),
                       const SizedBox(height: 20.0),
+                      const Text("Enter your phone number"),
+                      TextFormField(
+                          validator: (val) => val!.isEmpty
+                              ? 'Enter your phone number'
+                              : null, //indicates if form is valid or not. Using !. so assuming value won't be null
+                          onChanged: (val) {
+                            // on user typing
+                            setState(() => phoneNumber = val);
+                            print(phoneNumber);
+                          }),
+                      const SizedBox(height: 20.0),
                       const Text(
                           "Enter as many personal urls as desired separated by commas"),
                       TextFormField(
@@ -190,6 +201,9 @@ class _artistSettingsState extends State<artistSettings> {
                             if (!stageName.isEmpty) {
                               updateMap["stageName"] = stageName;
                             }
+                            if (!phoneNumber.isEmpty) {
+                              updateMap["phoneNumber"] = phoneNumber;
+                            }
                             if (!websiteLinks.isEmpty) {
                               // Separate links by comma
                               updateMap["websiteLinks"] =
@@ -223,6 +237,12 @@ class _artistSettingsState extends State<artistSettings> {
                             }
                             if (!stageName.isEmpty) {
                               updateMap["stageName"] = stageName;
+                            } else {
+                              // Raise error, require all fields to be non-null
+                              error = "Empty Field: All fields required";
+                            }
+                            if (!phoneNumber.isEmpty) {
+                              updateMap["phoneNumber"] = phoneNumber;
                             } else {
                               // Raise error, require all fields to be non-null
                               error = "Empty Field: All fields required";
