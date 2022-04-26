@@ -23,9 +23,12 @@ class _ExploreState extends State<Explore> {
   void _getVenues() async {
     DatabaseReference dbRef = database.ref();
     DatabaseEvent thisVenue = await dbRef.child("Venues").orderByValue().once();
-    List<dynamic> venues = [];
+    List<Map<String, dynamic>> venues = [];
     for (var user in thisVenue.snapshot.children) {
-      venues.add(user.child("name").value.toString());
+      Map<String, dynamic> venueInfo = {};
+      venueInfo["id"] = user.key ?? "Null";
+      venueInfo["name"] = user.child("name").value.toString();
+      venues.add(venueInfo);
     }
     setState(() {
       listIds = venues;
@@ -47,15 +50,14 @@ class _ExploreState extends State<Explore> {
               elevation: 4.0,
               child: Column(children: [
                 ListTile(
-                  title: Text(listIds[index]),
+                  title: Text(listIds[index]["name"]),
                   subtitle: const Text("Ratings"),
                   trailing: const Icon(Icons.favorite),
                 ),
                 SizedBox(
                   height: 200.0,
                   child: Ink.image(
-                    image: const AssetImage(
-                        'assets/images/venue_test.jpg'),
+                    image: const AssetImage('assets/images/venue_test.jpg'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -68,7 +70,11 @@ class _ExploreState extends State<Explore> {
                   children: [
                     TextButton(
                       child: const Text('Contact Venue'),
-                      onPressed: () {},
+                      onPressed: () {
+                        // Create a new conversation between
+                        var venueID = listIds[index]["id"].toString();
+                        print("Venue $venueID");
+                      },
                     ),
                     TextButton(
                       child: const Text('Learn More'),
