@@ -4,8 +4,8 @@ import 'package:application/screens/widgets/artist_appdrawer.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class Explore extends StatefulWidget {
-  const Explore({Key? key, this.title}) : super(key: key);
-  final String? title;
+  const Explore({Key? key}) : super(key: key);
+
   @override
   State<Explore> createState() => _ExploreState();
 }
@@ -28,6 +28,9 @@ class _ExploreState extends State<Explore> {
       Map<String, dynamic> venueInfo = {};
       venueInfo["id"] = user.key ?? "Null";
       venueInfo["name"] = user.child("name").value.toString();
+      venueInfo["description"] = user.child("description").value.toString();
+      venueInfo["streetAddress"] = user.child("streetAddress").value.toString();
+
       venues.add(venueInfo);
     }
     setState(() {
@@ -47,43 +50,43 @@ class _ExploreState extends State<Explore> {
           itemCount: listIds.length,
           itemBuilder: (BuildContext context, int index) {
             return Card(
-              elevation: 4.0,
-              child: Column(children: [
-                ListTile(
-                  title: Text(listIds[index]["name"]),
-                  subtitle: const Text("Ratings"),
-                  trailing: const Icon(Icons.favorite),
-                ),
-                SizedBox(
-                  height: 200.0,
-                  child: Ink.image(
-                    image: const AssetImage('assets/images/venue_test.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(16.0),
-                  alignment: Alignment.centerLeft,
-                  child: const Text("Other Information"),
-                ),
-                ButtonBar(
-                  children: [
-                    TextButton(
-                      child: const Text('Contact Venue'),
-                      onPressed: () {
-                        // Create a new conversation between
-                        var venueID = listIds[index]["id"].toString();
-                        print("Venue $venueID");
-                      },
+                elevation: 6.0,
+                child: InkWell(
+                  onTap: () {},
+                  child: Column(children: [
+                    ListTile(
+                      title: Text(listIds[index]["name"].toString()),
+                      subtitle:
+                          Text(listIds[index]["streetAddress"].toString()),
+                      trailing: const Icon(Icons.favorite),
                     ),
-                    TextButton(
-                      child: const Text('Learn More'),
-                      onPressed: () {},
+                    SizedBox(
+                      height: 200.0,
+                      child: Ink.image(
+                        image: const AssetImage('assets/images/venue_test.jpg'),
+                        fit: BoxFit.cover,
+                        child: InkWell(onTap: () {}),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(listIds[index]["description"].toString()),
+                    ),
+                    ButtonBar(
+                      children: [
+                        TextButton(
+                          child: const Text('Contact Venue'),
+                          onPressed: () {
+                            // Create a new conversation between
+                            var venueID = listIds[index]["id"].toString();
+                            print("Venue $venueID");
+                          },
+                        ),
+                      ],
                     )
-                  ],
-                )
-              ]),
-            );
+                  ]),
+                ));
           },
         ));
   }
