@@ -54,7 +54,7 @@ final AuthService _auth = AuthService();
                 ),
               ),
               onTap: () {
-               Navigator.of(context).pushReplacementNamed('/profile-venue');
+               Navigator.of(context).pushReplacementNamed('/profile-venue', arguments: {"uid": _auth.userID.toString()});
 
               },
             ),
