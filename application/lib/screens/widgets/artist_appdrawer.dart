@@ -82,6 +82,17 @@ final AuthService _auth = AuthService();
                   Navigator.of(context).pushReplacementNamed('/account-artist');
               },
             ),
+            ListTile(
+              title: const Text(
+                'Messaging',
+                style: TextStyle(
+                  fontSize: 30.0,
+                ),
+              ),
+              onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/messaging');
+              },
+            ),
           ],
         ),
     );

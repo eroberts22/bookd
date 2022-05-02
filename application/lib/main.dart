@@ -6,6 +6,7 @@ import 'package:application/screens/homepage/account_venue.dart';
 import 'package:application/screens/homepage/calendar_page.dart';
 import 'package:application/screens/homepage/explore.dart';
 import 'package:application/screens/homepage/account_artist.dart';
+import 'package:application/screens/messaging/chatroom.dart';
 import 'package:application/screens/store_info/artist_store_info.dart';
 import 'package:application/screens/store_info/venue_store_info.dart';
 import 'package:application/screens/homepage/artist_profile_page.dart';
@@ -18,6 +19,7 @@ import 'package:application/screens/store_info/upload_pictures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:application/screens/messaging/conversations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +59,7 @@ class MyApp extends StatelessWidget {
             '/upload-image': (context) => const UploadImage(),
             '/booking': (context) => const BookingPage(),
             '/incoming-requests': (context) => const IncomingRequestPage(),
+            '/messaging': (context) => const chatroom(),
           },
         ));
   }
