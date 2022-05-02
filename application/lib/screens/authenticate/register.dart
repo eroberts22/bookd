@@ -72,13 +72,13 @@ class _RegisterState extends State<Register> {
                                 width: 130,
                                 fit: BoxFit.cover,
                               ),
-                              SizedBox(height: 6),
+                              const SizedBox(height: 6),
                               const Text(
                                 'Artist',
                                 style: TextStyle(
                                     fontSize: 26, color: Colors.white),
                               ),
-                              SizedBox(height: 6),
+                              const SizedBox(height: 6),
                             ],
                           ),
                         ),
