@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>729684081664-530luf2rpp7venuavihj7cakcp24jvfm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.729684081664-530luf2rpp7venuavihj7cakcp24jvfm</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAN8c_bm8xYvl_yszhke-At2oUWplgAxNs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>729684081664</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.CS472.bookd</string>
+	<key>PROJECT_ID</key>
+	<string>bookd-4bdd3</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bookd-4bdd3.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:729684081664:ios:edb7eefecfbbca5a296ce5</string>
+	<key>DATABASE_URL</key>
+	<string>https://bookd-4bdd3-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
