@@ -23,7 +23,6 @@ class _RegisterState extends State<Register> {
   String email = '';
   String password = '';
   String error = ''; // error is caught and printed to box
-  String profileType = '0';
   bool isArtistSelected = false;
   bool isVenueSelected = false;
   @override
@@ -59,7 +58,8 @@ class _RegisterState extends State<Register> {
                             setState(() {
                               isArtistSelected = true;
                               isVenueSelected = false;
-                              profileType == "0";
+                              print(isArtistSelected);
+                              print(isVenueSelected);
                             });
                           },
                           child: Column(
@@ -95,7 +95,9 @@ class _RegisterState extends State<Register> {
                             setState(() {
                               isArtistSelected = false;
                               isVenueSelected = true;
-                              profileType = "1";
+                              print(isArtistSelected);
+                              print(isVenueSelected);
+
                             });
                           },
                           child: Column(
@@ -121,7 +123,6 @@ class _RegisterState extends State<Register> {
                       ),
                     ],
                   ),
-
                   SizedBox(height: 50),
                   TextFormField(
                     decoration: const InputDecoration(
@@ -163,14 +164,15 @@ class _RegisterState extends State<Register> {
                           style: TextStyle(color: Colors.white)),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          // true if form is valid, false if otherwise. !NOTE!!!! Using a !. null safety operator, telling it this state can never be null. Might need to fix this to avoid bugs?
-                          // Need to check if the profile type is valid
-                          if (profileType == "0" || profileType == "1") {
-                            String profile = "";
-                            if (profileType == "0") {
+                          String profile;
+                          if(isArtistSelected || isVenueSelected) {
+                            if(isArtistSelected && !isVenueSelected) {
                               profile = "artist";
-                            } else {
+                            } else if (!isArtistSelected && isVenueSelected) {
                               profile = "venue";
+                            } else {
+                              profile = "";
+                              print("ERROR");
                             }
                             dynamic result =
                                 await _authService.registerWithEmailAndPassword(
