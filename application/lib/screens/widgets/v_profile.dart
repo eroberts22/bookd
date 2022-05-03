@@ -43,7 +43,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
     String uid = widget.uid;
     final ref = FirebaseDatabase.instance.ref();
     event = await ref.child('Venues/$uid').once();
-
+/*
     print(event.snapshot.children);
     for (var c in event.snapshot.children) {
       print(c.key);
@@ -56,7 +56,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
         print(c.key);
         venueType = c.key;
       }
-    }
+    }*/
   }
 
   @override
@@ -99,12 +99,12 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top:20, bottom: 10),
-                  child: event.snapshot.child("name").value != null ?
+                  child: event.snapshot.child("name").value != null && event.snapshot.child("description").value != null ?
                   Text(event.snapshot.child("name").value.toString(),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30),)
-                  :const Text("Please Enter All Profile\nInformation in Settings",
+                  :const Text("Please Enter Information\nin Profile Settings",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),),
@@ -118,7 +118,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                     : Text(""),
                 ),
                 Padding(padding: const EdgeInsets.only(top: 10, left: 30, right: 30 ),
-                  child: event.snapshot.child("description").value != null ?
+                  child: event.snapshot.child("name").value != null && event.snapshot.child("description").value != null ?
                     Text(event.snapshot.child("description").value.toString())
                     :Container(),
                 ),
