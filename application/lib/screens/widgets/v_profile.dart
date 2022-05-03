@@ -15,9 +15,9 @@ import 'dart:io';
 
 class VenueProfileWidget extends StatefulWidget {
   // //make it so the uid is set by passing it into this widget. access uid by using "widget.uid"
-  // final String uid;
-  // const VenueProfileWidget(this.uid);
-  const VenueProfileWidget({Key? key}) : super(key: key);
+  final String uid;
+  const VenueProfileWidget(this.uid);
+  //const VenueProfileWidget({Key? key}) : super(key: key);
   @override
   State<VenueProfileWidget> createState() => _VenueProfileWidgetState();
 }
@@ -38,8 +38,9 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
   }
 
   Future _getProfileInfo() async {
-    String? uid = _authService
-        .userID; //TODO: uid here should be passed in from explore page card (see contructor)
+    // String? uid = _authService
+    //     .userID; //TODO: uid here should be passed in from explore page card (see contructor)
+    String uid = widget.uid;
     final ref = FirebaseDatabase.instance.ref();
     event = await ref.child('Venues/$uid').once();
 
@@ -150,7 +151,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                 SizedBox(
                   width: 400,
                   height: 400,
-                  child: BookdCalendar(_authService.userID!),
+                  child: BookdCalendar(widget.uid),
                 ),
               ]));
             } else {

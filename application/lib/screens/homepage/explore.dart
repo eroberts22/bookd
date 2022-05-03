@@ -73,7 +73,14 @@ class _ExploreState extends State<Explore> {
                 return Card(
                     elevation: 6.0,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        print(listIds[index]["id"].toString());
+                        //call venue page passing in venue id
+                        Navigator.of(context)
+                            .pushReplacementNamed('/profile-venue', arguments: {
+                          "uid": listIds[index]["id"].toString()
+                        });
+                      },
                       child: Column(children: [
                         ListTile(
                           title: Text(listIds[index]["name"].toString()),
