@@ -1,13 +1,11 @@
-import 'package:application/screens/homepage/account_artist.dart';
 import 'package:application/screens/homepage/account_venue.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:application/screens/homepage/explore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:application/services/auth.dart';
 
 class Home extends StatefulWidget {
-  const Home({ Key? key}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -16,14 +14,21 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final AuthService _authService = AuthService();
   FirebaseDatabase database = FirebaseDatabase.instance;
-  
-  var profileType; // added so we can navigate to appropriate user account
-  bool artistLogged = true; // used to specify which user account is logged in
+
+  late DatabaseEvent event;
+  bool artistLogged = false; // used to specify which user account is logged in
+  bool venueLogged = false;
+
+   void setArt() {
+    artistLogged = true;
+    venueLogged = false;
+  }
 
   void setVen() {
-    setState(()=> artistLogged = !artistLogged);
+    venueLogged = true;
+    artistLogged = false;
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -35,23 +40,38 @@ class _HomeState extends State<Home> {
   Future _getDatabaseProfileType() async {
     String? uid = _authService.userID;
     DatabaseReference profileTypeRef = database.ref("Users/$uid/profileType");
-    DatabaseEvent profileTypeEv = await profileTypeRef.once();
-    profileType = profileTypeEv.snapshot.value;
-    
+    DatabaseEvent event = await profileTypeRef.once();
+    var profileType = event.snapshot.value;
+
+    if (profileType == 'artist') {
+      setArt();
+    }
+
     if (profileType == 'venue') {
       setVen();
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
-
-    if (artistLogged) {
-      return const Explore();
-    } else if (!artistLogged){
-      return const AccountVenue();
-    } else {
-      return const Explore();
-    }
+    return FutureBuilder(
+      future: _getDatabaseProfileType(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          
+          if (artistLogged && !venueLogged) {
+            return const Explore();
+          } if (venueLogged && !artistLogged) {
+            return const AccountVenue();
+          } else {
+            return Container();
+          }
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 }
