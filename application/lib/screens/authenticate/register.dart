@@ -1,4 +1,4 @@
-import 'package:application/screens/authenticate/landingPage.dart';
+import 'package:application/screens/authenticate/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -58,8 +58,8 @@ class _RegisterState extends State<Register> {
                             setState(() {
                               isArtistSelected = true;
                               isVenueSelected = false;
-                              print(isArtistSelected);
-                              print(isVenueSelected);
+                              //print(isArtistSelected);
+                              //print(isVenueSelected);
                             });
                           },
                           child: Column(
@@ -95,8 +95,8 @@ class _RegisterState extends State<Register> {
                             setState(() {
                               isArtistSelected = false;
                               isVenueSelected = true;
-                              print(isArtistSelected);
-                              print(isVenueSelected);
+                              //print(isArtistSelected);
+                              //print(isVenueSelected);
 
                             });
                           },
@@ -110,20 +110,20 @@ class _RegisterState extends State<Register> {
                                 width: 130,
                                 fit: BoxFit.cover,
                               ),
-                              SizedBox(height: 6),
+                              const SizedBox(height: 6),
                               const Text(
                                 'Venue',
                                 style: TextStyle(
                                     fontSize: 26, color: Colors.white),
                               ),
-                              SizedBox(height: 6),
+                              const SizedBox(height: 6),
                             ],
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   TextFormField(
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -172,7 +172,7 @@ class _RegisterState extends State<Register> {
                               profile = "venue";
                             } else {
                               profile = "";
-                              print("ERROR");
+                             // print("ERROR");
                             }
                             dynamic result =
                                 await _authService.registerWithEmailAndPassword(
@@ -184,9 +184,9 @@ class _RegisterState extends State<Register> {
                             } else {
                               String? uid = result.uid;
                               // Store the new user in the database!
-                              String u_email = result.email;
-                              Map<String, String?> user_map = {
-                                "email": u_email,
+                              String uEmail = result.email;
+                              Map<String, String?> userMap = {
+                                "email": uEmail,
                                 "profileType": profile
                               };
 
@@ -194,9 +194,8 @@ class _RegisterState extends State<Register> {
                               DatabaseReference artistRef =
                                   database.ref("Users/$uid");
 
-                              await artistRef.set(user_map);
-                              print(
-                                  "Created user $uid in database with email $u_email and profile $profile");
+                              await artistRef.set(userMap);
+                              print("Created user $uid in database with email $uEmail and profile $profile");
                               // if register is valid, show home page
                               if (result != null) {
                                 // if sign in is valid, show home screen

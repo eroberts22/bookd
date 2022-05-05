@@ -76,7 +76,7 @@ class BookdCalendarState extends State<BookdCalendar> {
             calendarBuilders: CalendarBuilders(
               singleMarkerBuilder: (context, day, events) { //changes the look of the event markers.
                 return Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.rectangle,
                     color: Colors.cyan),
                   width: 57.0,
@@ -86,7 +86,7 @@ class BookdCalendarState extends State<BookdCalendar> {
               selectedBuilder: (context, day, events) { //changes look of days that are selected
                 return Container(
                   //duration: Duration(milliseconds: 300),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.orangeAccent),
                   width: 45.0,
@@ -98,7 +98,7 @@ class BookdCalendarState extends State<BookdCalendar> {
               todayBuilder: (context, day, events) { //changes the look of the today day
                 return Container(
                   //duration: Duration(milliseconds: 300),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Color.fromARGB(100, 255, 171, 64)),
                   width: 45.0,
@@ -169,7 +169,7 @@ class BookdCalendarState extends State<BookdCalendar> {
             builder: (context, value, _){
               return ListView.builder(
                 itemCount: value.length,
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 100.0,
                 ),
                 itemBuilder: (context, index){
@@ -181,11 +181,13 @@ class BookdCalendarState extends State<BookdCalendar> {
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
                         overlayColor: MaterialStateProperty.resolveWith<Color?>(
                           (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.hovered))
+                            if (states.contains(MaterialState.hovered)) {
                               return Colors.blue.withOpacity(0.04);
+                            }
                             if (states.contains(MaterialState.focused) ||
-                                states.contains(MaterialState.pressed))
+                                states.contains(MaterialState.pressed)) {
                               return Colors.orangeAccent.withOpacity(0.9);
+                            }
                             return null; // Defer to the widget's default.
                           },
                         ),

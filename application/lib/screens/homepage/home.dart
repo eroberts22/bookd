@@ -67,8 +67,9 @@ class _HomeState extends State<Home> {
             return Container();
           }
         } else {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Container(
+            decoration: const BoxDecoration(color: Colors.white),
+            child: const Center (child: CircularProgressIndicator(),)
           );
         }
       },

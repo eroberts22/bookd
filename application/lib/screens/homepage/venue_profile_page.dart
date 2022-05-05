@@ -19,6 +19,7 @@ class ProfileVenue extends StatefulWidget {
 class _ProfileVenueState extends State<ProfileVenue> {
   final AuthService _authService = AuthService();
   FirebaseDatabase database = FirebaseDatabase.instance;
+  // ignore: prefer_typing_uninitialized_variables
   var profileType;
   @override
   void initState() {

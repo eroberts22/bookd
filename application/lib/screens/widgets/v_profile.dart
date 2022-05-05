@@ -1,29 +1,19 @@
-// public profile widget
-
-import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/calendar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:application/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:application/models/venue.dart';
-import 'package:path/path.dart';
-import 'dart:convert';
 import 'dart:io';
 
 class VenueProfileWidget extends StatefulWidget {
   // //make it so the uid is set by passing it into this widget. access uid by using "widget.uid"
   final String uid;
-  const VenueProfileWidget(this.uid);
+  const VenueProfileWidget(this.uid, {Key? key}) : super(key: key);
   //const VenueProfileWidget({Key? key}) : super(key: key);
   @override
   State<VenueProfileWidget> createState() => _VenueProfileWidgetState();
 }
 
 class _VenueProfileWidgetState extends State<VenueProfileWidget> {
-  final AuthService _authService = AuthService();
+
   FirebaseDatabase database = FirebaseDatabase.instance;
   File? _photo;
   String? img;
@@ -115,7 +105,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                     Text(venueType!,
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.5) ),)
-                    : Text(""),
+                    : const Text(""),
                 ),
                 Padding(padding: const EdgeInsets.only(top: 10, left: 30, right: 30 ),
                   child: event.snapshot.child("name").value != null && event.snapshot.child("description").value != null ?
