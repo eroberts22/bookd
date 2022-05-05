@@ -2,9 +2,6 @@ import 'package:application/models/users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-import '../models/venue.dart';
-
-
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -44,20 +41,7 @@ class AuthService {
   }
 
  Future getCurrentUID() async {
-    return await _auth.currentUser?.uid;
-  }
-
-  Future getCurrentUser() async {
-    return await _auth.currentUser;
-  }
-
-  Future getCurrentVenue() async {
-    FirebaseDatabase database = FirebaseDatabase.instance;
-    DatabaseReference ref = database.ref("Artists/$getCurrentUID");
-    //DatabaseReference databaseRef = database.ref(); //get the reference
-    //DatabaseEvent venue = await databaseRef.child("Users/${uid}").once(); 
-    //return venue;
-    
+    return _auth.currentUser?.uid;
   }
 
   // Sign in anonymous

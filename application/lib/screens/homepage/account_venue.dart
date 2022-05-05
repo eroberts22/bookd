@@ -1,4 +1,4 @@
-import 'package:application/screens/authenticate/landingPage.dart';
+import 'package:application/screens/authenticate/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/screens/widgets/appbar.dart';
@@ -15,9 +15,10 @@ class AccountVenue extends StatefulWidget {
 class _AccountVenueState extends State<AccountVenue> {
   final AuthService _auth = AuthService();
   FirebaseDatabase database = FirebaseDatabase.instance;
+  // ignore: prefer_typing_uninitialized_variables
   var profileType;
 
-  String error_str = "";
+  String errorStr = "";
 
   @override void initState() {
     super.initState();
@@ -89,7 +90,7 @@ class _AccountVenueState extends State<AccountVenue> {
                   Navigator.of(context).pushReplacementNamed('/upload-image');
                 } else {
                   // No settings exist!
-                  setState(() => error_str =
+                  setState(() => errorStr =
                       "Error! Cannot upload images before storing profile settings");
                 }
               },
@@ -140,7 +141,7 @@ class _AccountVenueState extends State<AccountVenue> {
               ),
             ),
             Text(
-            error_str,
+            errorStr,
             style: const TextStyle(color: Colors.red, fontSize: 14.0),
           )
           ],

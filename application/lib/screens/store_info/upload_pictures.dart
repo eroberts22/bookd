@@ -167,7 +167,7 @@ class _UploadImageState extends State<UploadImage> {
       ),
       body: Column(
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           Center(
@@ -177,7 +177,7 @@ class _UploadImageState extends State<UploadImage> {
               },
               child: CircleAvatar(
                 radius: 55,
-                backgroundColor: Color(0xffFDCF09),
+                backgroundColor: const Color(0xffFDCF09),
                 child: _photo != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(50),
@@ -212,26 +212,24 @@ class _UploadImageState extends State<UploadImage> {
         context: context,
         builder: (BuildContext bc) {
           return SafeArea(
-            child: Container(
-              child: new Wrap(
-                children: <Widget>[
-                  new ListTile(
-                      leading: new Icon(Icons.photo_library),
-                      title: new Text('Gallery'),
-                      onTap: () {
-                        imageFromGallery();
-                        Navigator.of(context).pop();
-                      }),
-                  new ListTile(
-                    leading: new Icon(Icons.photo_camera),
-                    title: new Text('Camera'),
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text('Gallery'),
                     onTap: () {
-                      imageFromCamera();
+                      imageFromGallery();
                       Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
+                    }),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Camera'),
+                  onTap: () {
+                    imageFromCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
             ),
           );
         });

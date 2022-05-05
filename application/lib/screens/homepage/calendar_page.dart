@@ -14,6 +14,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   final AuthService _authService = AuthService();
   FirebaseDatabase database = FirebaseDatabase.instance;
+  // ignore: prefer_typing_uninitialized_variables
   var profileType; // added so we can navigate to appropriate user account
 
   @override

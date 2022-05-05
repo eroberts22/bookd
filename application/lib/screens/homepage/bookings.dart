@@ -1,7 +1,6 @@
 // page that shows in artist version
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:application/services/auth.dart';
+import 'package:application/screens/widgets/booking_tile.dart';
 
 class BookingPage extends StatefulWidget {
   const BookingPage({ Key? key }) : super(key: key);
@@ -25,8 +24,8 @@ class _BookingPageState extends State<BookingPage> {
                 Navigator.of(context).pushReplacementNamed('/account-artist');
               },
             )),
-        body: Container(
-          ),
+        body: Container(),
+        //BookingTile(),
         );
   }
 }
