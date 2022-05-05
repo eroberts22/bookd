@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:application/screens/messaging/conversations.dart';
+import 'package:application/screens/messaging/conversations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
             '/upload-image': (context) => const UploadImage(),
             '/booking': (context) => const BookingPage(),
             '/incoming-requests': (context) => const IncomingRequestPage(),
-            '/messaging': (context) => const chatroom(otherUID: "NuD7CE1ZwVRopkNw5Lta6gcHCrA2"),
+            '/messaging': (context) => const conversations(),
           },
         ));
   }
