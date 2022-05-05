@@ -1,3 +1,4 @@
+import 'package:application/screens/messaging/chatroom.dart';
 import 'package:flutter/material.dart';
 import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/artist_appdrawer.dart';
@@ -83,8 +84,10 @@ class _ExploreState extends State<Explore> {
                           child: const Text('Contact Venue'),
                           onPressed: () {
                             // Create a new conversation between
-                            var venueID = listIds[index]["id"].toString();
+                            String venueID = listIds[index]["id"].toString();
                             print("Venue $venueID");
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => chatroom(otherUID: venueID)));
+
                           },
                         ),
                       ],
