@@ -39,7 +39,7 @@ class _ProfileVenueState extends State<ProfileVenue> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      drawer: profileType == "venue" ? const VBookdAppDrawer() : const ABookdAppDrawer(), //depending on profile type, return correct appdrawer
+      drawer: arguements["profileType"] == "venue" ? const VBookdAppDrawer() : const ABookdAppDrawer(), //depending on profile type, return correct appdrawer
       appBar: const BookdAppBar(),
       body: VenueProfileWidget(arguements["uid"]),
     );

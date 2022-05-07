@@ -55,8 +55,8 @@ class _ExploreState extends State<Explore> {
                 child: InkWell(
                   onTap: () {
                     print(listIds[index]["id"].toString());
-                    //call venue page, passing in venue id
-                    Navigator.of(context).pushReplacementNamed('/profile-venue', arguments: {"uid": listIds[index]["id"].toString()});
+                    //call venue page, passing in venue id and current user profile type (artist) to arguements
+                    Navigator.of(context).pushReplacementNamed('/profile-venue', arguments: {"uid": listIds[index]["id"].toString(), "profileType": "artist"});
                   },
                   child: Column(children: [
                     ListTile(
