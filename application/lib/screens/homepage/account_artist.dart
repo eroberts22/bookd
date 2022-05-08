@@ -91,22 +91,22 @@ class _AccountArtistState extends State<AccountArtist> {
             ),
           ),
           // calendar
-          TextButton.icon(
-            icon: const Icon(Icons.calendar_month),
-            onPressed: () async {
-              Navigator.of(context).pushReplacementNamed('/calendar');
-            },
-            label: const Text(
-              'Calendar',
-              style: TextStyle(
-                fontSize: 20.0,
-                color: Colors.black,
-              ),
-            ),
-            style: TextButton.styleFrom(
-              primary: Colors.black,
-            ),
-          ),
+          // TextButton.icon(
+          //   icon: const Icon(Icons.calendar_month),
+          //   onPressed: () async {
+          //     Navigator.of(context).pushReplacementNamed('/calendar');
+          //   },
+          //   label: const Text(
+          //     'Calendar',
+          //     style: TextStyle(
+          //       fontSize: 20.0,
+          //       color: Colors.black,
+          //     ),
+          //   ),
+          //   style: TextButton.styleFrom(
+          //     primary: Colors.black,
+          //   ),
+          // ),
           // logout
           TextButton.icon(
             icon: const Icon(Icons.person),
