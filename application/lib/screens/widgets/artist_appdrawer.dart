@@ -66,7 +66,7 @@ final AuthService _auth = AuthService();
                 ),
               ),
               onTap: () {
-               Navigator.of(context).pushReplacementNamed('/profile-artist');
+               Navigator.of(context).pushReplacementNamed('/profile-artist', arguments: {"uid": _auth.userID.toString(), "profileType": "artist"});
 
               },
             ),

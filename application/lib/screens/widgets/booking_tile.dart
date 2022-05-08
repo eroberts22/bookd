@@ -40,10 +40,12 @@ class _BookingTileState extends State<BookingTile> {
             children: [
               Container(
                 padding: const EdgeInsets.fromLTRB(20.0, 6.0, 10.0, 0.0),
-                child: const Text("Venue Name"),
+                child: Text(venueName),
               ),
               TextButton(
-                onPressed: () {}, // *** on pressed: shows the venue's profile
+                onPressed: () { // *** on pressed: shows the venue's profile
+                  Navigator.of(context).pushReplacementNamed('/profile-venue', arguments: {"uid": widget.uid, "profileType": "artist"});
+                },
                 child: Row(children: const [
                   Padding(
                     padding: EdgeInsets.fromLTRB(20.0, 6.0, 10.0, 0.0),

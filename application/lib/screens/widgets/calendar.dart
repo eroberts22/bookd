@@ -18,6 +18,8 @@ class BookdCalendarState extends State<BookdCalendar> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   List _availableDates = [];
+  Map _bookedDays = {}; // a map of artist ids to dates they are booked
+  Map _bookedArtistNames = {}; // a map of artist ids to their stage names
   late final ValueNotifier<List> _bookDayButton;
 
   var profileType; // added so we can navigate to appropriate user account
@@ -37,25 +39,42 @@ class BookdCalendarState extends State<BookdCalendar> {
     DatabaseReference databaseRef = database.ref(); //get the reference
     DatabaseEvent userType = await databaseRef.child("Users/$uid/profileType").once(); //event for getting the profile type for comparison
     DatabaseEvent userDates;
+    DatabaseEvent userBookings;
+    DatabaseEvent bookedArtistName;
     if(userType.snapshot.value == "artist"){
       userDates = await databaseRef.child("Artists/$uid/availableDates").orderByValue().once();
+      userBookings = await databaseRef.child("Artists/$uid/bookings").orderByValue().once();
     }
     else{//(userType == "Venue"){
       userDates = await databaseRef.child("Venues/$uid/availableDates").orderByValue().once();
+      userBookings = await databaseRef.child("Venues/$uid/bookings").orderByValue().once();
     }
-    List<dynamic> allDates = []; //a list that will contain all the dates stored in the database for an user (as strings)
+    List<dynamic> allDates = []; //a list that will contain all the availible dates stored in the database for an user (as strings)
     for (var date in userDates.snapshot.children){ //add each date to list of dates
       allDates.add(date.value);
     }
+    Map bookedDays = {}; //map of bookings with id as a value and date as key
+    Map bookedArtistNames = {};
+    for(var booking in userBookings.snapshot.children){
+      //booking.value is the date, booking.key is the id
+      bookedDays[booking.value] = booking.key;
+      bookedArtistName = await databaseRef.child("Artists/${booking.key}/stageName").once();
+      bookedArtistNames[booking.key] = bookedArtistName.snapshot.value;
+    }
     setState(() { //set the state once data has arrived
       _availableDates = allDates; //set global list of dates
+      _bookedDays = bookedDays;
+      _bookedArtistNames = bookedArtistNames;
     });
   }
 
   List _getEventsForDay(DateTime day){ //return a list of "events" that exist on a day. In this case there can only be one event on any particular day, so return a single value array or empty array
     List available = [];
     if(_availableDates.contains(day.toString())){
-      available.add(true);
+      available.add("available");
+    }
+    if(_bookedDays.containsKey(day.toString())){
+      available.add(_bookedDays[day.toString()]);
     }
     return available;
   }
@@ -67,6 +86,26 @@ class BookdCalendarState extends State<BookdCalendar> {
     profileType = profileTypeEv.snapshot.value;
   }
 
+  Widget markerBuilderOnDay(DateTime day){
+    if(_bookedDays.containsKey(day.toString())){
+      return Center(child: Container(
+        decoration: const BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.purple),
+        width: 52.0,
+        height: 13.0,
+      ));
+    }
+    else{
+      return Center(child: Container(
+        decoration: const BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.cyan),
+        width: 52.0,
+        height: 13.0,
+        ));
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,13 +114,7 @@ class BookdCalendarState extends State<BookdCalendar> {
           TableCalendar(
             calendarBuilders: CalendarBuilders(
               singleMarkerBuilder: (context, day, events) { //changes the look of the event markers.
-                return Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: Colors.cyan),
-                  width: 57.0,
-                  height: 13.0,
-                );
+                 return markerBuilderOnDay(day);//Container(
               },
               selectedBuilder: (context, day, events) { //changes look of days that are selected
                 return Container(
@@ -92,7 +125,7 @@ class BookdCalendarState extends State<BookdCalendar> {
                   width: 45.0,
                   height: 45.0,              
                   child: Center(
-                    child: Text(day.day.toString(), style: const TextStyle(fontSize: 14, color: Colors.black)),)                  
+                    child: Text(day.day.toString(), style: const TextStyle(fontSize: 14, color: Colors.black)),  )              
                 );
               },
               todayBuilder: (context, day, events) { //changes the look of the today day
@@ -135,13 +168,15 @@ class BookdCalendarState extends State<BookdCalendar> {
                   userTypePath = "Venues/$uid/availableDates";
                 }
                 DatabaseEvent userDate = await databaseRef.child(userTypePath).orderByValue().equalTo(selectedDay.toString()).once(); //query for finding if the selected day exists in the database
-                if(!userDate.snapshot.exists){ //if this day does not already exist in the database
-                  DatabaseReference addedListItemRef = databaseRef.child(userTypePath).push(); //create new spot for selected day
-                  addedListItemRef.set(selectedDay.toString()); //set the current date to be in the spot just created
-                }
-                else{ //delete day from database
-                  for(var child in userDate.snapshot.children){ //delete each key of the children from the artistDate query (should be only one child)
-                    databaseRef.child(userTypePath + "/" + child.key!).remove();
+                if(!_bookedDays.containsKey(userDate.snapshot.value)){ //can only add and remove available dates if the date is not in list of booked dates
+                  if(!userDate.snapshot.exists){ //if this day does not already exist in the database
+                    DatabaseReference addedListItemRef = databaseRef.child(userTypePath).push(); //create new spot for selected day
+                    addedListItemRef.set(selectedDay.toString()); //set the current date to be in the spot just created
+                  }
+                  else{ //delete day from database
+                    for(var child in userDate.snapshot.children){ //delete each key of the children from the artistDate query (should be only one child)
+                      databaseRef.child(userTypePath + "/" + child.key!).remove();
+                    }
                   }
                 }
               }
@@ -163,8 +198,9 @@ class BookdCalendarState extends State<BookdCalendar> {
           ),
 
         const SizedBox(height: 8.0),
-        Expanded( //this is for showing the "book a day" button
-          child: ValueListenableBuilder<List>(
+        /////////////////////////////////////////////////////this is for showing the "book a day" button or the booked artist/////////////////////////////////////////////////////////
+        Expanded ( 
+          child: ValueListenableBuilder<List> (
             valueListenable: _bookDayButton,
             builder: (context, value, _){
               return ListView.builder(
@@ -172,8 +208,8 @@ class BookdCalendarState extends State<BookdCalendar> {
                 padding: const EdgeInsets.symmetric(
                   horizontal: 100.0,
                 ),
-                itemBuilder: (context, index){
-                  if(widget.uid != _authService.userID){ //only show book a day button if user is not the owner of the calendar
+                itemBuilder: (context, index) {
+                  if(widget.uid != _authService.userID && _bookDayButton.value[index] == "available"){ //only show book a day button if user is not the owner of the calendar
                     return TextButton(                   
                       style: ButtonStyle(
                         //fixedSize: MaterialStateProperty.all<Size>(Size.fromWidth(1.0)),
@@ -192,12 +228,23 @@ class BookdCalendarState extends State<BookdCalendar> {
                           },
                         ),
                       ),
-                      onPressed: () {
-                        DatabaseReference addedListItemRef = database.ref().child("Venues/${widget.uid}/bookingRequests").push(); //push a new bookingrequest onto the list
-                        addedListItemRef.set(_authService.userID); //set the booking request to be the id of the requestee
+                      onPressed: () { // request to book on this date
+                        database.ref().child("Venues/${widget.uid}/bookingRequests").update({_authService.userID!: _selectedDay.toString()}); //add a new booking request
+                        //database structure: 
+                          //venueid
+                            //bookingRequests
+                              //artistuid: dateOfRequest
                        },
                       child: const Text('Book a Day')
                     );
+                  }
+                  else if(_bookDayButton.value[index] != "available"){ //show the artists that are booked on this day
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Card(
+                          margin: const EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+                          child: Text("Booked Artist: " + _bookedArtistNames[_bookDayButton.value[index]]), //show the name of the artist booked on this day
+                    ));
                   }
                   else{
                     return Container();

@@ -7,7 +7,8 @@ import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 
 class ArtistProfileWidget extends StatefulWidget {
-  const ArtistProfileWidget({Key? key}) : super(key: key);
+  final String uid;
+  const ArtistProfileWidget(this.uid, {Key? key}) : super(key: key);
 
   @override
   State<ArtistProfileWidget> createState() => _ArtistProfileWidgetState();
@@ -29,9 +30,9 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
   }
 
   Future _getProfileInfo() async {
-    String? uid = _authService.userID;
+    //String? uid = _authService.userID;
     final ref = FirebaseDatabase.instance.ref();
-    event = await ref.child('Artists/$uid').once();
+    event = await ref.child('Artists/${widget.uid}').once();
 
     //print(event.snapshot.children);
     //for (var c in event.snapshot.children) {
