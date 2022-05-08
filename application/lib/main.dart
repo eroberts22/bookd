@@ -1,11 +1,12 @@
 import 'package:application/models/users.dart';
-import 'package:application/screens/authenticate/landingPage.dart';
+import 'package:application/screens/authenticate/landing_page.dart';
 import 'package:application/screens/authenticate/sign_in.dart';
 import 'package:application/screens/authenticate/register.dart';
 import 'package:application/screens/homepage/account_venue.dart';
 import 'package:application/screens/homepage/calendar_page.dart';
 import 'package:application/screens/homepage/explore.dart';
 import 'package:application/screens/homepage/account_artist.dart';
+import 'package:application/screens/messaging/chatroom.dart';
 import 'package:application/screens/store_info/artist_store_info.dart';
 import 'package:application/screens/store_info/venue_store_info.dart';
 import 'package:application/screens/homepage/artist_profile_page.dart';
@@ -18,6 +19,8 @@ import 'package:application/screens/store_info/upload_pictures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:application/screens/messaging/conversations.dart';
+import 'package:application/screens/messaging/conversations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,12 +54,13 @@ class MyApp extends StatelessWidget {
             '/profile-venue': (context) => const ProfileVenue(),
             '/account-artist': (context) => const AccountArtist(),
             '/account-venue': (context) => const AccountVenue(),
-            '/artist-settings': (context) => const artistSettings(),
-            '/venue-settings': (context) => const venueSettings(),
+            '/artist-settings': (context) => const ArtistSettings(),
+            '/venue-settings': (context) => const VenueSettings(),
             '/calendar': (context) => const CalendarPage(),
             '/upload-image': (context) => const UploadImage(),
             '/booking': (context) => const BookingPage(),
             '/incoming-requests': (context) => const IncomingRequestPage(),
+            '/messaging': (context) => const conversations(),
           },
         ));
   }

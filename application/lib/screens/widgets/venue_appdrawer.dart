@@ -54,7 +54,8 @@ final AuthService _auth = AuthService();
                 ),
               ),
               onTap: () {
-               Navigator.of(context).pushReplacementNamed('/profile-venue', arguments: {"uid": _auth.userID.toString()});
+                //navigate to venue profile page and pass in the current user profile type and the current user id
+               Navigator.of(context).pushReplacementNamed('/profile-venue', arguments: {"uid": _auth.userID.toString(), "profileType": "venue"});
 
               },
             ),

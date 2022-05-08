@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:application/services/auth.dart';
 import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/artist_appdrawer.dart';
 import 'package:application/screens/widgets/a_profile.dart';
-
+import 'package:application/screens/widgets/venue_appdrawer.dart';
 
 class ProfileArtist extends StatefulWidget {
 
@@ -14,15 +13,15 @@ class ProfileArtist extends StatefulWidget {
 }
 
 class _ProfileArtistState extends State<ProfileArtist> {
-   final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final arguements = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
+    return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      drawer: ABookdAppDrawer(),
+      drawer: arguements["profileType"] == "venue" ? const VBookdAppDrawer() : const ABookdAppDrawer(), //need to return venue drawer if it is a venue viewing artist profile
       appBar: BookdAppBar(),
-      body: ArtistProfileWidget(),
+      body: ArtistProfileWidget(arguements["uid"]),
       );
   }
 }

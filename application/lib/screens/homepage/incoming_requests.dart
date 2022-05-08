@@ -28,7 +28,7 @@ class _IncomingRequestPageState extends State<IncomingRequestPage> {
     DatabaseEvent thisVenue = await venueRef.once();
     List<String> requests = [];
     for(var child in thisVenue.snapshot.children){
-      requests.add(child.value.toString());
+      requests.add(child.key.toString());
     }
     setState(() {
       bookingReqIds = requests;

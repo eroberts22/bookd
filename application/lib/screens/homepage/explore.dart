@@ -1,3 +1,4 @@
+import 'package:application/screens/messaging/chatroom.dart';
 import 'package:flutter/material.dart';
 import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/artist_appdrawer.dart';
@@ -59,48 +60,49 @@ class _ExploreState extends State<Explore> {
         resizeToAvoidBottomInset: false,
         drawer: const ABookdAppDrawer(),
         appBar: const BookdAppBar(),
-        body: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: BookdSearchField(),
-            ),
-            Expanded(
-                child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: listIds.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                    elevation: 6.0,
-                    child: InkWell(
-                      onTap: () {
-                        print(listIds[index]["id"].toString());
-                        //call venue page passing in venue id
-                        Navigator.of(context)
-                            .pushReplacementNamed('/profile-venue', arguments: {
-                          "uid": listIds[index]["id"].toString()
-                        });
-                      },
-                      child: Column(children: [
-                        ListTile(
-                          title: Text(listIds[index]["name"].toString()),
-                          subtitle:
-                              Text(listIds[index]["streetAddress"].toString()),
-                          trailing: const Icon(Icons.favorite),
-                        ),
-                        SizedBox(
-                          height: 200.0,
-                          child: Ink.image(
-                            image: const AssetImage(
-                                'assets/images/venue_test.jpg'),
-                            fit: BoxFit.cover,
-                            child: InkWell(onTap: () {}),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(16.0),
-                          alignment: Alignment.centerLeft,
-                          child: Text(listIds[index]["description"].toString()),
+        body: ListView.builder(
+          shrinkWrap: true,
+          itemCount: listIds.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+                elevation: 6.0,
+                child: InkWell(
+                  onTap: () {
+                    print(listIds[index]["id"].toString());
+                    //call venue page, passing in venue id and current user profile type (artist) to arguements
+                    Navigator.of(context).pushReplacementNamed('/profile-venue', arguments: {"uid": listIds[index]["id"].toString(), "profileType": "artist"});
+                  },
+                  child: Column(children: [
+                    ListTile(
+                      title: Text(listIds[index]["name"].toString()),
+                      subtitle:
+                          Text(listIds[index]["streetAddress"].toString()),
+                      trailing: const Icon(Icons.favorite),
+                    ),
+                    SizedBox(
+                      height: 200.0,
+                      child: Ink.image(
+                        image: const AssetImage('assets/images/venue_test.jpg'),
+                        fit: BoxFit.cover,
+                        child: InkWell(onTap: () {}),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(listIds[index]["description"].toString()),
+                    ),
+                    ButtonBar(
+                      children: [
+                        TextButton(
+                          child: const Text('Contact Venue'),
+                          onPressed: () {
+                            // Create a new conversation between
+                            String venueID = listIds[index]["id"].toString();
+                            print("Venue $venueID");
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => chatroom(otherUID: venueID)));
+
+                          },
                         ),
                         ButtonBar(
                           children: [

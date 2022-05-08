@@ -3,7 +3,7 @@ import 'package:application/services/auth.dart';
 import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/artist_appdrawer.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:application/screens/authenticate/landingPage.dart';
+import 'package:application/screens/authenticate/landing_page.dart';
 
 class AccountArtist extends StatefulWidget {
   const AccountArtist({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class _AccountArtistState extends State<AccountArtist> {
   final AuthService _auth = AuthService();
   FirebaseDatabase database = FirebaseDatabase.instance;
 
-  String error_str = "";
+  String errorStr = "";
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class _AccountArtistState extends State<AccountArtist> {
                 Navigator.of(context).pushReplacementNamed('/upload-image');
               } else {
                 // No settings exist!
-                setState(() => error_str =
+                setState(() => errorStr =
                     "Error! Cannot upload images before storing profile settings");
               }
             },
@@ -91,22 +91,22 @@ class _AccountArtistState extends State<AccountArtist> {
             ),
           ),
           // calendar
-          TextButton.icon(
-            icon: const Icon(Icons.calendar_month),
-            onPressed: () async {
-              Navigator.of(context).pushReplacementNamed('/calendar');
-            },
-            label: const Text(
-              'Calendar',
-              style: TextStyle(
-                fontSize: 20.0,
-                color: Colors.black,
-              ),
-            ),
-            style: TextButton.styleFrom(
-              primary: Colors.black,
-            ),
-          ),
+          // TextButton.icon(
+          //   icon: const Icon(Icons.calendar_month),
+          //   onPressed: () async {
+          //     Navigator.of(context).pushReplacementNamed('/calendar');
+          //   },
+          //   label: const Text(
+          //     'Calendar',
+          //     style: TextStyle(
+          //       fontSize: 20.0,
+          //       color: Colors.black,
+          //     ),
+          //   ),
+          //   style: TextButton.styleFrom(
+          //     primary: Colors.black,
+          //   ),
+          // ),
           // logout
           TextButton.icon(
             icon: const Icon(Icons.person),
@@ -126,7 +126,7 @@ class _AccountArtistState extends State<AccountArtist> {
             ),
           ),
           Text(
-            error_str,
+            errorStr,
             style: const TextStyle(color: Colors.red, fontSize: 14.0),
           )
         ],

@@ -66,7 +66,7 @@ final AuthService _auth = AuthService();
                 ),
               ),
               onTap: () {
-               Navigator.of(context).pushReplacementNamed('/profile-artist');
+               Navigator.of(context).pushReplacementNamed('/profile-artist', arguments: {"uid": _auth.userID.toString(), "profileType": "artist"});
 
               },
             ),
@@ -80,6 +80,17 @@ final AuthService _auth = AuthService();
               ),
               onTap: () {
                   Navigator.of(context).pushReplacementNamed('/account-artist');
+              },
+            ),
+            ListTile(
+              title: const Text(
+                'Messaging',
+                style: TextStyle(
+                  fontSize: 30.0,
+                ),
+              ),
+              onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/messaging');
               },
             ),
           ],

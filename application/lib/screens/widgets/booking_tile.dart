@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:application/services/auth.dart';
 
 class BookingTile extends StatefulWidget {
   final String uid;
 
-  BookingTile(this.uid);
+  const BookingTile(this.uid, {Key? key}) : super(key: key);
 
   @override
   State<BookingTile> createState() => _BookingTileState();
@@ -13,7 +12,6 @@ class BookingTile extends StatefulWidget {
 
 class _BookingTileState extends State<BookingTile> {
 
-   final AuthService _authService = AuthService();
   FirebaseDatabase database = FirebaseDatabase.instance;
   String venueName = "";
 
@@ -36,16 +34,18 @@ class _BookingTileState extends State<BookingTile> {
  return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Card(
-          margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
+          margin: const EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.fromLTRB(20.0, 6.0, 10.0, 0.0),
-                child: Text("Venue Name"),
+                padding: const EdgeInsets.fromLTRB(20.0, 6.0, 10.0, 0.0),
+                child: Text(venueName),
               ),
               TextButton(
-                onPressed: () {}, // *** on pressed: shows the venue's profile
+                onPressed: () { // *** on pressed: shows the venue's profile
+                  Navigator.of(context).pushReplacementNamed('/profile-venue', arguments: {"uid": widget.uid, "profileType": "artist"});
+                },
                 child: Row(children: const [
                   Padding(
                     padding: EdgeInsets.fromLTRB(20.0, 6.0, 10.0, 0.0),

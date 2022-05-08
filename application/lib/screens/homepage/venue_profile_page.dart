@@ -19,6 +19,7 @@ class ProfileVenue extends StatefulWidget {
 class _ProfileVenueState extends State<ProfileVenue> {
   final AuthService _authService = AuthService();
   FirebaseDatabase database = FirebaseDatabase.instance;
+  // ignore: prefer_typing_uninitialized_variables
   var profileType;
   @override
   void initState() {
@@ -38,7 +39,7 @@ class _ProfileVenueState extends State<ProfileVenue> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      drawer: profileType == "venue" ? const VBookdAppDrawer() : const ABookdAppDrawer(), //depending on profile type, return correct appdrawer
+      drawer: arguements["profileType"] == "venue" ? const VBookdAppDrawer() : const ABookdAppDrawer(), //depending on profile type, return correct appdrawer
       appBar: const BookdAppBar(),
       body: VenueProfileWidget(arguements["uid"]),
     );
