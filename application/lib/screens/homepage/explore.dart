@@ -15,7 +15,7 @@ class Explore extends StatefulWidget {
 class _ExploreState extends State<Explore> {
   TextEditingController editingController = TextEditingController();
   FirebaseDatabase database = FirebaseDatabase.instance;
-  List<dynamic> listIds = [];
+  List<Map<String, dynamic>> venues = [];
 
   @override
   void initState() {
@@ -26,18 +26,17 @@ class _ExploreState extends State<Explore> {
   void _getVenues() async {
     DatabaseReference dbRef = database.ref();
     DatabaseEvent thisVenue = await dbRef.child("Venues").orderByValue().once();
-    List<Map<String, dynamic>> venues = [];
-    for (var user in thisVenue.snapshot.children) {
-      Map<String, dynamic> venueInfo = {};
-      venueInfo["id"] = user.key ?? "Null";
-      venueInfo["name"] = user.child("name").value.toString();
-      venueInfo["description"] = user.child("description").value.toString();
-      venueInfo["streetAddress"] = user.child("streetAddress").value.toString();
-
-      venues.add(venueInfo);
-    }
     setState(() {
-      listIds = venues;
+      for (var user in thisVenue.snapshot.children) {
+        Map<String, dynamic> venueInfo = {};
+        venueInfo["id"] = user.key ?? "Null";
+        venueInfo["name"] = user.child("name").value.toString();
+        venueInfo["description"] = user.child("description").value.toString();
+        venueInfo["streetAddress"] =
+            user.child("streetAddress").value.toString();
+
+        venues.add(venueInfo);
+      }
     });
   }
 
@@ -69,24 +68,22 @@ class _ExploreState extends State<Explore> {
             Expanded(
                 child: ListView.builder(
               shrinkWrap: true,
-              itemCount: listIds.length,
+              itemCount: venues.length,
               itemBuilder: (BuildContext context, int index) {
                 return Card(
                     elevation: 6.0,
                     child: InkWell(
                       onTap: () {
-                        print(listIds[index]["id"].toString());
                         //call venue page passing in venue id
-                        Navigator.of(context)
-                            .pushReplacementNamed('/profile-venue', arguments: {
-                          "uid": listIds[index]["id"].toString()
-                        });
+                        Navigator.of(context).pushReplacementNamed(
+                            '/profile-venue',
+                            arguments: {"uid": venues[index]["id"].toString()});
                       },
                       child: Column(children: [
                         ListTile(
-                          title: Text(listIds[index]["name"].toString()),
+                          title: Text(venues[index]["name"].toString()),
                           subtitle:
-                              Text(listIds[index]["streetAddress"].toString()),
+                              Text(venues[index]["streetAddress"].toString()),
                           trailing: const Icon(Icons.favorite),
                         ),
                         SizedBox(
@@ -101,7 +98,7 @@ class _ExploreState extends State<Explore> {
                         Container(
                           padding: const EdgeInsets.all(16.0),
                           alignment: Alignment.centerLeft,
-                          child: Text(listIds[index]["description"].toString()),
+                          child: Text(venues[index]["description"].toString()),
                         ),
                         ButtonBar(
                           children: [
@@ -109,7 +106,7 @@ class _ExploreState extends State<Explore> {
                               child: const Text('Contact Venue'),
                               onPressed: () {
                                 // Create a new conversation between
-                                var venueID = listIds[index]["id"].toString();
+                                var venueID = venues[index]["id"].toString();
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
                                         chatroom(otherUID: venueID)));
