@@ -145,11 +145,15 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                           event.snapshot.child("websiteLinks").value != null
                       ? ListView.builder(
                           itemCount: activeUrlList.length,
-                          shrinkWrap: true, 
+                          shrinkWrap: true,
                           itemBuilder: (BuildContext ctxt, int index) {
                             return InkWell(
-                              //MaterialStateProperty.all<Color>(Colors.cyan),
-                                child: Text(activeUrlList[index].toString(), style: TextStyle(color: Color.fromARGB(255, 9, 133, 150)),),
+                                //MaterialStateProperty.all<Color>(Colors.cyan),
+                                child: Text(
+                                  activeUrlList[index].toString(),
+                                  style: const TextStyle(
+                                      color: Color.fromARGB(255, 9, 133, 150)),
+                                ),
                                 onTap: () => _launchUrl(activeUrlList[index]));
                           })
                       : Container(),

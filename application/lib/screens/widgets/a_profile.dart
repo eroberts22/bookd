@@ -43,11 +43,11 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
 
     String urls = event.snapshot.child("websiteLinks").value.toString();
     //for (var c in event.snapshot.child("websiteLinks").children) {
-     // print(c);
+    // print(c);
     //}
     urls = urls.replaceAll("[", "");
     urls = urls.replaceAll("]", "");
-    urls = urls.replaceAll(" ","");
+    urls = urls.replaceAll(" ", "");
     urlList = (urls.split(','));
     activeUrlList.clear();
     for (var c in urlList) {
@@ -57,8 +57,8 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
   }
 
   void _launchUrl(_url) async {
-  if (!await launchUrl(_url)) throw 'Could not launch $_url';
-}
+    if (!await launchUrl(_url)) throw 'Could not launch $_url';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,49 +98,74 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
                           ),
                   ),
                   Padding(
-                  padding: const EdgeInsets.only(top:20, bottom: 10),
-                  child: event.snapshot.child("stageName").value != null && event.snapshot.child("description").value != null ?
-                  Text(event.snapshot.child("stageName").value.toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30),)
-                  :const Text("Please Enter Information\nin Profile Settings",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),),
+                    padding: const EdgeInsets.only(top: 20),
+                    child: event.snapshot.child("stageName").value != null &&
+                            event.snapshot.child("description").value != null
+                        ? Text(
+                            event.snapshot.child("stageName").value.toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 30),
+                          )
+                        : const Text(
+                            "Please Enter Information\nin Profile Settings",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
-                  Padding(padding: const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 10),
-                    child: event.snapshot.child("stageName").value != null && event.snapshot.child("description").value != null ?
-                      Text(event.snapshot.child("description").value.toString())
-                      :Container(),
-                  ),
-                  Padding(padding: const EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 10),
-                    child: event.snapshot.child("stageName").value != null && event.snapshot.child("websiteLinks").value != null ?
-                      //Text(event.snapshot.child("websiteLinks").value.toString())
-                      ListView.builder(
-                        itemCount: activeUrlList.length,
-                        shrinkWrap: true,
-                        itemBuilder: 
-                          (BuildContext ctxt, int index) 
-                          {return InkWell(
-                            child: Text(activeUrlList[index].toString()),
-                            onTap: () => _launchUrl(activeUrlList[index])
-                          );
-                          } 
-                      )
-                      :Container(),
+                  SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 10, left: 30, right: 30),
+                    child: event.snapshot.child("stageName").value != null &&
+                            event.snapshot.child("description").value != null
+                        ? Text(event.snapshot
+                            .child("description")
+                            .value
+                            .toString())
+                        : Container(),
+                  )),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10, left: 30, right: 30, bottom: 10),
+                    child: event.snapshot.child("stageName").value != null &&
+                            event.snapshot.child("websiteLinks").value != null
+                        ?
+                        //Text(event.snapshot.child("websiteLinks").value.toString())
+                        ListView.builder(
+                            itemCount: activeUrlList.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext ctxt, int index) {
+                              return InkWell(
+                                  child: Text(
+                                    activeUrlList[index].toString(),
+                                    style: const TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 9, 133, 150)),
+                                  ),
+                                  onTap: () =>
+                                      _launchUrl(activeUrlList[index]));
+                            })
+                        : Container(),
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: event.snapshot.child("phoneNumber").value != null ?
-                    Padding(
-                      padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
-                      child: Text(
-                      event.snapshot.child("phoneNumber").value.toString(),
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.black.withOpacity(0.5) ),),
-                    ):Container(),
+                    child: event.snapshot.child("phoneNumber").value != null
+                        ? Padding(
+                            padding: const EdgeInsets.only(
+                                left: 30, right: 30, bottom: 10),
+                            child: Text(
+                              event.snapshot
+                                  .child("phoneNumber")
+                                  .value
+                                  .toString(),
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(0.5)),
+                            ),
+                          )
+                        : Container(),
                   ),
                 ]),
               );
