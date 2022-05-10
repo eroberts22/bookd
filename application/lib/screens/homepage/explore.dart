@@ -1,9 +1,9 @@
 import 'package:application/screens/messaging/chatroom.dart';
+import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/artist_appdrawer.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:application/screens/widgets/searchValues.dart';
 
 class Explore extends StatefulWidget {
   const Explore({Key? key}) : super(key: key);
@@ -13,43 +13,83 @@ class Explore extends StatefulWidget {
 }
 
 class _ExploreState extends State<Explore> {
-  TextEditingController editingController = TextEditingController();
   FirebaseDatabase database = FirebaseDatabase.instance;
-  List<Map<String, dynamic>> venues = [];
+  late DatabaseEvent
+      event; // Store a reference to potential cities from Artists
+  final AuthService _authService = AuthService();
+  List<Map<String, dynamic>> venues =
+      []; // List containing venues from database
+  List<Map<String, dynamic>> searchList = [];
+  late List<dynamic> potentialCitiesFromArtist;
 
   @override
   void initState() {
     super.initState();
-    _getVenues();
+    _getVenues(); // update venues list
+    searchList = venues;
   }
 
   void _getVenues() async {
+    String? uid = _authService
+        .userID; // user id to check for potential cities from artists
     DatabaseReference dbRef = database.ref();
-    DatabaseEvent thisVenue = await dbRef.child("Venues").orderByValue().once();
-    setState(() {
-      for (var user in thisVenue.snapshot.children) {
-        Map<String, dynamic> venueInfo = {};
-        venueInfo["id"] = user.key ?? "Null";
-        venueInfo["name"] = user.child("name").value.toString();
-        venueInfo["description"] = user.child("description").value.toString();
-        venueInfo["streetAddress"] =
-            user.child("streetAddress").value.toString();
+    DatabaseEvent thisVenue =
+        await dbRef.child("Venues").orderByValue().once(); // Get all Venues
+    List<dynamic> cities = []; // Venue cities from the database
+    event = await dbRef
+        .child('Artists/$uid/potentialCities')
+        .orderByValue()
+        .once(); // Get all potential cities from Artists
+    for (var potentialCity in event.snapshot.children) {
+      cities.add(potentialCity.value.toString().toLowerCase());
+    }
 
-        venues.add(venueInfo);
+    setState(() {
+      potentialCitiesFromArtist = cities;
+      for (var venue in thisVenue.snapshot.children) {
+        var cityOfVenue = venue
+            .child("city")
+            .value
+            .toString()
+            .toLowerCase(); // Get current city of Venue
+        for (var city in potentialCitiesFromArtist) {
+          // Compare potential cities from current Artist to the city of current Venue
+          // If they match, add to venues list to display in UI
+          if (city == cityOfVenue) {
+            Map<String, dynamic> venueInfo = {};
+            venueInfo["id"] = venue.key ?? "Null";
+            venueInfo["name"] = venue.child("name").value.toString();
+            venueInfo["description"] =
+                venue.child("description").value.toString();
+            venueInfo["streetAddress"] =
+                venue.child("streetAddress").value.toString();
+            venueInfo["city"] = venue.child("city").value.toString();
+
+            venues.add(venueInfo);
+          }
+        }
       }
     });
   }
 
-  void filterSearchResults(String query) {
-    List<dynamic> searchList = [];
-    if (query.isNotEmpty) {
-      List<String> dummyListData = [];
-      searchList.forEach((element) {
-        if (element.contains(query)) {
-          dummyListData.add(element);
-        }
-      });
+  void _filterSearchResults(String query) {
+    List<Map<String, dynamic>> results = [];
+    if (query.isEmpty) {
+      // If the search field is empty or contains white space, display all cards
+      results = venues;
+    } else {
+      results = venues
+          .where((element) =>
+              element["city"].toLowerCase().contains(query.toLowerCase()) ||
+              element["name"].toLowerCase().contains(query.toLowerCase()) ||
+              element["description"]
+                  .toLowerCase()
+                  .contains(query.toLowerCase()))
+          .toList();
     }
+    setState(() {
+      searchList = results;
+    });
   }
 
   @override
@@ -63,61 +103,97 @@ class _ExploreState extends State<Explore> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: BookdSearchField(),
+              child: TextField(
+                onChanged: (value) => _filterSearchResults(value),
+                decoration: const InputDecoration(
+                  labelText: "Search",
+                  hintText: "Search",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                ),
+              ),
             ),
             Expanded(
-                child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: venues.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                    elevation: 6.0,
-                    child: InkWell(
-                      onTap: () {
-                        //call venue page passing in venue id
-                        Navigator.of(context).pushReplacementNamed(
-                            '/profile-venue',
-                            arguments: {"uid": venues[index]["id"].toString()});
-                      },
-                      child: Column(children: [
-                        ListTile(
-                          title: Text(venues[index]["name"].toString()),
-                          subtitle:
-                              Text(venues[index]["streetAddress"].toString()),
-                          trailing: const Icon(Icons.favorite),
-                        ),
-                        SizedBox(
-                          height: 200.0,
-                          child: Ink.image(
-                            image: const AssetImage(
-                                'assets/images/venue_test.jpg'),
-                            fit: BoxFit.cover,
-                            child: InkWell(onTap: () {}),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(16.0),
-                          alignment: Alignment.centerLeft,
-                          child: Text(venues[index]["description"].toString()),
-                        ),
-                        ButtonBar(
-                          children: [
-                            TextButton(
-                              child: const Text('Contact Venue'),
-                              onPressed: () {
-                                // Create a new conversation between
-                                var venueID = venues[index]["id"].toString();
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        chatroom(otherUID: venueID)));
+              child: searchList.isNotEmpty
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: searchList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                            elevation: 6.0,
+                            child: InkWell(
+                              onTap: () {
+                                //call venue page passing in venue id
+                                Navigator.of(context).pushReplacementNamed(
+                                    '/profile-venue',
+                                    arguments: {
+                                      "uid": searchList[index]["id"].toString()
+                                    });
                               },
-                            ),
-                          ],
-                        )
-                      ]),
-                    ));
-              },
-            ))
+                              child: Column(children: [
+                                ListTile(
+                                  title: Text(
+                                      searchList[index]["name"].toString()),
+                                  subtitle: Text(searchList[index]
+                                              ["streetAddress"]
+                                          .toString() +
+                                      " | " +
+                                      searchList[index]["city"]
+                                          .toString()
+                                          .toUpperCase()),
+                                  trailing: const Icon(Icons.favorite),
+                                ),
+                                SizedBox(
+                                  height: 200.0,
+                                  child: Ink.image(
+                                    image: const AssetImage(
+                                        'assets/images/venue_test.jpg'),
+                                    fit: BoxFit.cover,
+                                    child: InkWell(onTap: () {
+                                      //call venue page passing in venue id
+                                      Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              '/profile-venue',
+                                              arguments: {
+                                            "uid": searchList[index]["id"]
+                                                .toString()
+                                          });
+                                    }),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(16.0),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(searchList[index]["description"]
+                                      .toString()),
+                                ),
+                                ButtonBar(
+                                  children: [
+                                    TextButton(
+                                      child: const Text('Contact Venue'),
+                                      onPressed: () {
+                                        // Create a new conversation between
+                                        var venueID =
+                                            searchList[index]["id"].toString();
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) => chatroom(
+                                                    otherUID: venueID)));
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ]),
+                            ));
+                      },
+                    )
+                  : const Text(
+                      // No matches
+                      'No Results Found',
+                      style: TextStyle(fontSize: 20),
+                    ),
+            )
           ],
         ));
   }
