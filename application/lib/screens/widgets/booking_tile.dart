@@ -21,19 +21,23 @@ class _BookingTileState extends State<BookingTile> {
     _getVenueEvent();
   }
 
-  void _getVenueEvent() async{ //get database event for thisArtist so we can access its values
+  Future _getVenueEvent() async{ //get database event for thisArtist so we can access its values
     DatabaseReference venueref = database.ref().child("Venues/${widget.uid}");
     DatabaseEvent thisVenue = await venueref.once();
-    setState(() {
-      venueName = thisVenue.snapshot.child("name").value.toString();
-    });
+   // setState(() {
+    venueName = thisVenue.snapshot.child("name").value.toString();
+    //});
   }
 
   @override
   Widget build(BuildContext context) {
  return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: Card(
+      child: FutureBuilder(
+        future: _getVenueEvent(), 
+        builder: (context,snapshot) {
+          if(snapshot.connectionState == ConnectionState.done) {
+            return Card(
           margin: const EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,7 +48,7 @@ class _BookingTileState extends State<BookingTile> {
               ),
               TextButton(
                 onPressed: () { // *** on pressed: shows the venue's profile
-                  Navigator.of(context).pushReplacementNamed('/profile-venue', arguments: {"uid": widget.uid, "profileType": "artist"});
+                  Navigator.of(context).pushReplacementNamed('/booking-view-profile', arguments: {"uid": widget.uid, "profileType": "artist"});
                 },
                 child: Row(children: const [
                   Padding(
@@ -60,7 +64,12 @@ class _BookingTileState extends State<BookingTile> {
                 ],),
                 ),
             ],
-          )),
+          ));
+          } else {
+            return  Container();
+          }
+        }
+        )
     );
   }
 }
