@@ -3,9 +3,11 @@ import 'package:application/screens/authenticate/landing_page.dart';
 import 'package:application/screens/authenticate/sign_in.dart';
 import 'package:application/screens/authenticate/register.dart';
 import 'package:application/screens/homepage/account_venue.dart';
+import 'package:application/screens/homepage/bookings_view_ven_profile.dart';
 import 'package:application/screens/homepage/calendar_page.dart';
 import 'package:application/screens/homepage/explore.dart';
 import 'package:application/screens/homepage/account_artist.dart';
+import 'package:application/screens/homepage/explore_page_venue_profile.dart';
 import 'package:application/screens/messaging/chatroom.dart';
 import 'package:application/screens/store_info/artist_store_info.dart';
 import 'package:application/screens/store_info/venue_store_info.dart';
@@ -19,7 +21,6 @@ import 'package:application/screens/store_info/upload_pictures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:application/screens/messaging/conversations.dart';
 import 'package:application/screens/messaging/conversations.dart';
 
 void main() async {
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
             '/explore': (context) => const Explore(),
             '/profile-artist': (context) => const ProfileArtist(),
             '/profile-venue': (context) => const ProfileVenue(),
+            '/explore-profile-venue':(context) => const ExploreProfileVenue(),
             '/account-artist': (context) => const AccountArtist(),
             '/account-venue': (context) => const AccountVenue(),
             '/artist-settings': (context) => const ArtistSettings(),
@@ -59,6 +61,7 @@ class MyApp extends StatelessWidget {
             '/calendar': (context) => const CalendarPage(),
             '/upload-image': (context) => const UploadImage(),
             '/booking': (context) => const BookingPage(),
+            '/booking-view-profile': (context) => const BookingViewProfile(),
             '/incoming-requests': (context) => const IncomingRequestPage(),
             '/messaging': (context) => const conversations(),
           },
