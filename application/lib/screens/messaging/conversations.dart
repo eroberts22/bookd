@@ -8,6 +8,13 @@ import 'package:application/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:application/screens/messaging/chatroom.dart';
 
+class Pair<T1, T2> {
+  final T1 a;
+  final T2 b;
+
+  Pair(this.a, this.b);
+}
+
 class conversations extends StatefulWidget {
   const conversations({Key? key}) : super(key: key);
 
@@ -19,7 +26,7 @@ class _conversationsState extends State<conversations> {
   final AuthService _authService = AuthService();
 
   FirebaseDatabase database = FirebaseDatabase.instance;
-  List<String> chatIDs = [];
+  List<Pair> chatIDs = [];
 
   String? uid = "";
 
@@ -40,14 +47,32 @@ class _conversationsState extends State<conversations> {
     Map<String, dynamic> chatrooms =
         jsonDecode(jsonEncode(chatroomsEvent.snapshot.value));
 
-    List<String> tempChatIDs = [];
+    List<Pair> tempChatIDs = [];
 
     for (String key in chatrooms.keys) {
+      String myID = uid ?? "Null";
       //Check if the key contains the userID, if it does append the key to chatIDs
-      if (key.contains(key) == true) {
-        tempChatIDs.add(key);
+      if (key.contains(myID) == true) {
+        String otherUID = "";
+        List userIDS = key.split('-');
+        if (myID == userIDS[0]) {
+          otherUID = userIDS[1];
+        } else {
+          otherUID = userIDS[0];
+        }
+
+        String otherUserName = "None";
+        await getName(otherUID).then((value) => 
+          {
+            otherUserName = value
+          });
+
+        Pair ChatID_and_name = Pair(key, otherUserName);
+
+        tempChatIDs.add(ChatID_and_name);
       }
     }
+
     setState(() {
       chatIDs = tempChatIDs;
     });
@@ -70,19 +95,21 @@ class _conversationsState extends State<conversations> {
                   onTap: () {
                     String otherID = "";
                     // Get other user ID
-                    List<String> userIDS = chatIDs[index].split("-");
-                    if (uid == userIDS[0]) {
+                    List<String> ChatroomIDS = chatIDs[index].a.split("-");
+                    if (uid == ChatroomIDS[0]) {
                       // The other ID is index 1
-                      otherID = userIDS[1];
+                      otherID = ChatroomIDS[1];
                     } else {
                       // The other ID is index 0
-                      otherID = userIDS[0];
+                      otherID = ChatroomIDS[0];
                     }
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => chatroom(otherUID: otherID)));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => chatroom(otherUID: otherID)));
                   },
                   child: Column(children: [
                     ListTile(
-                      title: Text(chatIDs[index]),
+                      // Title is the other user's username
+                      title: Text(chatIDs[index].b),
                       trailing: const Icon(Icons.favorite),
                     ),
                     Container(
