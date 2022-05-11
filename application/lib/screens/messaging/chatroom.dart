@@ -73,7 +73,7 @@ class _chatroomState extends State<chatroom> {
 
   Future _initUser(String uid) async {
     // Retrieve username and update variable
-    getName(uid).then((value) => setState(() => userName = value) );
+    await getName(uid).then((value) => setState(() => userName = value) );
 
     // Update state
     setState(() {
@@ -87,11 +87,11 @@ class _chatroomState extends State<chatroom> {
 
   Future _initOtherUser(String uid) async {
     // Retrieve username and update variable
-    getName(uid).then((value) => setState(() => otherName = value) );
+    await getName(uid).then((value) => setState(() => otherName = value) );
     
     // Update state
     setState(() {
-      otherUser = ChatUser(id: uid, firstName: userName);
+      otherUser = ChatUser(id: uid, firstName: otherName);
     });
 
     print("Init User: $uid, $userName");
@@ -174,7 +174,7 @@ class _chatroomState extends State<chatroom> {
       ChatMessage welcomeMSG = ChatMessage(
           user: ChatUser(id: "welcomeBot", firstName: "Welcome Bot"),
           text:
-              "Welcome $venueName, $artistName would like to connect with you!",
+              "Hello $venueName, $artistName would like to connect with you!",
           createdAt: DateTime.now());
 
       // Initialize messages with default bot welcome
