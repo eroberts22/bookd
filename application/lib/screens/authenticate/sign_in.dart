@@ -89,6 +89,9 @@ class _SignInState extends State<SignIn> {
                       // Go log this person into firebase
                       if (_formKey.currentState!.validate()) {
                         // true if form is valid, false if otherwise. !NOTE!!!! Using a !. null safety operator, telling it this state can never be null. Might need to fix this to avoid bugs?
+                        // if there is any whitespace, remove it
+                        // this is usually an issue happening at the end of the email string
+                        email = email.replaceAll(' ','');
                         dynamic result =
                             await _authService.signInWithEmailAndPassword(email,
                                 password); //get "dynamic"(result can change its type) result
