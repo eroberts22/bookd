@@ -8,6 +8,7 @@ import 'package:application/screens/homepage/calendar_page.dart';
 import 'package:application/screens/homepage/explore.dart';
 import 'package:application/screens/homepage/account_artist.dart';
 import 'package:application/screens/homepage/explore_page_venue_profile.dart';
+import 'package:application/screens/homepage/request_view_artist.dart';
 import 'package:application/screens/messaging/chatroom.dart';
 import 'package:application/screens/store_info/artist_store_info.dart';
 import 'package:application/screens/store_info/venue_store_info.dart';
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
             '/booking': (context) => const BookingPage(),
             '/booking-view-profile': (context) => const BookingViewProfile(),
             '/incoming-requests': (context) => const IncomingRequestPage(),
+            '/request-view-profile': (context) => const RequestProfileArtist(),
             '/messaging': (context) => const conversations(),
           },
         ));
