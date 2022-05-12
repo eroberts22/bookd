@@ -1,4 +1,5 @@
 import 'package:application/services/auth.dart';
+import 'package:application/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'register.dart';
 
@@ -24,27 +25,23 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          backgroundColor: Colors.cyan,
-        ),
+        appBar: AppBar(backgroundColor: AppTheme.colors.primary),
         body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
+            scrollDirection: Axis.vertical,
             padding:
-                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 35.0),
             child: Form(
                 key: _formKey, //key to track state of form to validate
                 child: Column(children: <Widget>[
-                  Padding(
-                      padding: const EdgeInsets.only(top: 30.0),
-                      child: Center(
-                          child: SizedBox(
-                              width: 250,
-                              height: 200,
-                              child: Image.asset(
-                                  'assets/images/bookd_logo.JPG')))),
+                  Center(
+                      child: SizedBox(
+                          width: 300,
+                          height: 300,
+                          child: Image.asset(
+                              'assets/images/Book_transparent_logo.jpg'))),
                   Padding(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                     child: TextFormField(
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -61,7 +58,7 @@ class _SignInState extends State<SignIn> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                     child: TextFormField(
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
@@ -76,33 +73,39 @@ class _SignInState extends State<SignIn> {
                         }),
                   ),
 
-                  const SizedBox(height: 20.0),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.cyan),
-                      fixedSize: MaterialStateProperty.all(const Size(300, 30)),
-                    ),
-                    child: const Text('Sign In',
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () async {
-                      // Go log this person into firebase
-                      if (_formKey.currentState!.validate()) {
-                        // true if form is valid, false if otherwise. !NOTE!!!! Using a !. null safety operator, telling it this state can never be null. Might need to fix this to avoid bugs?
-                        dynamic result =
-                            await _authService.signInWithEmailAndPassword(email,
-                                password); //get "dynamic"(result can change its type) result
-                        if (result == null) {
-                          setState(() => error = 'Invalid email or password');
-                        }
+                  Container(
+                    height: 70,
+                    width: double.infinity,
+                    padding:
+                        const EdgeInsets.only(top: 25, left: 20, right: 20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: AppTheme.colors.primary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0)),
+                      ),
+                      child: const Text('Sign In',
+                          style: TextStyle(color: Colors.white)),
+                      onPressed: () async {
+                        // Go log this person into firebase
+                        if (_formKey.currentState!.validate()) {
+                          // true if form is valid, false if otherwise. !NOTE!!!! Using a !. null safety operator, telling it this state can never be null. Might need to fix this to avoid bugs?
+                          dynamic result =
+                              await _authService.signInWithEmailAndPassword(
+                                  email,
+                                  password); //get "dynamic"(result can change its type) result
+                          if (result == null) {
+                            setState(() => error = 'Invalid email or password');
+                          }
 
-                        if (result != null) {
-                          // if sign in is valid, show home screen
-                          Navigator.of(context).pushReplacementNamed('/home');
+                          if (result != null) {
+                            // if sign in is valid, show home screen
+                            Navigator.of(context).pushReplacementNamed('/home');
+                          }
+                          // If result is not null, the listener stream<bookduser> in auth.dart will know a user has signed in and will update authentication state
                         }
-                        // If result is not null, the listener stream<bookduser> in auth.dart will know a user has signed in and will update authentication state
-                      }
-                    },
+                      },
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -112,6 +115,7 @@ class _SignInState extends State<SignIn> {
                       'Forgot Password',
                     ),
                   ),
+
                   Row(
                     children: const <Widget>[
                       Expanded(child: Divider(color: Colors.grey)),
@@ -119,16 +123,22 @@ class _SignInState extends State<SignIn> {
                       Expanded(child: Divider(color: Colors.grey)),
                     ],
                   ),
-                  const SizedBox(height: 20.0),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blueGrey),
-                      fixedSize: MaterialStateProperty.all(const Size(300, 30)),
+                  Container(
+                    height: 70,
+                    width: double.infinity,
+                    padding:
+                        const EdgeInsets.only(top: 25, left: 20, right: 20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: AppTheme.colors.ternary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0)),
+                      ),
+                      child: const Text('Create New Bookd Account',
+                          style: TextStyle(color: Colors.white)),
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed(Register.routeName),
                     ),
-                    child: const Text('Create new Bookd account',
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () => Navigator.of(context).pushNamed(Register.routeName),
                   ),
                   const SizedBox(height: 12.0), //text box for error
                   Text(
