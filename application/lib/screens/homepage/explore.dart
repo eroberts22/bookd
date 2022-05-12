@@ -126,7 +126,7 @@ class _ExploreState extends State<Explore> {
                               onTap: () {
                                 //call venue page passing in venue id
                                 Navigator.of(context).pushReplacementNamed(
-                                    '/profile-venue',
+                                    '/explore-profile-venue',
                                     arguments: {
                                       "uid": searchList[index]["id"].toString()
                                     });

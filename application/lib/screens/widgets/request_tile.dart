@@ -20,36 +20,27 @@ class RequestTileState extends State<RequestTile> {
     _getArtistEvent();
   }
 
-  void _getArtistEvent() async{ //get database event for thisArtist so we can access its values
+  Future _getArtistEvent() async{ //get database event for thisArtist so we can access its values
     DatabaseReference artistRef = database.ref().child("Artists/${widget.uid}");
     DatabaseEvent thisArtist = await artistRef.once();
-    setState(() {
+    //setState(() {
       artistName = thisArtist.snapshot.child("stageName").value.toString();
-    });
+    //});
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: Card(
+      child: FutureBuilder(
+        future: _getArtistEvent(), 
+        builder: (context,snapshot) {
+          if(snapshot.connectionState == ConnectionState.done) {
+            return Card(
           margin: const EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextButton(
-                onPressed: () {// *** on pressed: shows the artist's profile (current user is a venue)
-                  Navigator.of(context).pushReplacementNamed('/profile-artist', arguments: {"uid": widget.uid, "profileType": "venue"});
-                }, 
-                child: const Icon(
-                  Icons.person,
-                  color: Colors.black,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(10.0, 6.0, 10.0, 0.0),
-                child: Text(artistName),
-              ),
               Row(
                 children: [
               TextButton(
@@ -102,8 +93,33 @@ class RequestTileState extends State<RequestTile> {
               )
                 ],
               ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(10.0, 6.0, 10.0, 0.0),
+                child: Text(artistName),
+              ),
+              TextButton(
+                onPressed: () {// *** on pressed: shows the artist's profile (current user is a venue)
+                  Navigator.of(context).pushReplacementNamed('/request-view-profile', arguments: {"uid": widget.uid, "profileType": "venue"});
+                }, 
+                child: Row(children: const [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20.0, 6.0, 10.0, 0.0),
+                    child: Text("View",
+                      style: TextStyle(
+                        color: Colors.orangeAccent,
+                      ),),
+                  ),
+                  Icon(
+                    Icons.person,
+                    color: Colors.orangeAccent,)
+                ],),
+              ),
             ],
-          )),
+          ));
+          } else {
+            return Container();
+          }
+        })
     );
   }
 }
