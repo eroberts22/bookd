@@ -1,5 +1,7 @@
 import 'package:application/screens/authenticate/register.dart';
 import 'package:application/screens/authenticate/sign_in.dart';
+import 'package:application/theme/landing_page_button.dart';
+import 'package:application/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 
 class LandingPage extends StatefulWidget {
@@ -13,94 +15,124 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/landingPage_background.jpg'),
-                  fit: BoxFit.fill),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 6,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 80, left: 25),
-                  child: Column(
-                    children: const [
-                      Text(
-                        'BOOKD',
-                        style: TextStyle(
-                            fontSize: 55,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+        body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Stack(
+          children: [
+            Center(
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  // Gradient Defined here
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const AppColors().primary,
+                          const AppColors().secondary,
+                          const AppColors().ternary
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 80,
-                      width: double.infinity,
-                      padding:
-                          const EdgeInsets.only(top: 25, left: 24, right: 24),
-                      child: ElevatedButton(
-                        onPressed: () =>
-                            Navigator.of(context).pushNamed(SignIn.routeName),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.grey,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text(
-                          'Sign In',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 350),
+                    child: Image.asset(
+                      'assets/images/Bookd_landingpage_logo.png',
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                      color: Colors.white,
+                      scale: 1.3,
                     ),
-                    Container(
-                      height: 80,
-                      width: double.infinity,
-                      padding:
-                          const EdgeInsets.only(top: 25, left: 24, right: 24),
-                      child: ElevatedButton(
-                        onPressed: () =>
-                            Navigator.of(context).pushNamed(Register.routeName),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 20,
                         ),
-                        child: const Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.grey,
+                        ElevatedButton(
+                          onPressed: () =>
+                              Navigator.of(context).pushNamed(SignIn.routeName),
+                          style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(2),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.black12),
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.pink.shade50),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25))),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.white),
+                            fixedSize:
+                                MaterialStateProperty.all(const Size(412, 60)),
                           ),
+                          child: Row(children: const [
+                            Spacer(),
+                            Text(
+                              "SIGN IN",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Spacer(),
+                          ]),
                         ),
-                      ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        ElevatedButton(
+                          onPressed: () => Navigator.of(context)
+                              .pushNamed(Register.routeName),
+                          style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(2),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.black12),
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.pink.shade50),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25))),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.white),
+                            fixedSize:
+                                MaterialStateProperty.all(const Size(412, 60)),
+                          ),
+                          child: Row(children: const [
+                            Spacer(),
+                            Text(
+                              "REGISTER",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Spacer(),
+                          ]),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  )
+                ],
               ),
-            ],
-          ),
-        ],
-      ),
-    );
+            )
+          ],
+        )
+      ],
+    ));
   }
 }
