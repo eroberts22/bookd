@@ -1,4 +1,5 @@
 // page that shows in artist version
+import 'package:application/theme/app_theme.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
@@ -40,7 +41,7 @@ class _BookingPageState extends State<BookingPage> {
     return Scaffold(
       backgroundColor: Colors.white,
         appBar: AppBar(
-            backgroundColor: Colors.cyan,
+            backgroundColor: AppTheme.colors.primary,
             elevation: 0.0,
             title: const Text('Bookings'),
             leading: IconButton(

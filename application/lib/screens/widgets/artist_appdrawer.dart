@@ -1,3 +1,4 @@
+import 'package:application/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -38,7 +39,7 @@ final AuthService _auth = AuthService();
             ListTile(
               leading: const Icon(
                 Icons.close,
-                color: Colors.cyan,
+                color: Color.fromRGBO(52, 84, 148, 1),
                 size: 50.0,
               ),
               onTap: () {

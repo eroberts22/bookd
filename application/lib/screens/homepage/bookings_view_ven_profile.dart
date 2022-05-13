@@ -1,3 +1,4 @@
+import 'package:application/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/screens/widgets/appbar.dart';
@@ -41,7 +42,7 @@ class _BookingViewProfileState extends State<BookingViewProfile> {
       resizeToAvoidBottomInset: false,
       drawer: arguements["profileType"] == "venue" ? const VBookdAppDrawer() : const ABookdAppDrawer(), //depending on profile type, return correct appdrawer
       appBar: AppBar(
-            backgroundColor: Colors.cyan,
+            backgroundColor: AppTheme.colors.primary,
             elevation: 0.0,
             //title: const Text(),
             leading: IconButton(

@@ -1,3 +1,4 @@
+import 'package:application/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/artist_appdrawer.dart';
@@ -21,7 +22,7 @@ class _RequestProfileArtistState extends State<RequestProfileArtist> {
       resizeToAvoidBottomInset: false,
       drawer: arguements["profileType"] == "venue" ? const VBookdAppDrawer() : const ABookdAppDrawer(), //need to return venue drawer if it is a venue viewing artist profile
       appBar: AppBar(
-            backgroundColor: Colors.cyan,
+            backgroundColor: AppTheme.colors.primary,
             elevation: 0.0,
             //title: const Text(),
             leading: IconButton(

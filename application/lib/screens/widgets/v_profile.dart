@@ -148,7 +148,6 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                           shrinkWrap: true,
                           itemBuilder: (BuildContext ctxt, int index) {
                             return InkWell(
-                                //MaterialStateProperty.all<Color>(Colors.cyan),
                                 child: Text(
                                   activeUrlList[index].toString(),
                                   style: const TextStyle(

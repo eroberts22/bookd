@@ -29,14 +29,14 @@ class _SignInState extends State<SignIn> {
         body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             padding:
-                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 35.0),
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 35.0),
             child: Form(
                 key: _formKey, //key to track state of form to validate
                 child: Column(children: <Widget>[
                   Center(
                       child: SizedBox(
                           width: 300,
-                          height: 300,
+                          height: 280,
                           child: Image.asset(
                               'assets/images/Book_transparent_logo.jpg'))),
                   Padding(

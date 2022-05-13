@@ -1,6 +1,6 @@
 import 'package:application/screens/authenticate/register.dart';
 import 'package:application/screens/authenticate/sign_in.dart';
-import 'package:application/theme/landing_page_button.dart';
+import 'package:application/theme/app_theme.dart';
 import 'package:application/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -75,17 +75,17 @@ class _LandingPageState extends State<LandingPage> {
                             fixedSize:
                                 MaterialStateProperty.all(const Size(412, 60)),
                           ),
-                          child: Row(children: const [
-                            Spacer(),
+                          child: Row(children: [
+                            const Spacer(),
                             Text(
                               "SIGN IN",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  color: Colors.black87,
+                                  color: AppTheme.colors.ternary,
                                   fontSize: 17,
                                   fontWeight: FontWeight.w500),
                             ),
-                            Spacer(),
+                            const Spacer(),
                           ]),
                         ),
                         const SizedBox(
@@ -108,21 +108,21 @@ class _LandingPageState extends State<LandingPage> {
                             fixedSize:
                                 MaterialStateProperty.all(const Size(412, 60)),
                           ),
-                          child: Row(children: const [
-                            Spacer(),
+                          child: Row(children: [
+                            const Spacer(),
                             Text(
                               "REGISTER",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  color: Colors.black87,
+                                  color: AppTheme.colors.ternary,
                                   fontSize: 17,
                                   fontWeight: FontWeight.w500),
                             ),
-                            Spacer(),
+                            const Spacer(),
                           ]),
                         ),
                         const SizedBox(
-                          height: 30,
+                          height: 20,
                         ),
                       ],
                     ),

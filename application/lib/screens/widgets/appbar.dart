@@ -1,3 +1,4 @@
+import 'package:application/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class BookdAppBar extends StatelessWidget implements PreferredSizeWidget{
@@ -11,8 +12,7 @@ class BookdAppBar extends StatelessWidget implements PreferredSizeWidget{
           'Bookd.',
           style: TextStyle(fontSize: 30),
         ),
-        backgroundColor: Colors.cyan, // transparent background
-        //foregroundColor: Colors.cyan,
+        backgroundColor: AppTheme.colors.primary, // transparent background
         elevation: 0.0,
         leading: Builder(
           builder: (context) => IconButton(
