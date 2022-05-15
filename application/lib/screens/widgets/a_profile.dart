@@ -3,8 +3,9 @@ import 'package:application/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:path/path.dart';
 import 'dart:io';
-import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:typed_data';
 
 class ArtistProfileWidget extends StatefulWidget {
   final String uid;
@@ -17,7 +18,8 @@ class ArtistProfileWidget extends StatefulWidget {
 class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
   final AuthService _authService = AuthService();
   FirebaseDatabase database = FirebaseDatabase.instance;
-  File? _photo;
+  FirebaseStorage storage = FirebaseStorage.instance;
+  Uint8List? profilePic;
   late List<String> urlList;
   late List<Uri> activeUrlList = [];
 
@@ -27,6 +29,15 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
   void initState() {
     super.initState();
     _getProfileInfo();
+    getProfilePic();
+  }
+  void getProfilePic() async{
+    DatabaseEvent profilePicEvent = await database.ref().child("Artists/${widget.uid}/profileImage").once();
+    storage.ref().child("Images/${widget.uid}/${profilePicEvent.snapshot.value}").getData(10000000).then((data) =>
+      setState((){
+        profilePic = data!;
+      }
+    ));
   }
 
   Future _getProfileInfo() async {
@@ -72,31 +83,17 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
             if (snapshot.connectionState == ConnectionState.done) {
               return Center(
                 child: Column(children: [
-                  CircleAvatar(
-                    radius: 55,
-                    backgroundColor: Colors.orangeAccent,
-                    child: _photo != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: Image.file(
-                              _photo!,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.fitHeight,
-                            ),
-                          )
-                        : Container(
-                            decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(50)),
-                            width: 100,
-                            height: 100,
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.grey[800],
-                            ),
-                          ),
-                  ),
+                  Card(
+                  child: SizedBox(
+                    height: 200.0,
+                    child: profilePic != null ? Image.memory(
+                      profilePic!,
+                      fit: BoxFit.cover
+                    ): const Center(
+                        child: CircularProgressIndicator(),
+                      ) 
+                  )
+                ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: event.snapshot.child("stageName").value != null &&

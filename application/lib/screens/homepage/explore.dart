@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:application/screens/widgets/appbar.dart';
 import 'package:application/screens/widgets/artist_appdrawer.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:typed_data';
 
 class Explore extends StatefulWidget {
   const Explore({Key? key}) : super(key: key);
@@ -14,6 +16,7 @@ class Explore extends StatefulWidget {
 
 class _ExploreState extends State<Explore> {
   FirebaseDatabase database = FirebaseDatabase.instance;
+  FirebaseStorage storage = FirebaseStorage.instance;
   late DatabaseEvent
       event; // Store a reference to potential cities from Artists
   final AuthService _authService = AuthService();
@@ -64,7 +67,17 @@ class _ExploreState extends State<Explore> {
             venueInfo["streetAddress"] =
                 venue.child("streetAddress").value.toString();
             venueInfo["city"] = venue.child("city").value.toString();
-
+            //add profile photo
+            String profilePhotoName = venue.child("profileImage").value.toString();
+            if (profilePhotoName != "null"){
+              storage.ref().child("Images/${venue.key}/${profilePhotoName}").getData(10000000).then((data) =>(){
+                venueInfo["profileImage"] = data;
+              }
+              );
+            }
+            else{
+              venueInfo["profileImage"] = null;
+            }
             venues.add(venueInfo);
           }
         }
@@ -146,20 +159,24 @@ class _ExploreState extends State<Explore> {
                                 ),
                                 SizedBox(
                                   height: 200.0,
-                                  child: Ink.image(
-                                    image: const AssetImage(
-                                        'assets/images/venue_test.jpg'),
-                                    fit: BoxFit.cover,
-                                    child: InkWell(onTap: () {
+                                  child: InkWell(
+                                    child:searchList[index]["profileImage"] != null ? Image.memory(
+                                          searchList[index]["profileImage"]!,
+                                          fit: BoxFit.cover,
+                                          ): const Center(
+                                            child: Icon(
+                                              Icons.camera_alt,
+                                              color: Colors.grey,
+                                              ),
+                                          ),
+                                    onTap: () {
                                       //call venue page passing in venue id
-                                      Navigator.of(context)
-                                          .pushReplacementNamed(
-                                              '/profile-venue',
-                                              arguments: {
-                                            "uid": searchList[index]["id"]
-                                                .toString()
-                                          });
-                                    }),
+                                      Navigator.of(context).pushReplacementNamed(
+                                        '/profile-venue',
+                                        arguments: {
+                                        "uid": searchList[index]["id"].toString()
+                                      });
+                                    }
                                   ),
                                 ),
                                 Container(

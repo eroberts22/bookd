@@ -1,10 +1,12 @@
+// import 'dart:html';
+import 'dart:typed_data';
+import 'package:application/theme/app_theme.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'dart:io';
-import 'dart:convert';
 
 import 'package:application/services/auth.dart';
 
@@ -21,14 +23,45 @@ class _UploadImageState extends State<UploadImage> {
 
   // For authenticating user
   final AuthService _authService = AuthService();
-
+  
   // To update user info
   FirebaseDatabase database = FirebaseDatabase.instance;
 
   var type; // type of account, used for navigation
+  var errorMsg = null;
+  List<Uint8List> allImages = [];
+  List<String> imageNames = [];
+  File? _photo; //photo being uploaded
 
-  File? _photo;
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState(){
+    super.initState();
+    _getDatabaseProfileType();
+    getAllImages();
+  }
+
+  void getAllImages() async {
+    String uid = _authService.userID.toString();
+    allImages = []; //reset all images to have no images in it
+    imageNames = [];
+    ListResult result = await storage.ref().child("Images/$uid").listAll();
+    //for each image in storage, create a reference for it
+    //then add the data at the reference to the global list of all image data
+    result.items.forEach((Reference imageRef){
+      imageRef.getData(10000000).then((data) =>
+        setState((){
+          allImages.add(data!);
+          imageNames.add(imageRef.name);
+        })
+      ).catchError((e) =>
+        setState((){
+          errorMsg = e.error;
+        })
+      );
+    });
+  }
 
   Future imageFromGallery() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -55,85 +88,39 @@ class _UploadImageState extends State<UploadImage> {
       }
     });
   }
+  
+  void setAsProfilePic(int imageIndex) async {
+    String uid = _authService.userID.toString();
+    DatabaseEvent userEvent = await database.ref("Users/$uid").once();
+    String? profileType = userEvent.snapshot.child("profileType").value.toString();
+    if(profileType == "artist"){
+      profileType = "Artists";
+    }
+    else{
+      profileType = "Venues";
+    }
+    //set profileImage field to be the selected image.
+    database.ref().child("$profileType/$uid").update({"profileImage" : imageNames[imageIndex]});
+
+  }
 
   // Upload the _photo path to firebase storage
   Future uploadFile() async {
+    String uid = _authService.userID.toString();
     if (_photo == null) return;
     final fileName = basename(_photo!.path);
-    final destination = "Images/$fileName";
+    final destination = "Images/$uid/$fileName";
 
     try {
       // Create a new storage reference pointing to the unique filePath
       await storage.ref(destination).putFile(_photo!);
       print("Successfully uploaded file $fileName");
-
-      String? uid = _authService.userID;
-      // Add the url to filename to the current user's list of images
-      // Get the user's type of profile
-      DatabaseEvent userEvent = await database.ref("Users/$uid").once();
-      // Attempts to access the value, but if it is null we access the empty map
-      String? profileType =
-          jsonDecode(jsonEncode(userEvent.snapshot.value))["profileType"];
-
-      // Get reference to user account
-      if (profileType == "artist") {
-        DatabaseReference profileRef = database.ref("Artists/$uid");
-        print(uid);
-
-        DatabaseEvent profileEvent = await profileRef.once();
-        print(jsonDecode(jsonEncode(profileEvent.snapshot.value)));
-
-        // copy the already existing images
-        List<String>? prevImages =
-            (jsonDecode(jsonEncode(profileEvent.snapshot.value))["images"]
-                as List<String>?);
-        // add new image
-        if (prevImages == null) {
-          prevImages = [fileName];
-          print("Creating image list");
-        } else {
-          prevImages.add(fileName);
-          print("Appending to image list");
-        }
-
-        Map<String, Object> updateMap = {"images": prevImages};
-        // Update the node
-        profileRef.update(updateMap);
-
-        print("Added image for $profileType $uid");
-      } else if (profileType == "venue") {
-        DatabaseReference profileRef = database.ref("Venues/$uid");
-
-        DatabaseEvent profileEvent = await profileRef.once();
-        // copy the already existing images
-        List<String>? prevImages =
-            (jsonDecode(jsonEncode(profileEvent.snapshot.value))["images"]
-                as List<String>?);
-        // add new image
-        if (prevImages == null) {
-          prevImages = [fileName];
-          print("Creating image list");
-        } else {
-          prevImages.add(fileName);
-          print("Appending to image list");
-        }
-
-        Map<String, Object> updateMap = {"images": prevImages};
-        // Update the node
-        profileRef.update(updateMap);
-
-        print("Added image for $profileType $uid");
-      }
     } catch (e) {
       print("Error occurred uploading file: $e");
     }
-  }
-
-  // functions to handle navigation based on profile type\
-  @override
-  void initState() {
-    super.initState();
-    _getDatabaseProfileType();
+    setState(() {
+      getAllImages();
+    });
   }
 
   void _getDatabaseProfileType() async {
@@ -147,24 +134,20 @@ class _UploadImageState extends State<UploadImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.cyan,
+            backgroundColor: AppTheme.colors.primary,
             elevation: 0.0,
-            title: const Text('Upload Image'),
+            title: const Text('Profile Settings'),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
-               // _getDatabaseProfileType();
-                // load page specific to account type: artist and venue
-                if (type == "artist") {
+                if(type == "artist"){
                   Navigator.of(context).pushReplacementNamed('/account-artist');
                 }
-                else if (type == "venue") {
+                else if(type == "venue"){
                   Navigator.of(context).pushReplacementNamed('/account-venue');
-                } else {
-                  //
-                }              },
-            ),
-      ),
+                }
+              },
+            )),
       body: Column(
         children: <Widget>[
           const SizedBox(
@@ -177,7 +160,7 @@ class _UploadImageState extends State<UploadImage> {
               },
               child: CircleAvatar(
                 radius: 55,
-                backgroundColor: const Color(0xffFDCF09),
+                backgroundColor: AppTheme.colors.secondary,
                 child: _photo != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(50),
@@ -201,12 +184,37 @@ class _UploadImageState extends State<UploadImage> {
                       ),
               ),
             ),
-          )
+          ),
+          SizedBox(
+            height: 32.0,
+          ),
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: allImages.length,
+              itemBuilder: (BuildContext context, int index){
+                var curImage = allImages[index] != null ? Image.memory(
+                  allImages[index],
+                  fit: BoxFit.cover,
+                ): Text(errorMsg != null ? errorMsg : "image not loading");
+                return Card(
+                  child: InkWell(
+                      onTap: (){
+                        useAsProfile(context,index);
+                      },
+                        child: SizedBox(
+                          height: 200.0,
+                          child: curImage,
+                          ),
+                  )
+                );
+              }
+            )),
         ],
-      ),
-    );
+      ));
   }
 
+//pop up for where to pick image from
   void _showPicker(BuildContext context) {
     showModalBottomSheet(
         context: context,
@@ -233,5 +241,27 @@ class _UploadImageState extends State<UploadImage> {
             ),
           );
         });
+  }
+
+
+  //pop up for using an image as a profile picture
+  void useAsProfile(BuildContext context, int imageIndex){
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                title: const Text('Use as profile picture'),
+                onTap: () {
+                  setAsProfilePic(imageIndex);
+                  Navigator.of(context).pop();
+                }
+              )
+            ],
+          ),
+        );
+      });
   }
 }
