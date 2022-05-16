@@ -22,6 +22,9 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
   Uint8List? profilePic;
   late List<String> urlList;
   late List<Uri> activeUrlList = [];
+  var errorMsg = null;
+  List<Uint8List> allImages = [];
+  List<String> imageNames = [];
 
   late DatabaseEvent event;
 
@@ -31,13 +34,17 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
     _getProfileInfo();
     getProfilePic();
   }
-  void getProfilePic() async{
-    DatabaseEvent profilePicEvent = await database.ref().child("Artists/${widget.uid}/profileImage").once();
-    storage.ref().child("Images/${widget.uid}/${profilePicEvent.snapshot.value}").getData(10000000).then((data) =>
-      setState((){
-        profilePic = data!;
-      }
-    ));
+
+  void getProfilePic() async {
+    DatabaseEvent profilePicEvent =
+        await database.ref().child("Artists/${widget.uid}/profileImage").once();
+    storage
+        .ref()
+        .child("Images/${widget.uid}/${profilePicEvent.snapshot.value}")
+        .getData(10000000)
+        .then((data) => setState(() {
+              profilePic = data!;
+            }));
   }
 
   Future _getProfileInfo() async {
@@ -67,6 +74,27 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
     //print(urlList[0]);
   }
 
+  Future _getAllImages() async {
+    String uid = _authService.userID.toString();
+    allImages = []; //reset all images to have no images in it
+    imageNames = [];
+    ListResult result = await storage.ref().child("Images/$uid").listAll();
+    //for each image in storage, create a reference for it
+    //then add the data at the reference to the global list of all image data
+    result.items.forEach((Reference imageRef){
+      imageRef.getData(10000000).then((data) =>
+        setState((){
+          allImages.add(data!);
+          imageNames.add(imageRef.name);
+        })
+      ).catchError((e) =>
+        setState((){
+          errorMsg = e.error;
+        })
+      );
+    });
+  }
+
   void _launchUrl(_url) async {
     if (!await launchUrl(_url)) throw 'Could not launch $_url';
   }
@@ -84,16 +112,16 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
               return Center(
                 child: Column(children: [
                   Card(
-                  child: SizedBox(
-                    height: 200.0,
-                    child: profilePic != null ? Image.memory(
-                      profilePic!,
-                      fit: BoxFit.cover
-                    ): const Center(
-                        child: CircularProgressIndicator(),
-                      ) 
-                  )
-                ),
+                      child: SizedBox(
+                          height: 200.0,
+                          child: profilePic != null
+                              ? Image.memory(profilePic!, fit: BoxFit.cover)
+                              : const Center(
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.grey,
+                                  ),
+                                ))),
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: event.snapshot.child("stageName").value != null &&
@@ -113,16 +141,16 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
                   SizedBox(
                       width: double.infinity,
                       child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10, left: 30, right: 30),
-                    child: event.snapshot.child("stageName").value != null &&
-                            event.snapshot.child("description").value != null
-                        ? Text(event.snapshot
-                            .child("description")
-                            .value
-                            .toString())
-                        : Container(),
-                  )),
+                        padding:
+                            const EdgeInsets.only(top: 10, left: 30, right: 30),
+                        child: event.snapshot.child("stageName").value != null && 
+                        event.snapshot.child("description").value != null
+                                ? Text(event.snapshot
+                                    .child("description")
+                                    .value
+                                    .toString())
+                                : Container(),
+                      )),
                   Padding(
                     padding: const EdgeInsets.only(
                         top: 10, left: 30, right: 30, bottom: 10),
@@ -164,6 +192,34 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
                           )
                         : Container(),
                   ),
+                  /*FutureBuilder(
+                    future: _getAllImages(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: allImages.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var curImage = allImages[index] != null ? Image.memory(
+                              allImages[index],
+                              fit: BoxFit.cover,
+                            ): Text(errorMsg != null ? errorMsg : "image not loading");
+                            return Card(
+                                child: InkWell(
+                                    child: SizedBox(
+                                      height: 200.0,
+                                      child: curImage,
+                                  ),
+                                )
+                              );
+                            }
+                          )
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    })*/
                 ]),
               );
             } else {
