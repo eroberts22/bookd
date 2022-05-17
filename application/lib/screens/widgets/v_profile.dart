@@ -34,14 +34,18 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
     getProfilePic();
   }
 
-  void getProfilePic() async{
-    DatabaseEvent profilePicEvent = await database.ref().child("Venues/${widget.uid}/profileImage").once();
-    storage.ref().child("Images/${widget.uid}/${profilePicEvent.snapshot.value}").getData(10000000).then((data) =>
-      setState((){
-        profilePic = data!;
-      }
-    ));
+  void getProfilePic() async {
+    DatabaseEvent profilePicEvent =
+        await database.ref().child("Venues/${widget.uid}/profileImage").once();
+    storage
+        .ref()
+        .child("Images/${widget.uid}/${profilePicEvent.snapshot.value}")
+        .getData(10000000)
+        .then((data) => setState(() {
+              profilePic = data!;
+            }));
   }
+
   Future _getProfileInfo() async {
     // String? uid = _authService
     //     .userID; //TODO: uid here should be passed in from explore page card (see contructor)
@@ -94,16 +98,16 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
               return Center(
                   child: Column(children: [
                 Card(
-                  child: SizedBox(
-                    height: 200.0,
-                    child: profilePic != null ? Image.memory(
-                      profilePic!,
-                      fit: BoxFit.cover
-                    ): const Center(
-                        child: CircularProgressIndicator(),
-                      ) 
-                  )
-                ),
+                    child: SizedBox(
+                        height: 200.0,
+                        child: profilePic != null
+                            ? Image.memory(profilePic!, fit: BoxFit.cover)
+                            : const Center(
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.grey,
+                                ),
+                              ))),
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: event.snapshot.child("name").value != null &&
