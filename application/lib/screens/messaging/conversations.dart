@@ -1,6 +1,7 @@
 // Homepage listing all available chats for authenticated user
 import 'dart:convert';
 
+import 'package:application/screens/widgets/venue_appdrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:application/screens/widgets/artist_appdrawer.dart';
 import 'package:application/screens/widgets/appbar.dart';
@@ -28,6 +29,8 @@ class _conversationsState extends State<conversations> {
   FirebaseDatabase database = FirebaseDatabase.instance;
   List<Pair> chatIDs = [];
 
+  String profileType = "";
+
   String? uid = "";
 
   @override
@@ -36,6 +39,8 @@ class _conversationsState extends State<conversations> {
 
     // Get chatIDs that include the authenticated user
     _getChatIDs();
+
+    setProfileType();
   }
 
   void _getChatIDs() async {
@@ -48,6 +53,8 @@ class _conversationsState extends State<conversations> {
         jsonDecode(jsonEncode(chatroomsEvent.snapshot.value));
 
     List<Pair> tempChatIDs = [];
+
+    print(chatrooms);
 
     for (String key in chatrooms.keys) {
       String myID = uid ?? "Null";
@@ -62,10 +69,7 @@ class _conversationsState extends State<conversations> {
         }
 
         String otherUserName = "None";
-        await getName(otherUID).then((value) => 
-          {
-            otherUserName = value
-          });
+        await getName(otherUID).then((value) => {otherUserName = value});
 
         Pair ChatID_and_name = Pair(key, otherUserName);
 
@@ -78,48 +82,77 @@ class _conversationsState extends State<conversations> {
     });
   }
 
+  void setProfileType() async {
+    DatabaseEvent userEvent = await database.ref("Users/$uid").once();
+
+    Map<String, dynamic> userInfo =
+        jsonDecode(jsonEncode(userEvent.snapshot.value)) ?? {};
+
+    print("User info: $userInfo ending user info");
+
+    setState(() {
+      profileType = userInfo["profileType"] ?? "artist";
+    });
+  }
+
+  Scaffold noConvos() {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
+      drawer: profileType == "artist"
+          ? const ABookdAppDrawer()
+          : const VBookdAppDrawer(),
+      appBar: const BookdAppBar(),
+      body: const Text("No Conversations :("),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: false,
-        drawer: const ABookdAppDrawer(),
-        appBar: const BookdAppBar(),
-        body: ListView.builder(
-          shrinkWrap: true,
-          itemCount: chatIDs.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Card(
-                elevation: 6.0,
-                child: InkWell(
-                  onTap: () {
-                    String otherID = "";
-                    // Get other user ID
-                    List<String> ChatroomIDS = chatIDs[index].a.split("-");
-                    if (uid == ChatroomIDS[0]) {
-                      // The other ID is index 1
-                      otherID = ChatroomIDS[1];
-                    } else {
-                      // The other ID is index 0
-                      otherID = ChatroomIDS[0];
-                    }
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => chatroom(otherUID: otherID)));
-                  },
-                  child: Column(children: [
-                    ListTile(
-                      // Title is the other user's username
-                      title: Text(chatIDs[index].b),
-                      trailing: const Icon(Icons.favorite),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(16.0),
-                      alignment: Alignment.centerLeft,
-                      child: Text("Sample Text"),
-                    )
-                  ]),
-                ));
-          },
-        ));
+    return chatIDs.isEmpty
+        ? noConvos()
+        : Scaffold(
+            backgroundColor: Colors.white,
+            resizeToAvoidBottomInset: false,
+            drawer: profileType == "artist"
+                ? const ABookdAppDrawer()
+                : const VBookdAppDrawer(),
+            appBar: const BookdAppBar(),
+            body: ListView.builder(
+              shrinkWrap: true,
+              itemCount: chatIDs.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                    elevation: 6.0,
+                    child: InkWell(
+                      onTap: () {
+                        String otherID = "";
+                        // Get other user ID
+                        List<String> ChatroomIDS = chatIDs[index].a.split("-");
+                        if (uid == ChatroomIDS[0]) {
+                          // The other ID is index 1
+                          otherID = ChatroomIDS[1];
+                        } else {
+                          // The other ID is index 0
+                          otherID = ChatroomIDS[0];
+                        }
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => chatroom(otherUID: otherID)));
+                      },
+                      child: Column(children: [
+                        ListTile(
+                          // Title is the other user's username
+                          title: Text(chatIDs[index].b),
+                          trailing: const Icon(Icons.favorite),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(16.0),
+                          alignment: Alignment.centerLeft,
+                          child: Text("Sample Text"),
+                        )
+                      ]),
+                    ));
+              },
+            ));
   }
 }
