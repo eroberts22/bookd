@@ -51,29 +51,117 @@ class _chatroomState extends State<chatroom> {
     await chatMessagesRef.update({"messages": dbMessages});
   }
 
+  // Future<List> getMessages() async {
+  //   DatabaseEvent chatroomEvent =
+  //       await database.ref("Chatrooms/$chatID").once();
+
+  //   Map<String, dynamic> chatroom =
+  //       jsonDecode(jsonEncode(chatroomEvent.snapshot.value));
+
+  //   return chatroom["messages"] as List<dynamic>;
+  // }
+
+  // DatabaseEvent getChatroomEvent() {
+  //   DatabaseEvent event = await database.ref("Chatrooms/$chatID").once();
+  //   return event;
+  // }
+
+  List<ChatMessage> messagesFromJSON(List? messagesJSON) {
+    List<ChatMessage> returnMessages = [];
+
+    if (messagesJSON != null) {
+      // Convert each json message into a ChatMessage
+      for (var i = 0; i < messagesJSON.length; i++) {
+        Map<String, dynamic> inputMsg = {};
+        inputMsg["user"] = messagesJSON[i]["user"];
+        inputMsg["text"] = messagesJSON[i]["text"];
+        inputMsg["createdAt"] = messagesJSON[i]["createdAt"];
+        ChatUser msgUser = ChatUser(
+            id: inputMsg["user"]["id"],
+            firstName: inputMsg["user"]["firstname"]);
+
+        print("Adding message $inputMsg");
+
+        returnMessages.add(ChatMessage(
+            user: msgUser,
+            text: inputMsg["text"],
+            createdAt: DateTime.parse(inputMsg["createdAt"])));
+      }
+    }
+    return returnMessages;
+  }
+
+  ChatMessage chatFromJSON(Map jsonMessage) {
+    Map<String, dynamic> inputMsg = {};
+    inputMsg["user"] = jsonMessage["user"];
+    inputMsg["text"] = jsonMessage["text"];
+    inputMsg["createdAt"] = jsonMessage["createdAt"];
+    ChatUser msgUser = ChatUser(
+        id: inputMsg["user"]["id"], firstName: inputMsg["user"]["firstname"]);
+    print("Adding $jsonMessage");
+    return ChatMessage(
+        user: msgUser,
+        text: inputMsg["text"],
+        createdAt: DateTime.parse(inputMsg["createdAt"]));
+  }
+
+  Stream<List<ChatMessage>> getMessages() => database
+      .ref("Chatrooms/$chatID/messages")
+      .onChildAdded
+      .map((event) => event.snapshot.children
+          .map((e) => chatFromJSON(e.value as Map<String, dynamic>))
+          .toList());
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Basic example'),
-      ),
-      body: DashChat(
-        currentUser: chatUser,
-        onSend: (ChatMessage m) {
-          setState(() {
-            messages.insert(0, m);
+    database.ref("Chatrooms/$chatID/messages").onValue.listen((data) {
+      print("Listening!");
+      List dbFetch = (data.snapshot.value as List?) ?? [];
+      List<Map<String, dynamic>> msgJSON = [];
+      for (final msg in dbFetch) {
+        msgJSON.add(jsonDecode(jsonEncode(msg)) as Map<String, dynamic>);
+      }
+      // List<Map<String, dynamic>>? snapshotVal =
+      //     jsonDecode(jsonEncode(data.snapshot.value))
+      //         as List<Map<String, dynamic>>?;
 
-            uploadMessages();
-          });
-        },
-        messages: messages,
-      ),
-    );
+      // List<Map<String, dynamic>> newMessages = snapshotVal ?? [];
+
+      messages = messagesFromJSON(msgJSON);
+      print("New messages: $messages");
+    });
+
+    return StreamBuilder<List<ChatMessage>>(
+        stream: getMessages(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<ChatMessage>> snapshot) {
+          print(messages);
+          messages = snapshot.data ?? messages;
+          print(snapshot.data);
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(otherName),
+            ),
+            body: DashChat(
+              currentUser: chatUser,
+              onSend: (ChatMessage m) {
+                setState(() {
+                  messages.insert(0, m);
+
+                  uploadMessages();
+                });
+              },
+              // MOVE THIS MODIFIER OF MESSAGES SOMEWHERE ELSE??????
+              messages: messages,
+            ),
+          );
+        });
   }
 
   Future _initUser(String uid) async {
     // Retrieve username and update variable
-    await getName(uid).then((value) => setState(() => userName = value) );
+    await getName(uid).then((value) => setState(() => userName = value));
 
     // Update state
     setState(() {
@@ -87,8 +175,8 @@ class _chatroomState extends State<chatroom> {
 
   Future _initOtherUser(String uid) async {
     // Retrieve username and update variable
-    await getName(uid).then((value) => setState(() => otherName = value) );
-    
+    await getName(uid).then((value) => setState(() => otherName = value));
+
     // Update state
     setState(() {
       otherUser = ChatUser(id: uid, firstName: otherName);
@@ -173,8 +261,7 @@ class _chatroomState extends State<chatroom> {
       // Add default message welcoming users
       ChatMessage welcomeMSG = ChatMessage(
           user: ChatUser(id: "welcomeBot", firstName: "Welcome Bot"),
-          text:
-              "Hello $venueName, $artistName would like to connect with you!",
+          text: "Hello $venueName, $artistName would like to connect with you!",
           createdAt: DateTime.now());
 
       // Initialize messages with default bot welcome
@@ -231,52 +318,52 @@ class _chatroomState extends State<chatroom> {
     setState(() {
       messages = existingMessages;
     });
+    print(messages);
   }
-
 }
 
 Future<String> getName(String uid) async {
-    FirebaseDatabase database = FirebaseDatabase.instance;
-    
-    DatabaseEvent userEvent = await database.ref("/Users/$uid").once();
-    Map<String, dynamic>? userInfo =
-        jsonDecode(jsonEncode(userEvent.snapshot.value));
+  FirebaseDatabase database = FirebaseDatabase.instance;
 
-    String DBPath = "";
-    String userName = "";
+  DatabaseEvent userEvent = await database.ref("/Users/$uid").once();
+  Map<String, dynamic>? userInfo =
+      jsonDecode(jsonEncode(userEvent.snapshot.value));
 
-    if (userInfo != null) {
-      if (userInfo["profileType"] == "artist") {
-        // Artist profile type
-        DBPath = "Artists/$uid";
+  String DBPath = "";
+  String userName = "";
 
-        // Get the name for the user
-        DatabaseEvent userNameEvent = await database.ref(DBPath).once();
+  if (userInfo != null) {
+    if (userInfo["profileType"] == "artist") {
+      // Artist profile type
+      DBPath = "Artists/$uid";
 
-        Map<String, dynamic>? userInfo =
-            jsonDecode(jsonEncode(userNameEvent.snapshot.value));
+      // Get the name for the user
+      DatabaseEvent userNameEvent = await database.ref(DBPath).once();
 
-        if (userInfo == null || userNameEvent.snapshot.value == null) {
-          return "Unnamed-$uid";
-        } else {
-          return userInfo["stageName"];
-        }
-      } else if (userInfo["profileType"] == "venue") {
-        // Venue profile type
-        DBPath = "Venues/$uid";
-        // Get the name for the user
-        DatabaseEvent otherNameEvent = await database.ref(DBPath).once();
+      Map<String, dynamic>? userInfo =
+          jsonDecode(jsonEncode(userNameEvent.snapshot.value));
 
-        Map<String, dynamic> userInfo =
-            jsonDecode(jsonEncode(otherNameEvent.snapshot.value));
+      if (userInfo == null || userNameEvent.snapshot.value == null) {
+        return "Unnamed-$uid";
+      } else {
+        return userInfo["stageName"];
+      }
+    } else if (userInfo["profileType"] == "venue") {
+      // Venue profile type
+      DBPath = "Venues/$uid";
+      // Get the name for the user
+      DatabaseEvent otherNameEvent = await database.ref(DBPath).once();
 
-        if (otherNameEvent.snapshot.value == null) {
-          return "Unnamed-$uid";
-        } else {
-          return userInfo["name"];
-        }
+      Map<String, dynamic> userInfo =
+          jsonDecode(jsonEncode(otherNameEvent.snapshot.value));
+
+      if (otherNameEvent.snapshot.value == null) {
+        return "Unnamed-$uid";
+      } else {
+        return userInfo["name"];
       }
     }
-    // ERROR! Neither artist nor venue
-    return "Error: Unable to find a profile for user: $uid";
   }
+  // ERROR! Neither artist nor venue
+  return "Error: Unable to find a profile for user: $uid";
+}
