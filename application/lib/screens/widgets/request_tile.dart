@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:application/services/auth.dart';
+import 'package:application/theme/app_theme.dart';
 
 class RequestTile extends StatefulWidget {
   final String uid;
@@ -101,17 +102,17 @@ class RequestTileState extends State<RequestTile> {
                 onPressed: () {// *** on pressed: shows the artist's profile (current user is a venue)
                   Navigator.of(context).pushReplacementNamed('/request-view-profile', arguments: {"uid": widget.uid, "profileType": "venue"});
                 }, 
-                child: Row(children: const [
+                child: Row(children: [
                   Padding(
                     padding: EdgeInsets.fromLTRB(20.0, 6.0, 10.0, 0.0),
                     child: Text("View",
                       style: TextStyle(
-                        color: Colors.orangeAccent,
+                        color: AppTheme.colors.ternary,
                       ),),
                   ),
                   Icon(
                     Icons.person,
-                    color: Colors.orangeAccent,)
+                    color: AppTheme.colors.ternary,)
                 ],),
               ),
             ],

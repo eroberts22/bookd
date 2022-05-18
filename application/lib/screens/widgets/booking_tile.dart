@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:application/theme/app_theme.dart';
 
 class BookingTile extends StatefulWidget {
   final String uid;
@@ -50,17 +51,17 @@ class _BookingTileState extends State<BookingTile> {
                 onPressed: () { // *** on pressed: shows the venue's profile
                   Navigator.of(context).pushReplacementNamed('/booking-view-profile', arguments: {"uid": widget.uid, "profileType": "artist"});
                 },
-                child: Row(children: const [
+                child: Row(children: [
                   Padding(
                     padding: EdgeInsets.fromLTRB(20.0, 6.0, 10.0, 0.0),
                     child: Text("View",
                       style: TextStyle(
-                        color: Colors.orangeAccent,
+                        color: AppTheme.colors.ternary,
                       ),),
                   ),
                   Icon(
                     Icons.person,
-                    color: Colors.orangeAccent,)
+                    color: AppTheme.colors.ternary,)
                 ],),
                 ),
             ],

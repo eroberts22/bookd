@@ -1,4 +1,3 @@
-// import 'dart:html';
 import 'dart:typed_data';
 import 'package:application/theme/app_theme.dart';
 import 'package:firebase_storage/firebase_storage.dart';

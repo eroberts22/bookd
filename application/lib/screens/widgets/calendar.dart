@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:application/services/auth.dart';
+import 'package:application/theme/app_theme.dart';
 
 // User can edit their personal calendar hear and days that they are availible will be stored in the database
 class BookdCalendar extends StatefulWidget{
@@ -89,18 +90,18 @@ class BookdCalendarState extends State<BookdCalendar> {
   Widget markerBuilderOnDay(DateTime day){
     if(_bookedDays.containsKey(day.toString())){
       return Center(child: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          color: Colors.purple),
+          color: AppTheme.colors.secondary),
         width: 52.0,
         height: 13.0,
       ));
     }
     else{
       return Center(child: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          color: Colors.cyan),
+          color: AppTheme.colors.primary),
         width: 52.0,
         height: 13.0,
         ));
@@ -119,9 +120,9 @@ class BookdCalendarState extends State<BookdCalendar> {
               selectedBuilder: (context, day, events) { //changes look of days that are selected
                 return Container(
                   //duration: Duration(milliseconds: 300),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.orangeAccent),
+                    color: AppTheme.colors.ternary.withOpacity(0.8)),
                   width: 45.0,
                   height: 45.0,              
                   child: Center(
@@ -131,9 +132,9 @@ class BookdCalendarState extends State<BookdCalendar> {
               todayBuilder: (context, day, events) { //changes the look of the today day
                 return Container(
                   //duration: Duration(milliseconds: 300),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color.fromARGB(100, 255, 171, 64)),
+                    color: AppTheme.colors.ternary.withOpacity(0.5)),
                   width: 45.0,
                   height: 45.0,              
                   child: Center(
@@ -214,15 +215,15 @@ class BookdCalendarState extends State<BookdCalendar> {
                       style: ButtonStyle(
                         //fixedSize: MaterialStateProperty.all<Size>(Size.fromWidth(1.0)),
                         foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
+                        backgroundColor: MaterialStateProperty.all<Color>(AppTheme.colors.ternary),
                         overlayColor: MaterialStateProperty.resolveWith<Color?>(
                           (Set<MaterialState> states) {
                             if (states.contains(MaterialState.hovered)) {
-                              return Colors.blue.withOpacity(0.04);
+                              return AppTheme.colors.secondary.withOpacity(0.04);
                             }
                             if (states.contains(MaterialState.focused) ||
                                 states.contains(MaterialState.pressed)) {
-                              return Colors.orangeAccent.withOpacity(0.9);
+                              return Colors.white.withOpacity(0.5);
                             }
                             return null; // Defer to the widget's default.
                           },

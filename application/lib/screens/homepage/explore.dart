@@ -20,23 +20,22 @@ class _ExploreState extends State<Explore> {
   late DatabaseEvent
       event; // Store a reference to potential cities from Artists
   final AuthService _authService = AuthService();
-  List<Map<String, dynamic>> venues =
-      []; // List containing venues from database
+  List<Map<String, dynamic>> venues = []; // List containing venues from database
   List<Map<String, dynamic>> searchList = [];
-  late List<dynamic> potentialCitiesFromArtist;
+  List<dynamic> potentialCitiesFromArtist = [];
 
   @override
   void initState() {
     super.initState();
     _getVenues(); // update venues list
-    searchList = venues;
+    // searchList = venues;
   }
 
   void _getVenues() async {
     String? uid = _authService
         .userID; // user id to check for potential cities from artists
     DatabaseReference dbRef = database.ref();
-    DatabaseEvent thisVenue =
+    DatabaseEvent allVenues =
         await dbRef.child("Venues").orderByValue().once(); // Get all Venues
     List<dynamic> cities = []; // Venue cities from the database
     event = await dbRef
@@ -47,41 +46,46 @@ class _ExploreState extends State<Explore> {
       cities.add(potentialCity.value.toString().toLowerCase());
     }
 
-    setState(() {
-      potentialCitiesFromArtist = cities;
-      for (var venue in thisVenue.snapshot.children) {
-        var cityOfVenue = venue
-            .child("city")
-            .value
-            .toString()
-            .toLowerCase(); // Get current city of Venue
-        for (var city in potentialCitiesFromArtist) {
-          // Compare potential cities from current Artist to the city of current Venue
-          // If they match, add to venues list to display in UI
-          if (city == cityOfVenue) {
-            Map<String, dynamic> venueInfo = {};
-            venueInfo["id"] = venue.key ?? "Null";
-            venueInfo["name"] = venue.child("name").value.toString();
-            venueInfo["description"] =
-                venue.child("description").value.toString();
-            venueInfo["streetAddress"] =
-                venue.child("streetAddress").value.toString();
-            venueInfo["city"] = venue.child("city").value.toString();
-            //add profile photo
-            String profilePhotoName = venue.child("profileImage").value.toString();
-            if (profilePhotoName != "null"){
-              storage.ref().child("Images/${venue.key}/${profilePhotoName}").getData(10000000).then((data) =>(){
-                venueInfo["profileImage"] = data;
-              }
-              );
-            }
-            else{
-              venueInfo["profileImage"] = null;
-            }
-            venues.add(venueInfo);
+    //get all the venues and add them to global list of all venues
+    List<Map<String, dynamic>> venueData = [];
+    for (var venue in allVenues.snapshot.children) {
+      var cityOfVenue = venue
+          .child("city")
+          .value
+          .toString()
+          .toLowerCase(); // Get current city of Venue
+      for (var city in cities) {
+        // Compare potential cities from current Artist to the city of current Venue
+        // If they match, add to venues list to display in UI
+        if (city == cityOfVenue) {
+          Map<String, dynamic> venueInfo = {};
+          venueInfo["id"] = venue.key ?? "Null";
+          venueInfo["name"] = venue.child("name").value.toString();
+          venueInfo["description"] =
+              venue.child("description").value.toString();
+          venueInfo["streetAddress"] =
+              venue.child("streetAddress").value.toString();
+          venueInfo["city"] = venue.child("city").value.toString();
+          //add profile photo
+          String profilePhotoName = venue.child("profileImage").value.toString();
+          if (profilePhotoName != "null"){
+            print("hello");
+            await storage.ref().child("Images/${venue.key}/${profilePhotoName}").getData(10000000).then((data) =>(
+              venueInfo["profileImage"] = data
+            )
+            );
           }
+          else{
+            venueInfo["profileImage"] = null;
+          }
+          venueData.add(venueInfo);
         }
       }
+    }
+    setState(() {
+      potentialCitiesFromArtist = cities; // populate the potentialCites from the cities found
+      venues = venueData;
+      searchList = venues;
     });
   }
 
