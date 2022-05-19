@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/screens/widgets/request_tile.dart';
 
+import '../../theme/app_theme.dart';
+
 class IncomingRequestPage extends StatefulWidget {
   const IncomingRequestPage({ Key? key }) : super(key: key);
 
@@ -40,7 +42,7 @@ class _IncomingRequestPageState extends State<IncomingRequestPage> {
     return Scaffold(
       backgroundColor: Colors.white,
         appBar: AppBar(
-            backgroundColor: Colors.cyan,
+            backgroundColor: AppTheme.colors.primary,
             elevation: 0.0,
             title: const Text('Incoming Requests'),
             leading: IconButton(

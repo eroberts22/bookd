@@ -35,11 +35,11 @@ class _ArtistSettingsState extends State<ArtistSettings> {
   @override
   void initState() {
     super.initState();
-    _setupLinksAndCities();
+    _fillInProfile();
   }
 
   // Retrieve the existing values for links and cities, and store them as comma separated
-  void _setupLinksAndCities() async {
+  void _fillInProfile() async {
     String? uid = _authService.userID;
 
     DatabaseEvent profileEvent = await database.ref("Artists/$uid").once();
@@ -67,8 +67,9 @@ class _ArtistSettingsState extends State<ArtistSettings> {
         }
       }
 
-      String stageN = (profile["stageName"] as String);
-      String stageNameCsv = stageN.toString();
+      String name = (profile["stageName"] as String);
+      String description = (profile["description"] as String);
+      String phoneNumber = (profile["phoneNumber"] as String);
 
       print("Initializing");
       print(citiesCsv);
@@ -76,15 +77,19 @@ class _ArtistSettingsState extends State<ArtistSettings> {
       // Set the states
       setState(() => websiteLinks = linksCsv);
       setState(() => potentialCities = citiesCsv);
-      setState(() => stageName = stageNameCsv);
+      setState(() => stageName = name);
       print(websiteLinks);
       print(potentialCities);
 
+      setState(() => stageNameController = TextEditingController(text: name));
+      setState(() =>
+          descriptionController = TextEditingController(text: description));
+      setState(() =>
+          phoneNumberController = TextEditingController(text: phoneNumber));
       setState(() =>
           citiesController = TextEditingController(text: potentialCities));
       setState(
           () => linksController = TextEditingController(text: websiteLinks));
-
       // Only do all this stuff if the profile is not null
     }
   }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:application/services/auth.dart';
 
+import '../../theme/app_theme.dart';
+
 class CalendarPage extends StatefulWidget {
   const CalendarPage({ Key? key }) : super(key: key);
 
@@ -36,7 +38,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-            backgroundColor: Colors.cyan,
+            backgroundColor: AppTheme.colors.primary,
             elevation: 0.0,
             title: const Text('Calendar'),
             leading: IconButton(
