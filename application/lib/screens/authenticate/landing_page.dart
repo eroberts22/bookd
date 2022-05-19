@@ -15,10 +15,10 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Stack(
+        resizeToAvoidBottomInset: false,
+        body: SingleChildScrollView(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
           children: [
             Center(
               child: Stack(
@@ -131,8 +131,6 @@ class _LandingPageState extends State<LandingPage> {
               ),
             )
           ],
-        )
-      ],
-    ));
+        )));
   }
 }

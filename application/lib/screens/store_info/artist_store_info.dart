@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:application/theme/app_theme.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -16,22 +15,22 @@ class ArtistSettings extends StatefulWidget {
 class _ArtistSettingsState extends State<ArtistSettings> {
   // Our custom authentication class to store auth data
   final AuthService _authService = AuthService();
+  FirebaseDatabase database = FirebaseDatabase.instance;
+
   final _formKey =
       GlobalKey<FormState>(); //key to track state of form to validat
-
-  FirebaseDatabase database = FirebaseDatabase.instance;
+  var phoneNumberController = TextEditingController();
+  var stageNameController = TextEditingController();
+  var descriptionController = TextEditingController();
+  var citiesController = TextEditingController();
+  var linksController = TextEditingController();
 
   String description = "";
   String websiteLinks = "";
-  // Different cities recieved through comma separated string
   String potentialCities = "";
   String stageName = "";
   String phoneNumber = "";
-
-  String error = "";
-
-  var citiesController = TextEditingController();
-  var linksController = TextEditingController();
+  String error = ""; // Error output
 
   @override
   void initState() {
@@ -67,12 +66,17 @@ class _ArtistSettingsState extends State<ArtistSettings> {
           linksCsv = linksCsv + ", " + links[i].toString();
         }
       }
+
+      String stageN = (profile["stageName"] as String);
+      String stageNameCsv = stageN.toString();
+
       print("Initializing");
       print(citiesCsv);
       print(linksCsv);
       // Set the states
       setState(() => websiteLinks = linksCsv);
       setState(() => potentialCities = citiesCsv);
+      setState(() => stageName = stageNameCsv);
       print(websiteLinks);
       print(potentialCities);
 
@@ -87,7 +91,6 @@ class _ArtistSettingsState extends State<ArtistSettings> {
 
   @override
   Widget build(BuildContext context) {
-    print("Building");
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -101,187 +104,325 @@ class _ArtistSettingsState extends State<ArtistSettings> {
               },
             )),
         body: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-                vertical: 20.0, horizontal: 50.0),
-            child: Form(
-                key: _formKey, //key to track state of form to validate
-                child: Column(children: <Widget>[
-                  const SizedBox(height: 20.0),
-                  const Text("Enter a brief description of yourself"),
-                  TextFormField(
-                    validator: (val) =>
-                        val!.isEmpty ? 'Enter a description' : null,
-                    //indicates if form is valid or not. Using !. so assuming value won't be null
-                    // val represents whatever was inserted
-                    onChanged: (val) {
-                      // on user typing update email value
-                      setState(() => description = val);
-                      print(description);
-                    },
-                  ),
-                  const SizedBox(height: 20.0),
-                  const Text("Enter your desired stage name"),
-                  TextFormField(
-                      validator: (val) => val!.isEmpty
-                          ? 'Enter your stage name'
-                          : null, //indicates if form is valid or not. Using !. so assuming value won't be null
-                      onChanged: (val) {
-                        // on user typing
-                        setState(() => stageName = val);
-                        print(stageName);
-                      }),
-                  const SizedBox(height: 20.0),
-                  const Text("Enter your phone number"),
-                  TextFormField(
-                      validator: (val) => val!.isEmpty
-                          ? 'Enter your phone number'
-                          : null, //indicates if form is valid or not. Using !. so assuming value won't be null
-                      onChanged: (val) {
-                        // on user typing
-                        setState(() => phoneNumber = val);
-                        print(phoneNumber);
-                      }),
-                  const SizedBox(height: 20.0),
-                  const Text(
-                      "Enter as many personal urls as desired separated by commas"),
-                  TextFormField(
-                      controller: linksController,
-                      validator: (val) => val!.isEmpty
-                          ? 'Enter personal urls'
-                          : null, //indicates if form is valid or not. Using !. so assuming value won't be null
-                      onChanged: (val) {
-                        // on user typing update password value
-                        setState(() => websiteLinks = val);
-                        print(websiteLinks);
-                      }),
-                  const SizedBox(height: 20.0),
-                  const Text(
-                      "Enter all cities you willing to play in separated by commas"),
-                  TextFormField(
-                      controller: citiesController,
-                      validator: (val) => val!.isEmpty
-                          ? 'Enter potential cities'
-                          : null, //indicates if form is valid or not. Using !. so assuming value won't be null
-                      onChanged: (val) {
-                        // on user typing update password value
-                        setState(() => potentialCities = val);
-                        print(potentialCities);
-                      }),
-                  const SizedBox(height: 20.0),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
-                    ),
-                    child: const Text('Update Artist Info',
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () async {
-                      // Connect to the database, and access the current user's uid to be used as primary key
-                      print("Button Pressed, send info to database");
-                      String? uid = _authService.userID;
+          //padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(height: 20.0),
+              fillInInformation(),
+              const SizedBox(height: 20.0),
+              form(),
+              const SizedBox(height: 20.0),
+              updateInfo()
+            ],
+          ),
+        ));
+  }
 
-                      //Reset error to be empty
-                      error = "";
+  Widget fillInInformation() {
+    return Column(
+      children: [
+        Row(
+          children: const [
+            SizedBox(
+              width: 20,
+            ),
+            Text(
+              'Information',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+          ],
+        )
+      ],
+    );
+  }
 
-                      // Check if the current user already has an artist profile
+  Widget form() {
+    return Form(
+      key: _formKey,
+      child: Column(children: [
+        stageNameInput(),
+        const SizedBox(height: 20.0),
+        descriptionOfYourselfInput(),
+        const SizedBox(height: 20.0),
+        linksInput(),
+        const SizedBox(height: 20.0),
+        citiesInput(),
+        const SizedBox(height: 20.0),
+        phoneNumberInput(),
+        const SizedBox(height: 20.0),
+      ]),
+    );
+  }
 
-                      DatabaseReference artistRef =
-                          database.ref("Artists/$uid");
+  Widget descriptionOfYourselfInput() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextFormField(
+        controller: descriptionController,
+        decoration: InputDecoration(
+          labelText: 'Your Description',
+          labelStyle: const TextStyle(
+            fontSize: 18,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        style: const TextStyle(
+          fontSize: 18,
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please enter a description';
+          }
+          return null;
+        },
+        keyboardType: TextInputType.text,
+        onChanged: (value) {
+          setState(() => description = value);
+        },
+      ),
+    );
+  }
 
-                      DatabaseEvent artistEvent = await artistRef.once();
+  Widget stageNameInput() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextFormField(
+        controller: stageNameController,
+        decoration: InputDecoration(
+          labelText: 'Stage Name',
+          labelStyle: const TextStyle(
+            fontSize: 18,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        style: const TextStyle(
+          fontSize: 18,
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please enter your stage name';
+          }
+          return null;
+        },
+        keyboardType: TextInputType.text,
+        onChanged: (value) {
+          setState(() => stageName = value);
+        },
+      ),
+    );
+  }
 
-                      bool alreadyExists =
-                          artistEvent.snapshot.value != null;
-                      if (alreadyExists) {
-                        // Update the existing fields
-                        Map<String, Object> updateMap = {};
-                        if (!description.isEmpty) {
-                          updateMap["description"] = description;
-                        }
-                        if (!stageName.isEmpty) {
-                          updateMap["stageName"] = stageName;
-                        }
-                        if (!phoneNumber.isEmpty) {
-                          updateMap["phoneNumber"] = phoneNumber;
-                        }
-                        if (!websiteLinks.isEmpty) {
-                          // Separate links by comma
-                          updateMap["websiteLinks"] =
-                              websiteLinks.split(',');
-                        } else {
-                          // websiteLinks is empty, which can potentially be a change
-                          updateMap["websiteLinks"] = [];
-                        }
-                        if (!potentialCities.isEmpty) {
-                          // Separate cities by comma
-                          updateMap["potentialCities"] =
-                              potentialCities.split(',');
-                        } else {
-                          updateMap["potentialCities"] = [];
-                        }
-                        print(artistRef);
-                        print(updateMap);
-                        if (updateMap.isNotEmpty) {
-                          print("Writing map to database");
-                          await artistRef.update(updateMap);
-                        }
-                      } else {
-                        // Create the database reference
-                        // ALL FIELDS MUST BE NON-EMPTY
-                        Map<String, Object> updateMap = {};
-                        if (!description.isEmpty) {
-                          updateMap["description"] = description;
-                        } else {
-                          // Raise error, require all fields to be non-null
-                          error = "Empty Field: All fields required";
-                        }
-                        if (!stageName.isEmpty) {
-                          updateMap["stageName"] = stageName;
-                        } else {
-                          // Raise error, require all fields to be non-null
-                          error = "Empty Field: All fields required";
-                        }
-                        if (!phoneNumber.isEmpty) {
-                          updateMap["phoneNumber"] = phoneNumber;
-                        } else {
-                          // Raise error, require all fields to be non-null
-                          error = "Empty Field: All fields required";
-                        }
-                        if (!websiteLinks.isEmpty) {
-                          // Separate links by comma
-                          updateMap["websiteLinks"] =
-                              websiteLinks.split(',');
-                        } else {
-                          // Raise error, require all fields to be non-null
-                          error = "Empty Field: All fields required";
-                        }
-                        if (!potentialCities.isEmpty) {
-                          // Separate cities by comma
-                          updateMap["potentialCities"] =
-                              potentialCities.split(',');
-                        } else {
-                          // Raise error, require all fields to be non-null
-                          error = "Empty Field: All fields required";
-                        }
-                        print(artistRef);
-                        print(updateMap);
-                        print(error);
-                        // Don't want to write if there is an error
-                        if (updateMap.isNotEmpty && error == "") {
-                          print("Writing map to database");
-                          await artistRef.update(updateMap);
-                        }
-                      }
+  Widget linksInput() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextFormField(
+        controller: linksController,
+        decoration: InputDecoration(
+          labelText: 'Social Media Links',
+          labelStyle: const TextStyle(
+            fontSize: 18,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        style: const TextStyle(
+          fontSize: 18,
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please enter your links';
+          }
+          return null;
+        },
+        keyboardType: TextInputType.text,
+        onChanged: (value) {
+          setState(() => websiteLinks = value);
+        },
+      ),
+    );
+  }
 
-                      // Parse out info separated by commas in List fields
-                    },
-                  ),
-                  const SizedBox(height: 12.0), //text box for error
-                  Text(
-                    error, // output the error from signin
-                    style:
-                        const TextStyle(color: Colors.red, fontSize: 14.0),
-                  )
-                ]))));
+  Widget citiesInput() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextFormField(
+        controller: citiesController,
+        decoration: InputDecoration(
+          labelText: 'Cities You Want to Perform In',
+          labelStyle: const TextStyle(
+            fontSize: 18,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        style: const TextStyle(
+          fontSize: 18,
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please enter your cities';
+          }
+          return null;
+        },
+        keyboardType: TextInputType.text,
+        onChanged: (value) {
+          setState(() => potentialCities = value);
+        },
+      ),
+    );
+  }
+
+  Widget phoneNumberInput() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextFormField(
+        controller: phoneNumberController,
+        decoration: InputDecoration(
+          labelText: 'Phone Number',
+          labelStyle: const TextStyle(
+            fontSize: 18,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        style: const TextStyle(
+          fontSize: 18,
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please enter your phone numner';
+          }
+          return null;
+        },
+        keyboardType: TextInputType.text,
+        onChanged: (value) {
+          setState(() => phoneNumber = value);
+        },
+      ),
+    );
+  }
+
+  Widget updateInfo() {
+    return ElevatedButton(
+      style: ButtonStyle(
+        elevation: MaterialStateProperty.all(2),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
+        backgroundColor:
+            MaterialStateProperty.all<Color>(AppTheme.colors.primary),
+        fixedSize: MaterialStateProperty.all(const Size(300, 50)),
+      ),
+      child: Row(children: const [
+        Spacer(),
+        Text(
+          "Update Info",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Colors.white, fontSize: 17, fontWeight: FontWeight.w500),
+        ),
+        Spacer(),
+      ]),
+      onPressed: () async {
+        // Connect to the database, and access the current user's uid to be used as primary key
+        print("Button Pressed, send info to database");
+        String? uid = _authService.userID;
+
+        //Reset error to be empty
+        error = "";
+
+        // Check if the current user already has an artist profile
+
+        DatabaseReference artistRef = database.ref("Artists/$uid");
+
+        DatabaseEvent artistEvent = await artistRef.once();
+
+        bool alreadyExists = artistEvent.snapshot.value != null;
+        if (alreadyExists) {
+          // Update the existing fields
+          Map<String, Object> updateMap = {};
+          if (!description.isEmpty) {
+            updateMap["description"] = description;
+          }
+          if (!stageName.isEmpty) {
+            updateMap["stageName"] = stageName;
+          }
+          if (!phoneNumber.isEmpty) {
+            updateMap["phoneNumber"] = phoneNumber;
+          }
+          if (!websiteLinks.isEmpty) {
+            // Separate links by comma
+            updateMap["websiteLinks"] = websiteLinks.split(',');
+          } else {
+            // websiteLinks is empty, which can potentially be a change
+            updateMap["websiteLinks"] = [];
+          }
+          if (!potentialCities.isEmpty) {
+            // Separate cities by comma
+            updateMap["potentialCities"] = potentialCities.split(',');
+          } else {
+            updateMap["potentialCities"] = [];
+          }
+          print(artistRef);
+          print(updateMap);
+          if (updateMap.isNotEmpty) {
+            print("Writing map to database");
+            await artistRef.update(updateMap);
+          }
+        } else {
+          // Create the database reference
+          // ALL FIELDS MUST BE NON-EMPTY
+          Map<String, Object> updateMap = {};
+          if (!description.isEmpty) {
+            updateMap["description"] = description;
+          } else {
+            // Raise error, require all fields to be non-null
+            error = "Empty Field: All fields required";
+          }
+          if (!stageName.isEmpty) {
+            updateMap["stageName"] = stageName;
+          } else {
+            // Raise error, require all fields to be non-null
+            error = "Empty Field: All fields required";
+          }
+          if (!phoneNumber.isEmpty) {
+            updateMap["phoneNumber"] = phoneNumber;
+          } else {
+            // Raise error, require all fields to be non-null
+            error = "Empty Field: All fields required";
+          }
+          if (!websiteLinks.isEmpty) {
+            // Separate links by comma
+            updateMap["websiteLinks"] = websiteLinks.split(',');
+          } else {
+            // Raise error, require all fields to be non-null
+            error = "Empty Field: All fields required";
+          }
+          if (!potentialCities.isEmpty) {
+            // Separate cities by comma
+            updateMap["potentialCities"] = potentialCities.split(',');
+          } else {
+            // Raise error, require all fields to be non-null
+            error = "Empty Field: All fields required";
+          }
+          print(artistRef);
+          print(updateMap);
+          print(error);
+          // Don't want to write if there is an error
+          if (updateMap.isNotEmpty && error == "") {
+            print("Writing map to database");
+            await artistRef.update(updateMap);
+          }
+        }
+
+        // Parse out info separated by commas in List fields
+      },
+    );
   }
 }
