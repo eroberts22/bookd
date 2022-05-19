@@ -40,7 +40,6 @@ class _VenueSettingsState extends State<VenueSettings> {
   var zipcodeController = TextEditingController();
   var linksController = TextEditingController();
 
-
   Map<String, bool> tags = {
     "Bar": false,
     "Amphitheater": false,
@@ -67,7 +66,6 @@ class _VenueSettingsState extends State<VenueSettings> {
     Map<String, dynamic>? profile =
         jsonDecode(jsonEncode(profileEvent.snapshot.value));
     if (profile != null) {
-     
       List links = (profile["websiteLinks"] as List);
       String linksCsv = "";
       if (links.length > 0) {
@@ -84,7 +82,7 @@ class _VenueSettingsState extends State<VenueSettings> {
       String streetAddress = (profile["streetAddress"] as String);
       String city = (profile["city"] as String);
       String zipCode = (profile["zipCode"] as String);
-   
+
       print("Initializing");
       print(linksCsv);
       // Set the states
@@ -92,12 +90,16 @@ class _VenueSettingsState extends State<VenueSettings> {
       print(websiteLinks);
 
       setState(() => nameController = TextEditingController(text: name));
-      setState(() => descriptionController = TextEditingController(text: description));
-      setState(() => addressController = TextEditingController(text: streetAddress));
+      setState(() =>
+          descriptionController = TextEditingController(text: description));
+      setState(
+          () => addressController = TextEditingController(text: streetAddress));
       setState(() => cityController = TextEditingController(text: city));
       setState(() => zipcodeController = TextEditingController(text: zipCode));
-      setState(() => phoneController = TextEditingController(text: phoneNumber));
-      setState(() => linksController = TextEditingController(text: websiteLinks));
+      setState(
+          () => phoneController = TextEditingController(text: phoneNumber));
+      setState(
+          () => linksController = TextEditingController(text: websiteLinks));
       // Only do all this stuff if the profile is not null
     }
   }
@@ -139,39 +141,40 @@ class _VenueSettingsState extends State<VenueSettings> {
               },
             )),
         body: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-                vertical: 20.0, horizontal: 50.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
             child: Form(
                 key: _formKey, //key to track state of form to validate
                 child: Column(children: <Widget>[
                   //const Text("Enter the name of your venue"),
                   TextFormField(
-                      controller: nameController,
-                      validator: (val) => val!.isEmpty
-                          ? 'Enter your venue name'
-                          : null, //indicates if form is valid or not. Using !. so assuming value won't be null
-                      onChanged: (val) {
-                        // on user typing
-                        setState(() => name = val);
-                        print(name);
-                      },
-                      decoration: InputDecoration(
-                        labelText: "Enter Venue Name",
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.ternary,
-                          ),
+                    controller: nameController,
+                    validator: (val) => val!.isEmpty
+                        ? 'Enter your venue name'
+                        : null, //indicates if form is valid or not. Using !. so assuming value won't be null
+                    onChanged: (val) {
+                      // on user typing
+                      setState(() => name = val);
+                      print(name);
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Enter Venue Name",
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.ternary,
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.primary,
-                            width: 2.0,
-                          ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.primary,
+                          width: 2.0,
                         ),
-                      ),),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 20.0),
                   //const Text("Enter a brief description of your venue"),
                   TextFormField(
@@ -186,22 +189,22 @@ class _VenueSettingsState extends State<VenueSettings> {
                       print(description);
                     },
                     decoration: InputDecoration(
-                        labelText: "Enter Brief Description",
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.ternary,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.primary,
-                            width: 2.0,
-                          ),
+                      labelText: "Enter Brief Description",
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.ternary,
                         ),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.primary,
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20.0),
                   //const Text("Enter the street address of your venue"),
@@ -217,22 +220,22 @@ class _VenueSettingsState extends State<VenueSettings> {
                       print(streetAddress);
                     },
                     decoration: InputDecoration(
-                        labelText: "Enter Street Address",
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.ternary,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.primary,
-                            width: 2.0,
-                          ),
+                      labelText: "Enter Street Address",
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.ternary,
                         ),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.primary,
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20.0),
                   //const Text("Enter the city of your venue"),
@@ -247,29 +250,28 @@ class _VenueSettingsState extends State<VenueSettings> {
                       print(city);
                     },
                     decoration: InputDecoration(
-                        labelText: "Enter City",
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.ternary,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.primary,
-                            width: 2.0,
-                          ),
+                      labelText: "Enter City",
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.ternary,
                         ),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.primary,
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20.0),
                   //const Text("Enter the zip code of your venue"),
                   TextFormField(
                     controller: zipcodeController,
-                    validator: (val) =>
-                        val!.isEmpty ? 'Enter zip code' : null,
+                    validator: (val) => val!.isEmpty ? 'Enter zip code' : null,
                     //indicates if form is valid or not. Using !. so assuming value won't be null
                     // val represents whatever was inserted
                     onChanged: (val) {
@@ -278,22 +280,22 @@ class _VenueSettingsState extends State<VenueSettings> {
                       print(zipCode);
                     },
                     decoration: InputDecoration(
-                        labelText: "Enter Zip Code",
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.ternary,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.primary,
-                            width: 2.0,
-                          ),
+                      labelText: "Enter Zip Code",
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.ternary,
                         ),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.primary,
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20.0),
                   //const Text("Enter the phone number of your venue"),
@@ -309,57 +311,62 @@ class _VenueSettingsState extends State<VenueSettings> {
                       print(phoneNumber);
                     },
                     decoration: InputDecoration(
-                        labelText: "Enter Phone Number",
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.ternary,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.primary,
-                            width: 2.0,
-                          ),
+                      labelText: "Enter Phone Number",
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.ternary,
                         ),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.primary,
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20.0),
-                 // const Text(
-                 //     "Enter as many urls for your venue as desired separated by commas"),
+                  // const Text(
+                  //     "Enter as many urls for your venue as desired separated by commas"),
                   TextFormField(
                     controller: linksController,
-                      validator: (val) => val!.isEmpty
-                          ? 'Enter venue urls'
-                          : null, //indicates if form is valid or not. Using !. so assuming value won't be null
-                      onChanged: (val) {
-                        // on user typing update password value
-                        setState(() => websiteLinks = val);
-                        print(websiteLinks);
-                      },
-                      decoration: InputDecoration(
-                        labelText: "Enter Website Links, separated by commas",
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.ternary,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                          borderSide: BorderSide(
-                            color: AppTheme.colors.primary,
-                            width: 2.0,
-                          ),
+                    validator: (val) => val!.isEmpty
+                        ? 'Enter venue urls'
+                        : null, //indicates if form is valid or not. Using !. so assuming value won't be null
+                    onChanged: (val) {
+                      // on user typing update password value
+                      setState(() => websiteLinks = val);
+                      print(websiteLinks);
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Enter Website Links, separated by commas",
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.ternary,
                         ),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: AppTheme.colors.primary,
+                          width: 2.0,
+                        ),
                       ),
+                    ),
+                  ),
                   const SizedBox(height: 20.0),
-                  Text("Select Your Venue Type", style: TextStyle(fontSize: 20),),
-                  const SizedBox(height: 10,),
+                  Text(
+                    "Select Your Venue Type",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   CheckboxListTile(
                     title: const Text("Bar"),
                     secondary: const Icon(Icons.local_bar),
@@ -371,8 +378,8 @@ class _VenueSettingsState extends State<VenueSettings> {
                         print(tags);
                       });
                     },
-                    activeColor: Colors.green,
-                    checkColor: Colors.black,
+                    activeColor: AppTheme.colors.secondary,
+                    checkColor: Colors.white,
                   ),
                   const SizedBox(height: 12.0),
                   CheckboxListTile(
@@ -386,8 +393,8 @@ class _VenueSettingsState extends State<VenueSettings> {
                         print(tags);
                       });
                     },
-                    activeColor: Colors.green,
-                    checkColor: Colors.black,
+                    activeColor: AppTheme.colors.secondary,
+                    checkColor: Colors.white,
                   ),
                   const SizedBox(height: 12.0),
                   CheckboxListTile(
@@ -401,8 +408,8 @@ class _VenueSettingsState extends State<VenueSettings> {
                         print(tags);
                       });
                     },
-                    activeColor: Colors.green,
-                    checkColor: Colors.black,
+                    activeColor: AppTheme.colors.secondary,
+                    checkColor: Colors.white,
                   ),
                   const SizedBox(height: 12.0),
                   CheckboxListTile(
@@ -416,8 +423,8 @@ class _VenueSettingsState extends State<VenueSettings> {
                         print(tags);
                       });
                     },
-                    activeColor: Colors.green,
-                    checkColor: Colors.black,
+                    activeColor: AppTheme.colors.secondary,
+                    checkColor: Colors.white,
                   ),
                   const SizedBox(height: 12.0),
                   CheckboxListTile(
@@ -431,8 +438,8 @@ class _VenueSettingsState extends State<VenueSettings> {
                         print(tags);
                       });
                     },
-                    activeColor: Colors.green,
-                    checkColor: Colors.black,
+                    activeColor: AppTheme.colors.secondary,
+                    checkColor: Colors.white,
                   ),
                   const SizedBox(height: 12.0),
                   CheckboxListTile(
@@ -446,8 +453,8 @@ class _VenueSettingsState extends State<VenueSettings> {
                         print(tags);
                       });
                     },
-                    activeColor: Colors.green,
-                    checkColor: Colors.black,
+                    activeColor: AppTheme.colors.secondary,
+                    checkColor: Colors.white,
                   ),
                   const SizedBox(height: 12.0),
                   CheckboxListTile(
@@ -461,16 +468,20 @@ class _VenueSettingsState extends State<VenueSettings> {
                         print(tags);
                       });
                     },
-                    activeColor: Colors.green,
-                    checkColor: Colors.black,
+                    activeColor: AppTheme.colors.secondary,
+                    checkColor: Colors.white,
                   ),
                   const SizedBox(height: 20.0),
                   ElevatedButton(
                     style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
+                      elevation: MaterialStateProperty.all(2),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25))),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          AppTheme.colors.primary),
+                      fixedSize: MaterialStateProperty.all(const Size(300, 50)),
                     ),
-                    child: const Text('Update Venue Info',
+                    child: const Text('Update Profile Settings',
                         style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       // Connect to the database, and access the current user's uid to be used as primary key
@@ -480,13 +491,11 @@ class _VenueSettingsState extends State<VenueSettings> {
                       error = "";
                       // Check if the current user already has an artist profile
 
-                      DatabaseReference venueRef =
-                          database.ref("Venues/$uid");
+                      DatabaseReference venueRef = database.ref("Venues/$uid");
 
                       DatabaseEvent artistEvent = await venueRef.once();
 
-                      bool alreadyExists =
-                          artistEvent.snapshot.value != null;
+                      bool alreadyExists = artistEvent.snapshot.value != null;
                       if (alreadyExists) {
                         // Update the existing fields
                         Map<String, Object> updateMap = {};
@@ -514,8 +523,7 @@ class _VenueSettingsState extends State<VenueSettings> {
                         }
                         if (!websiteLinks.isEmpty) {
                           // Separate links by comma
-                          updateMap["websiteLinks"] =
-                              websiteLinks.split(',');
+                          updateMap["websiteLinks"] = websiteLinks.split(',');
                         }
                         print(venueRef);
                         print(updateMap);
@@ -569,8 +577,7 @@ class _VenueSettingsState extends State<VenueSettings> {
                         }
                         if (!websiteLinks.isEmpty) {
                           // Separate links by comma
-                          updateMap["websiteLinks"] =
-                              websiteLinks.split(',');
+                          updateMap["websiteLinks"] = websiteLinks.split(',');
                         } else {
                           // Raise error, require all fields to be non-null
                           error = "Empty Field: All fields required";
@@ -590,8 +597,7 @@ class _VenueSettingsState extends State<VenueSettings> {
                   const SizedBox(height: 12.0), //text box for error
                   Text(
                     error, // output the error from signin
-                    style:
-                        const TextStyle(color: Colors.red, fontSize: 14.0),
+                    style: const TextStyle(color: Colors.red, fontSize: 14.0),
                   )
                 ]))));
   }

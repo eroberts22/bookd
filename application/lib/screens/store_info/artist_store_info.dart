@@ -131,10 +131,10 @@ class _ArtistSettingsState extends State<ArtistSettings> {
             SizedBox(
               width: 20,
             ),
-            Text(
+            /*  Text(
               'Information',
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-            ),
+            ),*/
           ],
         )
       ],
@@ -169,8 +169,18 @@ class _ArtistSettingsState extends State<ArtistSettings> {
           labelStyle: const TextStyle(
             fontSize: 18,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(
+              color: AppTheme.colors.ternary,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(
+              color: AppTheme.colors.primary,
+              width: 2.0,
+            ),
           ),
         ),
         style: const TextStyle(
@@ -200,8 +210,18 @@ class _ArtistSettingsState extends State<ArtistSettings> {
           labelStyle: const TextStyle(
             fontSize: 18,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(
+              color: AppTheme.colors.ternary,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(
+              color: AppTheme.colors.primary,
+              width: 2.0,
+            ),
           ),
         ),
         style: const TextStyle(
@@ -231,8 +251,18 @@ class _ArtistSettingsState extends State<ArtistSettings> {
           labelStyle: const TextStyle(
             fontSize: 18,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(
+              color: AppTheme.colors.ternary,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(
+              color: AppTheme.colors.primary,
+              width: 2.0,
+            ),
           ),
         ),
         style: const TextStyle(
@@ -262,8 +292,18 @@ class _ArtistSettingsState extends State<ArtistSettings> {
           labelStyle: const TextStyle(
             fontSize: 18,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(
+              color: AppTheme.colors.ternary,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(
+              color: AppTheme.colors.primary,
+              width: 2.0,
+            ),
           ),
         ),
         style: const TextStyle(
@@ -293,8 +333,18 @@ class _ArtistSettingsState extends State<ArtistSettings> {
           labelStyle: const TextStyle(
             fontSize: 18,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(
+              color: AppTheme.colors.ternary,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: BorderSide(
+              color: AppTheme.colors.primary,
+              width: 2.0,
+            ),
           ),
         ),
         style: const TextStyle(
@@ -327,7 +377,7 @@ class _ArtistSettingsState extends State<ArtistSettings> {
       child: Row(children: const [
         Spacer(),
         Text(
-          "Update Info",
+          "Update Profile Settings",
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Colors.white, fontSize: 17, fontWeight: FontWeight.w500),
