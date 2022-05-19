@@ -30,17 +30,20 @@ class _ArtistSettingsState extends State<ArtistSettings> {
 
   String error = "";
 
+  var nameController = TextEditingController();
+  var descriptionController = TextEditingController();
+  var phoneController = TextEditingController();
   var citiesController = TextEditingController();
   var linksController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _setupLinksAndCities();
+    _fillInProfile();
   }
 
   // Retrieve the existing values for links and cities, and store them as comma separated
-  void _setupLinksAndCities() async {
+  void _fillInProfile() async {
     String? uid = _authService.userID;
 
     DatabaseEvent profileEvent = await database.ref("Artists/$uid").once();
@@ -67,6 +70,11 @@ class _ArtistSettingsState extends State<ArtistSettings> {
           linksCsv = linksCsv + ", " + links[i].toString();
         }
       }
+
+      String name = (profile["stageName"] as String);
+      String description = (profile["description"] as String);
+      String phoneNumber = (profile["phoneNumber"] as String);
+   
       print("Initializing");
       print(citiesCsv);
       print(linksCsv);
@@ -76,11 +84,11 @@ class _ArtistSettingsState extends State<ArtistSettings> {
       print(websiteLinks);
       print(potentialCities);
 
-      setState(() =>
-          citiesController = TextEditingController(text: potentialCities));
-      setState(
-          () => linksController = TextEditingController(text: websiteLinks));
-
+      setState(() => nameController = TextEditingController(text: name));
+      setState(() => descriptionController = TextEditingController(text: description));
+      setState(() => phoneController = TextEditingController(text: phoneNumber));
+      setState(() => citiesController = TextEditingController(text: potentialCities));
+      setState(() => linksController = TextEditingController(text: websiteLinks));
       // Only do all this stuff if the profile is not null
     }
   }
@@ -106,9 +114,41 @@ class _ArtistSettingsState extends State<ArtistSettings> {
             child: Form(
                 key: _formKey, //key to track state of form to validate
                 child: Column(children: <Widget>[
+                  
                   const SizedBox(height: 20.0),
-                  const Text("Enter a brief description of yourself"),
+                  //const Text("Enter your desired stage name"),
                   TextFormField(
+                      controller: nameController,
+                      validator: (val) => val!.isEmpty
+                          ? 'Enter your stage name'
+                          : null, //indicates if form is valid or not. Using !. so assuming value won't be null
+                      onChanged: (val) {
+                        // on user typing
+                        setState(() => stageName = val);
+                        print(stageName);
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Enter Stage Name",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                      ),
+                  const SizedBox(height: 20.0),
+                  //const Text("Enter a brief description of yourself"),
+                  TextFormField(
+                    controller: descriptionController,
                     validator: (val) =>
                         val!.isEmpty ? 'Enter a description' : null,
                     //indicates if form is valid or not. Using !. so assuming value won't be null
@@ -118,21 +158,28 @@ class _ArtistSettingsState extends State<ArtistSettings> {
                       setState(() => description = val);
                       print(description);
                     },
+                    decoration: InputDecoration(
+                        labelText: "Enter Brief Description",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
                   ),
                   const SizedBox(height: 20.0),
-                  const Text("Enter your desired stage name"),
+                  //const Text("Enter your phone number"),
                   TextFormField(
-                      validator: (val) => val!.isEmpty
-                          ? 'Enter your stage name'
-                          : null, //indicates if form is valid or not. Using !. so assuming value won't be null
-                      onChanged: (val) {
-                        // on user typing
-                        setState(() => stageName = val);
-                        print(stageName);
-                      }),
-                  const SizedBox(height: 20.0),
-                  const Text("Enter your phone number"),
-                  TextFormField(
+                      controller: phoneController,
                       validator: (val) => val!.isEmpty
                           ? 'Enter your phone number'
                           : null, //indicates if form is valid or not. Using !. so assuming value won't be null
@@ -140,10 +187,28 @@ class _ArtistSettingsState extends State<ArtistSettings> {
                         // on user typing
                         setState(() => phoneNumber = val);
                         print(phoneNumber);
-                      }),
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Enter Phone Number",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                      ),
                   const SizedBox(height: 20.0),
-                  const Text(
-                      "Enter as many personal urls as desired separated by commas"),
+                 // const Text(
+                  //    "Enter as many personal urls as desired separated by commas"),
                   TextFormField(
                       controller: linksController,
                       validator: (val) => val!.isEmpty
@@ -153,10 +218,28 @@ class _ArtistSettingsState extends State<ArtistSettings> {
                         // on user typing update password value
                         setState(() => websiteLinks = val);
                         print(websiteLinks);
-                      }),
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Enter Website Links, separated by commas",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                      ),
                   const SizedBox(height: 20.0),
-                  const Text(
-                      "Enter all cities you willing to play in separated by commas"),
+                  //const Text(
+                   //   "Enter all cities you willing to play in separated by commas"),
                   TextFormField(
                       controller: citiesController,
                       validator: (val) => val!.isEmpty
@@ -166,12 +249,30 @@ class _ArtistSettingsState extends State<ArtistSettings> {
                         // on user typing update password value
                         setState(() => potentialCities = val);
                         print(potentialCities);
-                      }),
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Enter Cities, separated by commas",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                      ),
                   const SizedBox(height: 20.0),
                   ElevatedButton(
                     style: ButtonStyle(
                       foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
+                          MaterialStateProperty.all<Color>(AppTheme.colors.secondary),
                     ),
                     child: const Text('Update Artist Info',
                         style: TextStyle(color: Colors.white)),

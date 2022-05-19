@@ -54,11 +54,11 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
     String uid = widget.uid;
     final ref = FirebaseDatabase.instance.ref();
     event = await ref.child('Venues/$uid').once();
-/*
-    print(event.snapshot.children);
+
+    /*print(event.snapshot.children);
     for (var c in event.snapshot.children) {
       print(c.key);
-    }
+    }*/
 
     print(event.snapshot.child("tags").children);
     for (var c in event.snapshot.child("tags").children) {
@@ -67,7 +67,8 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
         print(c.key);
         venueType = c.key;
       }
-    }*/
+    }
+    print(venueType);
 
     String urls = event.snapshot.child("websiteLinks").value.toString();
     //for (var c in event.snapshot.child("websiteLinks").children) {
@@ -132,7 +133,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                     padding:
                         const EdgeInsets.only(top: 10, left: 30, right: 30),
                     child: event.snapshot.child("name").value != null &&
-                            event.snapshot.child("description").value != null
+                            event.snapshot.child("description").value != null 
                         ? Text(event.snapshot
                             .child("description")
                             .value
@@ -142,7 +143,7 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 10, left: 30, right: 30, bottom: 10),
+                      top: 10, left: 30, right: 30),
                   child: event.snapshot.child("name").value != null &&
                           event.snapshot.child("websiteLinks").value != null
                       ? ListView.builder(

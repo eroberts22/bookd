@@ -32,6 +32,15 @@ class _VenueSettingsState extends State<VenueSettings> {
 
   String error = "";
 
+  var nameController = TextEditingController();
+  var descriptionController = TextEditingController();
+  var phoneController = TextEditingController();
+  var addressController = TextEditingController();
+  var cityController = TextEditingController();
+  var zipcodeController = TextEditingController();
+  var linksController = TextEditingController();
+
+
   Map<String, bool> tags = {
     "Bar": false,
     "Amphitheater": false,
@@ -46,6 +55,51 @@ class _VenueSettingsState extends State<VenueSettings> {
   void initState() {
     super.initState();
     _setupTags();
+    _fillInProfile();
+  }
+
+  // Retrieve the existing values for links and cities, and store them as comma separated
+  void _fillInProfile() async {
+    String? uid = _authService.userID;
+
+    DatabaseEvent profileEvent = await database.ref("Venues/$uid").once();
+
+    Map<String, dynamic>? profile =
+        jsonDecode(jsonEncode(profileEvent.snapshot.value));
+    if (profile != null) {
+     
+      List links = (profile["websiteLinks"] as List);
+      String linksCsv = "";
+      if (links.length > 0) {
+        // Convert the list of strings to a single string, with values separated by commas
+        linksCsv = links[0].toString();
+        for (var i = 1; i < links.length; i++) {
+          linksCsv = linksCsv + ", " + links[i].toString();
+        }
+      }
+
+      String name = (profile["name"] as String);
+      String description = (profile["description"] as String);
+      String phoneNumber = (profile["phoneNumber"] as String);
+      String streetAddress = (profile["streetAddress"] as String);
+      String city = (profile["city"] as String);
+      String zipCode = (profile["zipCode"] as String);
+   
+      print("Initializing");
+      print(linksCsv);
+      // Set the states
+      setState(() => websiteLinks = linksCsv);
+      print(websiteLinks);
+
+      setState(() => nameController = TextEditingController(text: name));
+      setState(() => descriptionController = TextEditingController(text: description));
+      setState(() => addressController = TextEditingController(text: streetAddress));
+      setState(() => cityController = TextEditingController(text: city));
+      setState(() => zipcodeController = TextEditingController(text: zipCode));
+      setState(() => phoneController = TextEditingController(text: phoneNumber));
+      setState(() => linksController = TextEditingController(text: websiteLinks));
+      // Only do all this stuff if the profile is not null
+    }
   }
 
   void _setupTags() async {
@@ -90,8 +144,9 @@ class _VenueSettingsState extends State<VenueSettings> {
             child: Form(
                 key: _formKey, //key to track state of form to validate
                 child: Column(children: <Widget>[
-                  const Text("Enter the name of your venue"),
+                  //const Text("Enter the name of your venue"),
                   TextFormField(
+                      controller: nameController,
                       validator: (val) => val!.isEmpty
                           ? 'Enter your venue name'
                           : null, //indicates if form is valid or not. Using !. so assuming value won't be null
@@ -99,11 +154,28 @@ class _VenueSettingsState extends State<VenueSettings> {
                         // on user typing
                         setState(() => name = val);
                         print(name);
-                      }),
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Enter Venue Name",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),),
                   const SizedBox(height: 20.0),
-                  const SizedBox(height: 20.0),
-                  const Text("Enter a brief description of your venue"),
+                  //const Text("Enter a brief description of your venue"),
                   TextFormField(
+                    controller: descriptionController,
                     validator: (val) =>
                         val!.isEmpty ? 'Enter a description' : null,
                     //indicates if form is valid or not. Using !. so assuming value won't be null
@@ -113,10 +185,28 @@ class _VenueSettingsState extends State<VenueSettings> {
                       setState(() => description = val);
                       print(description);
                     },
+                    decoration: InputDecoration(
+                        labelText: "Enter Brief Description",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
                   ),
                   const SizedBox(height: 20.0),
-                  const Text("Enter the street address of your venue"),
+                  //const Text("Enter the street address of your venue"),
                   TextFormField(
+                    controller: addressController,
                     validator: (val) =>
                         val!.isEmpty ? 'Enter street address' : null,
                     //indicates if form is valid or not. Using !. so assuming value won't be null
@@ -126,10 +216,28 @@ class _VenueSettingsState extends State<VenueSettings> {
                       setState(() => streetAddress = val);
                       print(streetAddress);
                     },
+                    decoration: InputDecoration(
+                        labelText: "Enter Street Address",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
                   ),
                   const SizedBox(height: 20.0),
-                  const Text("Enter the city of your venue"),
+                  //const Text("Enter the city of your venue"),
                   TextFormField(
+                    controller: cityController,
                     validator: (val) => val!.isEmpty ? 'Enter city' : null,
                     //indicates if form is valid or not. Using !. so assuming value won't be null
                     // val represents whatever was inserted
@@ -138,10 +246,28 @@ class _VenueSettingsState extends State<VenueSettings> {
                       setState(() => city = val);
                       print(city);
                     },
+                    decoration: InputDecoration(
+                        labelText: "Enter City",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
                   ),
                   const SizedBox(height: 20.0),
-                  const Text("Enter the zip code of your venue"),
+                  //const Text("Enter the zip code of your venue"),
                   TextFormField(
+                    controller: zipcodeController,
                     validator: (val) =>
                         val!.isEmpty ? 'Enter zip code' : null,
                     //indicates if form is valid or not. Using !. so assuming value won't be null
@@ -151,10 +277,28 @@ class _VenueSettingsState extends State<VenueSettings> {
                       setState(() => zipCode = val);
                       print(zipCode);
                     },
+                    decoration: InputDecoration(
+                        labelText: "Enter Zip Code",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
                   ),
                   const SizedBox(height: 20.0),
-                  const Text("Enter the phone number of your venue"),
+                  //const Text("Enter the phone number of your venue"),
                   TextFormField(
+                    controller: phoneController,
                     validator: (val) =>
                         val!.isEmpty ? 'Enter phone number' : null,
                     //indicates if form is valid or not. Using !. so assuming value won't be null
@@ -164,11 +308,29 @@ class _VenueSettingsState extends State<VenueSettings> {
                       setState(() => phoneNumber = val);
                       print(phoneNumber);
                     },
+                    decoration: InputDecoration(
+                        labelText: "Enter Phone Number",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
                   ),
                   const SizedBox(height: 20.0),
-                  const Text(
-                      "Enter as many urls for your venue as desired separated by commas"),
+                 // const Text(
+                 //     "Enter as many urls for your venue as desired separated by commas"),
                   TextFormField(
+                    controller: linksController,
                       validator: (val) => val!.isEmpty
                           ? 'Enter venue urls'
                           : null, //indicates if form is valid or not. Using !. so assuming value won't be null
@@ -176,8 +338,28 @@ class _VenueSettingsState extends State<VenueSettings> {
                         // on user typing update password value
                         setState(() => websiteLinks = val);
                         print(websiteLinks);
-                      }),
-                  const SizedBox(height: 12.0),
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Enter Website Links, separated by commas",
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.ternary,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          borderSide: BorderSide(
+                            color: AppTheme.colors.primary,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                      ),
+                  const SizedBox(height: 20.0),
+                  Text("Select Your Venue Type", style: TextStyle(fontSize: 20),),
+                  const SizedBox(height: 10,),
                   CheckboxListTile(
                     title: const Text("Bar"),
                     secondary: const Icon(Icons.local_bar),
