@@ -1,4 +1,5 @@
 import 'package:application/services/auth.dart';
+import 'package:application/theme/app_theme.dart';
 import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:application/models/artist.dart';
@@ -141,6 +142,7 @@ class _chatroomState extends State<chatroom> {
 
           return Scaffold(
             appBar: AppBar(
+              backgroundColor: AppTheme.colors.primary,
               title: Text(otherName),
             ),
             body: DashChat(

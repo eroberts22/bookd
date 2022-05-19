@@ -7,6 +7,8 @@ import 'dart:typed_data';
 
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../theme/app_theme.dart';
+
 class VenueProfileWidget extends StatefulWidget {
   // //make it so the uid is set by passing it into this widget. access uid by using "widget.uid"
   final String uid;
@@ -150,8 +152,8 @@ class _VenueProfileWidgetState extends State<VenueProfileWidget> {
                             return InkWell(
                                 child: Text(
                                   activeUrlList[index].toString(),
-                                  style: const TextStyle(
-                                      color: Color.fromARGB(255, 9, 133, 150)),
+                                  style: TextStyle(
+                                      color: AppTheme.colors.ternary,),
                                 ),
                                 onTap: () => _launchUrl(activeUrlList[index]));
                           })

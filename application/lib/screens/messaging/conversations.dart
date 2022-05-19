@@ -103,7 +103,7 @@ class _conversationsState extends State<conversations> {
           ? const ABookdAppDrawer()
           : const VBookdAppDrawer(),
       appBar: const BookdAppBar(),
-      body: const Text("No Conversations :("),
+      body: const Center(child: Text("No Conversations :("))
     );
   }
 

@@ -7,6 +7,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:typed_data';
 
+import '../../theme/app_theme.dart';
+
 class ArtistProfileWidget extends StatefulWidget {
   final String uid;
   const ArtistProfileWidget(this.uid, {Key? key}) : super(key: key);
@@ -165,9 +167,8 @@ class _ArtistProfileWidgetState extends State<ArtistProfileWidget> {
                               return InkWell(
                                   child: Text(
                                     activeUrlList[index].toString(),
-                                    style: const TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 9, 133, 150)),
+                                    style: TextStyle(
+                                        color: AppTheme.colors.ternary,),
                                   ),
                                   onTap: () =>
                                       _launchUrl(activeUrlList[index]));
